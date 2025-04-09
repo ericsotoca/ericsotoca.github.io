@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Play Store d'Eric</title>
+    <style>
+        /* --- Variables CSS --- */
+        :root {
+            --primary-color: #4285f4;
+            --secondary-color: #34a853;
+            --text-color: #333;
+            --bg-light: #f8f9fa;
+            --card-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            --card-hover-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            --category-tag-bg: #e0e0e0;
+        }
+
+        /* --- Styles Généraux --- */
+        body {
+            font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', Oxygen, Ubuntu, Cantarell, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: var(--text-color);
+            background-color: var(--bg-light);
+            line-height: 1.6;
+        }
+        body.modal-open {
+             overflow: hidden; /* Empêche le scroll du body quand la modale est ouverte */
+         }
+
+        /* --- Header --- */
+        header { background-color: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); padding: 1rem; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #eee; }
+        .header-content { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 1.5rem; font-weight: bold; color: var(--primary-color); cursor: pointer; text-decoration: none; }
+        .search-bar { flex-grow: 1; margin: 0 2rem; position: relative; }
+        .search-bar input { width: 100%; padding: 0.75rem 1rem; border-radius: 24px; border: 1px solid #ddd; font-size: 1rem; box-sizing: border-box; }
+
+        /* --- Main Content --- */
+        main { max-width: 1200px; margin: 1.5rem auto; padding: 1rem; }
+        .categories { display: flex; overflow-x: auto; gap: 1rem; padding-bottom: 0.5rem; margin-bottom: 1.5rem; -webkit-overflow-scrolling: touch; }
+        .category { padding: 0.5rem 1rem; background-color: white; border-radius: 20px; white-space: nowrap; cursor: pointer; border: 1px solid #ddd; transition: background-color 0.2s, color 0.2s, border-color 0.2s; font-size: 0.9rem; }
+        .category:hover { background-color: #f0f0f0; }
+        .category.active { background-color: var(--primary-color); color: white; border-color: var(--primary-color); }
+
+        /* --- Grille d'Applications --- */
+        .apps-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
+
+        /* --- Carte d'Application --- */
+        .app-card { background-color: white; border-radius: 8px; overflow: hidden; box-shadow: var(--card-shadow); transition: transform 0.2s ease-out, box-shadow 0.2s ease-out; cursor: pointer; display: flex; flex-direction: column; }
+        .app-card:hover { transform: translateY(-5px); box-shadow: var(--card-hover-shadow); }
+        .app-icon { height: 150px; display: flex; align-items: center; justify-content: center; background-color: #e9f0fe; overflow: hidden; flex-shrink: 0; }
+        .app-icon img { max-width: 80%; max-height: 80%; object-fit: contain; object-position: center; }
+        .app-info { padding: 1rem; display: flex; flex-direction: column; flex-grow: 1; }
+        .app-name { font-weight: bold; margin-bottom: 0.5rem; font-size: 1.1rem; color: var(--text-color); line-height: 1.3; /* Ajustez si nécessaire */ }
+        .app-picto { /* Style optionnel pour le picto sur la carte */
+            /* exemple: font-size: 1.4em; margin-bottom: 0.1em; display: inline-block; */
+         }
+        .app-name-text { /* Style optionnel pour le texte du nom sur la carte */ }
+        .app-meta { display: flex; align-items: center; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem; font-size: 0.9rem; color: #666; }
+        .tech-tag, .license-tag { padding: 0.25rem 0.6rem; border-radius: 12px; font-size: 0.75rem; line-height: 1.2; }
+        .tech-tag { background-color: #f0f0f0; }
+        .tech-html { background-color: #e34c26; color: white; }
+        .tech-js { background-color: #f7df1e; color: black; }
+        .license-tag { background-color: #e0e0e0; margin-left: auto; }
+        /* Description sur la carte (courte) */
+        .app-description {
+            color: #555; font-size: 0.9rem; margin-bottom: 1rem; flex-grow: 1;
+            overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical; text-overflow: ellipsis;
+        }
+        .update-info { font-size: 0.8rem; color: #999; margin-top: auto; padding-top: 0.5rem; }
+
+        /* --- Modale --- */
+        .modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.65); z-index: 1000; display: flex;
+            justify-content: center; align-items: center; padding: 1rem;
+            box-sizing: border-box; opacity: 0; visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0s linear 0.3s;
+        }
+        .modal.show {
+            opacity: 1; visibility: visible;
+            transition: opacity 0.3s ease, visibility 0s linear 0s;
+        }
+        .modal-content {
+            position: relative; background: #fff; border-radius: 10px;
+            max-width: 850px; width: 100%; max-height: 90vh;
+            overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            padding: 0; display: flex; flex-direction: row;
+            opacity: 0; transform: scale(0.95);
+            transition: opacity 0.3s ease 0.1s, transform 0.3s ease 0.1s;
+        }
+        .modal.show .modal-content { opacity: 1; transform: scale(1); }
+        .close-modal { /* Bouton X */
+            position: absolute; top: 10px; right: 15px; font-size: 1.8rem;
+            line-height: 1; cursor: pointer; color: #aaa;
+            transition: color 0.2s, transform 0.2s; z-index: 1012;
+        }
+        .close-modal:hover { color: #555; transform: scale(1.1); }
+
+        /* --- Structure Colonnes Modale --- */
+        .modal-column-left {
+            flex: 1; min-width: 0; padding: 2rem 1.5rem 2rem 2rem;
+            display: flex; flex-direction: column; overflow-y: auto;
+            max-height: 90vh; box-sizing: border-box;
+        }
+        .modal-left-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; flex-shrink: 0; }
+        .modal-icon { width: 55px; height: 55px; border-radius: 10px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; overflow: hidden; border: 1px solid #eee; background-color: #f8f8f8; }
+        .modal-icon img { max-width: 85%; max-height: 85%; object-fit: contain; }
+        .modal-left-title-area { flex-grow: 1; }
+        #modalTitle { margin: 0 0 0.2rem 0; font-size: 1.5rem; color: var(--text-color); line-height: 1.3; font-weight: 600; }
+        #modalCategory { font-size: 0.85rem; color: #555; background-color: var(--category-tag-bg); padding: 0.2rem 0.6rem; border-radius: 12px; display: inline-block; }
+        /* Description dans la modale (complète) */
+        #modalDescription {
+             line-height: 1.65; color: #555; font-size: 0.95rem;
+             margin-bottom: 1.5rem; flex-grow: 1; /* Pousse boutons */
+        }
+        .modal-left-actions { margin-top: auto; padding-top: 1rem; flex-shrink: 0; display: flex; flex-direction: column; gap: 0.8rem; align-items: center; }
+        #closeModalBtnBottom { background-color: transparent; border: 1px solid #ccc; color: #777; padding: 0.5rem 1.5rem; border-radius: 20px; font-size: 0.9rem; cursor: pointer; transition: background-color 0.2s, color 0.2s, border-color 0.2s; text-decoration: none; text-align: center; }
+        #closeModalBtnBottom:hover { background-color: #f0f0f0; border-color: #aaa; color: #333; }
+
+        .modal-column-right {
+            flex: 0 0 45%; background-color: #f4f5f7; overflow: hidden;
+            position: relative; display: flex; align-items: center; justify-content: center;
+        }
+        .modal-column-right.hidden { display: none; }
+        #modalImagePreviewContainer { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; padding: 1rem; box-sizing: border-box; }
+        #modalImagePreview { display: block; max-width: 100%; max-height: 100%; height: auto; width: auto; object-fit: contain; border-radius: 6px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+
+        /* --- Boutons (général) --- */
+        .btn { display: inline-block; padding: 0.75rem 2rem; border-radius: 25px; border: none; cursor: pointer; font-weight: 500; font-size: 1rem; transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s; text-decoration: none; text-align: center; }
+        .btn-primary { background: linear-gradient(45deg, var(--primary-color), var(--secondary-color)); color: white; box-shadow: 0 2px 5px rgba(0, 100, 255, 0.3); }
+        .btn-primary:hover, .btn-primary:focus { background: linear-gradient(45deg, #3367d6, #2e8b43); transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0, 100, 255, 0.4); outline: none; }
+
+        /* --- Footer --- */
+        footer { text-align: center; padding: 2rem 1rem; background-color: white; margin-top: 2rem; border-top: 1px solid #eee; font-size: 0.9rem; color: #666; }
+
+        /* --- Responsive --- */
+        @media (max-width: 768px) {
+            .modal-content { flex-direction: column; max-width: 500px; max-height: 85vh; overflow-y: auto; overflow-x: hidden; }
+            .modal-column-left, .modal-column-right { max-height: none; overflow-y: visible; }
+            .modal-column-left { padding: 1.5rem; order: 2; }
+            .modal-left-actions { margin-top: 1.5rem; }
+            .modal-column-right { order: 1; flex-basis: auto; width: 100%; background-color: #e9edf0; } /* Hauteur auto */
+            #modalImagePreviewContainer { padding: 0.5rem; }
+            .modal-icon { width: 45px; height: 45px; } #modalTitle { font-size: 1.3rem; } #modalCategory { font-size: 0.8rem; } #modalDescription { font-size: 0.9rem; }
+            #startAppBtn { font-size: 0.95rem; padding: 0.6rem 1.5rem; } #closeModalBtnBottom { font-size: 0.85rem; padding: 0.4rem 1.2rem; }
+        }
+         @media (max-width: 480px) {
+              .header-content { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+              .search-bar { width: 100%; margin: 0.5rem 0 0 0; }
+              .apps-grid { grid-template-columns: 1fr; gap: 1rem; }
+              .logo { font-size: 1.3rem; } .search-bar input { font-size: 0.9rem; } .category { font-size: 0.85rem; padding: 0.4rem 0.8rem; }
+              .modal-content { max-width: 95%; }
+              .modal-column-left { padding: 1.2rem; }
+              #modalTitle { font-size: 1.2rem; }
+         }
+
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <div class="logo" id="homeLink" title="Retour à l'accueil">Play Store d'Eric</div>
+            <div class="search-bar">
+                <input type="text" placeholder="Rechercher une application..." id="searchInput">
+            </div>
+        </div>
+    </header>
+
+    <!-- Main -->
+    <main>
+        <div class="categories">
+            <div class="category active" data-category="all">Tous</div>
+            <div class="category" data-category="musique">Musique</div>
+            <div class="category" data-category="developpement">Développement personnel</div>
+            <div class="category" data-category="jeux">Jeux</div>
+        </div>
+        <div class="apps-grid" id="appsGrid">
+            <!-- Cartes générées par JS -->
+        </div>
+    </main>
+
+    <!-- Modale -->
+    <div id="appModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" id="closeModal" title="Fermer">×</span>
+
+            <!-- Colonne Gauche: Infos + Actions -->
+            <div class="modal-column-left">
+                <div class="modal-left-header">
+                    <div class="modal-icon" id="modalIcon"></div>
+                    <div class="modal-left-title-area">
+                        <h2 id="modalTitle">Nom App</h2>
+                        <span id="modalCategory">Catégorie</span>
+                    </div>
+                </div>
+                <div class="modal-description" id="modalDescription">Description...</div>
+                <div class="modal-left-actions">
+                    <a id="startAppBtn" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Démarrer l'application</a>
+                    <button id="closeModalBtnBottom" class="btn">Fermer</button>
+                </div>
+            </div>
+
+            <!-- Colonne Droite: Image Preview -->
+            <div class="modal-column-right hidden" id="modalImagePreviewContainer">
+                 <img id="modalImagePreview" src="" alt="Aperçu" loading="lazy">
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        © <span id="copyright-year"></span> Play Store d'Eric Sotoca - Tous droits réservés
+    </footer>
+
+    <script defer>
+        // --- Données des Applications ---
+        // *** Structure mise à jour : picto et name séparés ***
+        const apps = [
+            {
+                id: 'danslatetedunchampion',
+                picto: '🌟🌟🌟🌟', // <-- Picto séparé
+                name: 'Dans la Tête d\'un Champion', // <-- Nom sans picto
+                tech: ['html'],
+                category: 'jeux',
+                description: 'Dans la Tête d\'un Champion est un jeu de réflexion et de stratégie qui met à l\'épreuve vos compétences cognitives et tactiques. Inspiré des jeux télévisés, il propose des défis où vous devez sélectionner et placer des réponses dans une grille pour accumuler des points. Avec des options de mise (75% ou 100% des gains), des statistiques de réussite (par exemple, 89%), et des historiques de parties, ce jeu offre une expérience immersive pour les amateurs de quiz et de challenges intellectuels.',
+                updated: 'Il y a 4 jours',
+                demoUrl: 'https://bit.ly/DansLaTeteDunChampion',
+                sourceUrl: 'https://bit.ly/DansLaTeteDunChampion',
+                image: 'images/logo_danslatetedunchampion.png',
+                previewImage: 'images/danslatetedunchampion_preview.png',
+                license: null
+            },
+            {
+                id: 'larouedelavie',
+                picto: '🌟🌟🌟', // <-- Picto séparé
+                name: 'La Roue de la Vie', // <-- Nom sans picto
+                tech: ['javascript'],
+                category: 'developpement',
+                description: 'La Roue de la Vie est un outil interactif conçu pour vous aider à évaluer et équilibrer les différents aspects de votre vie personnelle. À travers une interface intuitive, vous pouvez noter des domaines clés tels que la santé physique, le mental, et d\'autres aspects de votre bien-être sur une échelle de 1 à 10. L\'application génère une visualisation graphique sous forme de roue, vous permettant d\'identifier les déséquilibres et de définir des objectifs pour améliorer votre épanouissement global.',
+                updated: 'Il y a 20 heures',
+                demoUrl: 'https://bit.ly/LaRoueDeLaVie',
+                sourceUrl: 'https://bit.ly/LaRoueDeLaVie',
+                image: 'images/logo_larouedelavie.png',
+                previewImage: 'images/larouedelavie_preview.png',
+                license: null
+            },
+            {
+                id: 'mesrituels',
+                picto: '🌟', // <-- Picto séparé
+                name: 'Mes Rituels', // <-- Nom sans picto
+                tech: ['html'],
+                category: 'developpement',
+                description: 'Transformez votre quotidien avec une application conçue pour intégrer des habitudes positives dans votre routine. "Rituels Quotidiens" est votre compagnon idéal pour cultiver le bien-être, la productivité et la croissance personnelle grâce à une approche structurée et intuitive.',
+                updated: 'Il y a 10 heures',
+                demoUrl: 'https://bit.ly/MesRituels',
+                sourceUrl: 'https://bit.ly/MesRituels',
+                image: 'images/logo_mesrituels.png',
+                previewImage: 'images/mesrituels_preview.png',
+                license: null
+            },
+            {
+                id: 'siestefm',
+                picto: '🌟', // <-- Picto séparé
+                name: 'Sieste FM', // <-- Nom sans picto
+                tech: ['html'],
+                category: 'musique',
+                description: 'Sieste FM est une webradio conçue pour favoriser la relaxation et la méditation. Elle propose une sélection de musiques apaisantes, telles que "Blues in the Light of Dawn", pour créer une ambiance propice au repos. L\'application inclut des options de minuterie (10, 15, 30 minutes ou illimité) pour programmer une sieste, ainsi qu\'une fonction d\'alarme musicale pour un réveil en douceur. Parfaite pour une pause détente à tout moment de la journée.',
+                updated: 'Il y a 10 heures',
+                demoUrl: 'https://bit.ly/siestefm',
+                sourceUrl: 'https://bit.ly/siestefm',
+                image: 'images/logo_siestefm.png',
+                previewImage: 'images/siestefm_preview.png',
+                license: null
+            },
+            {
+                id: 'enneagramme',
+                picto: '🌟',
+                name: 'Enneagramme',
+                tech: ['javascript'],
+                category: 'developpement',
+                description: 'Découvrez l\'Enneagramme.',
+                updated: 'Il y a 20 heures',
+                demoUrl: 'https://ericsotoca.github.io/Enneagramme/',
+                sourceUrl: 'https://ericsotoca.github.io/Enneagramme/',
+                image: 'images/logo_enneagramme.png',
+                previewImage: 'images/enneagramme_preview.png',
+                license: null
+            },
+            {
+                id: 'mesobjectifs',
+                picto: '🌟',
+                name: 'Mon Parcours d\'Objectifs', // Avec échappement pour comparaison
+                tech: ['javascript'],
+                category: 'developpement',
+                description: 'Cette application a été conçue pour vous accompagner dans la définition, le suivi et l\'atteinte de vos objectifs personnels, quels que soient les domaines qui comptent pour vous : santé, famille, finances, carrière, loisirs, développement personnel, relations sociales ou cadre de vie. Grâce à une structure intuitive et personnalisable, elle vous permet d\'organiser vos aspirations.',
+                updated: 'Il y a 20 heures',
+                demoUrl: 'https://ericsotoca.github.io/MesObjectifs/',
+                sourceUrl: 'https://ericsotoca.github.io/MesObjectifs/',
+                image: 'images/logo_MesObjectifs.png',
+                previewImage: 'images/MesObjectifs_preview.png',
+                license: null
+            },
+            {
+                id: 'calculatrice',
+                picto: '🌟',
+                name: 'Calculatrice',
+                tech: ['javascript'],
+                category: 'developpement',
+                description: 'Calculatrice toute simple... ou pas ;-)',
+                updated: 'Il y a 20 heures',
+                demoUrl: 'https://ericsotoca.github.io/Calculatrice/',
+                sourceUrl: 'https://ericsotoca.github.io/Calculatrice/',
+                image: 'images/logo_calculatrice.png',
+                previewImage: 'images/calculatrice_preview.png',
+                license: null
+            },
+            {
+                id: 'acouphenes',
+                picto: '🌟',
+                name: 'Zen Acouphenes',
+                tech: ['javascript'],
+                category: 'developpement',
+                description: 'Acouphènes Zen : Votre compagnon pour mieux comprendre et gérer vos acouphènes au quotidien grâce à l\'auto-hypnose et aux sons thérapeutiques.',
+                updated: 'Il y a 20 heures',
+                demoUrl: 'https://ericsotoca.github.io/Acouphenes/',
+                sourceUrl: 'https://ericsotoca.github.io/Acouphenes/',
+                image: 'images/logo_acouphenes.png',
+                previewImage: 'images/acouphenes_preview.png',
+                license: null
+            },
+            
+
+            {
+                id: 'sotocawebradio',
+                picto: '🚧', // <-- Picto séparé
+                name: 'SOTOCA WebRadio', // <-- Nom sans picto
+                tech: ['javascript'],
+                category: 'musique',
+                description: 'SOTOCA WebRadio est une application de webradio personnalisable qui offre une large variété de stations pour répondre à tous les goûts musicaux. Que vous préfériez des sons calmes et puissants, des rythmes entraînants ou des mélodies spirituelles comme "Maylo" par Jensetis der Grenzen, cette webradio vous permet de choisir parmi des catégories telles que "Horizon Infini", "Calme Puissant", "Esprit Aiguisé", et "Quête Sauvage". Une expérience musicale immersive pour toutes les humeurs.',
+                updated: 'Il y a 20 heures',
+                demoUrl: 'https://bit.ly/sotocawebradio',
+                sourceUrl: 'https://bit.ly/sotocawebradio',
+                image: 'images/logo_sotocawebradio.png',
+                previewImage: 'images/sotocawebradio_preview.png',
+                license: null
+            },
+            {
+                id: 'ERICochet',
+                picto: '🚧', // <-- Picto séparé
+                name: 'ERICochet', // <-- Nom sans picto
+                tech: ['javascript'],
+                category: 'jeux',
+                description: 'ERICochet est un jeu de réflexion stratégique où les joueurs doivent guider un robot de la couleur correspondante vers une cible spécifique sur un plateau de 16x16 cases. Les robots glissent jusqu’à rencontrer un obstacle (mur ou autre robot), et les autres robots peuvent être déplacés pour servir de murs mobiles. L’objectif est d’atteindre la cible en un minimum de coups, en utilisant les flèches ou des boutons pour les déplacements, avec une interface adaptée aux smartphones.',
+                updated: 'Il y a 20 heures',
+                demoUrl: 'https://ericsotoca.github.io/ERICochet/',
+                sourceUrl: 'https://ericsotoca.github.io/ERICochet/',
+                image: 'images/logo_ERICochet.png',
+                previewImage: 'images/ERICochet_preview.png',
+                license: null
+            }
+            // Ajoutez d'autres applications ici en suivant le même format picto/name
+        ];
+
+        // --- Éléments du DOM ---
+        const appsGrid = document.getElementById('appsGrid');
+        const searchInput = document.getElementById('searchInput');
+        const categoryButtons = document.querySelectorAll('.category');
+        const homeLink = document.getElementById('homeLink');
+        const modal = document.getElementById('appModal');
+        const closeModalBtn = document.getElementById('closeModal');
+        const copyrightYearSpan = document.getElementById('copyright-year');
+        const modalContent = modal?.querySelector('.modal-content');
+        const modalIcon = document.getElementById('modalIcon');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalCategory = document.getElementById('modalCategory');
+        const modalDescription = document.getElementById('modalDescription');
+        const startAppBtn = document.getElementById('startAppBtn');
+        const closeModalBtnBottom = document.getElementById('closeModalBtnBottom');
+        const modalImagePreview = document.getElementById('modalImagePreview');
+        const modalImagePreviewContainer = document.getElementById('modalImagePreviewContainer');
+        const modalColumnLeft = modal?.querySelector('.modal-column-left');
+
+        // --- Fonctions ---
+        function capitalizeFirstLetter(string) { if (!string) return ''; return string.charAt(0).toUpperCase() + string.slice(1); }
+
+        function generateAppCards(appsToShow) {
+            if (!appsGrid) { console.error("appsGrid non trouvé!"); return; }
+            appsGrid.innerHTML = '';
+            if (!appsToShow || appsToShow.length === 0) { appsGrid.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; color: #777;">Aucune application trouvée.</p>'; return; }
+            appsToShow.forEach(app => {
+                const appCard = document.createElement('div');
+                appCard.className = 'app-card';
+                appCard.dataset.id = app.id;
+                const shortDescription = app.description.length > 100 ? app.description.substring(0, 100) + '...' : app.description;
+
+                // *** MODIFIÉ : Utilisation de app.picto et app.name séparément avec <br> ***
+                const appNameHTML = `
+                    <div class="app-name">
+                        ${app.picto ? `<span class="app-picto">${app.picto}</span><br>` : ''}
+                        <span class="app-name-text">${app.name || 'Nom App'}</span>
+                    </div>
+                `;
+
+                appCard.innerHTML = `
+                    <div class="app-icon"><img src="${app.image || 'images/placeholder.png'}" alt="Icône ${app.name || 'App'}" loading="lazy"></div>
+                    <div class="app-info">
+                        ${appNameHTML}
+                        <div class="app-meta"></div>
+                        <div class="app-description">${shortDescription}</div>
+                        <div class="update-info">Mis à jour ${app.updated || 'récemment'}</div>
+                    </div>`;
+                if (typeof openAppModal === 'function') { appCard.addEventListener('click', () => openAppModal(app)); }
+                else { console.warn("Fonction openAppModal non trouvée lors de la création de la carte."); }
+                appsGrid.appendChild(appCard);
+            });
+        }
+        function filterAppsByCategory(category) { return category === 'all' ? apps : apps.filter(app => app.category === category); }
+        // La recherche se fait toujours sur le nom et la description, pas sur le picto.
+        function filterAppsBySearch(term) { const lowerCaseTerm = term.toLowerCase().trim(); if (!lowerCaseTerm) return apps; return apps.filter(app => app.name.toLowerCase().includes(lowerCaseTerm) || app.description.toLowerCase().includes(lowerCaseTerm)); }
+
+        function openAppModal(app) {
+            if (!modal || !app) { console.error("Modale ou données App manquantes."); return; }
+
+            // Utilise app.name pour l'alt text
+            if (modalIcon) modalIcon.innerHTML = `<img src="${app.image || ''}" alt="Icône ${app.name || 'App'}">`; else console.warn("modalIcon non trouvé");
+
+            // *** MODIFIÉ : Affiche picto (si existe) + espace + nom dans le titre ***
+            if (modalTitle) {
+                 modalTitle.textContent = `${app.picto ? app.picto + ' ' : ''}${app.name || 'Application'}`;
+            } else {
+                 console.warn("modalTitle non trouvé");
+            }
+
+            if (modalCategory) modalCategory.textContent = capitalizeFirstLetter(app.category) || 'Divers'; else console.warn("modalCategory non trouvé");
+            if (modalDescription) modalDescription.textContent = app.description || 'Pas de description.'; else console.warn("modalDescription non trouvé");
+            if (startAppBtn) { startAppBtn.href = app.demoUrl || '#'; } else { console.warn("startAppBtn non trouvé"); }
+            if (modalImagePreviewContainer && modalImagePreview) {
+                if (app.previewImage && app.previewImage.trim() !== '') {
+                    modalImagePreview.src = app.previewImage;
+                    // Utilise app.name pour l'alt text
+                    modalImagePreview.alt = `Aperçu de ${app.name || 'App'}`;
+                    modalImagePreviewContainer.classList.remove('hidden');
+                } else {
+                    modalImagePreview.src = ''; modalImagePreview.alt = ''; modalImagePreviewContainer.classList.add('hidden');
+                }
+            } else { console.warn("Élément(s) image preview non trouvés"); }
+            modal.classList.add('show'); document.body.classList.add('modal-open');
+            if (modalColumnLeft) { modalColumnLeft.scrollTop = 0; } else { console.warn("modalColumnLeft non trouvé pour scroll reset"); }
+            if (window.innerWidth <= 768 && modalContent) { modalContent.scrollTop = 0; }
+        }
+
+        function closeAppModal() {
+             if (!modal) return;
+            modal.classList.remove('show'); document.body.classList.remove('modal-open');
+            if (modalImagePreview) modalImagePreview.src = '';
+            if (modalImagePreviewContainer) modalImagePreviewContainer.classList.add('hidden');
+        }
+        function updateCopyrightYear() { if (copyrightYearSpan) { copyrightYearSpan.textContent = new Date().getFullYear(); } else { console.warn("copyrightYearSpan non trouvé"); } }
+
+        // --- Initialisation & Écouteurs d'Événements ---
+        if(!appsGrid || !categoryButtons || !homeLink || !searchInput || !modal || !closeModalBtn || !closeModalBtnBottom || !copyrightYearSpan) {
+             console.error("ERREUR CRITIQUE: Un ou plusieurs éléments essentiels du DOM n'ont pas été trouvés. Vérifiez les IDs HTML.");
+        } else {
+            generateAppCards(apps); updateCopyrightYear();
+            categoryButtons.forEach(button => { button.addEventListener('click', () => { let currentActive = document.querySelector('.category.active'); if(currentActive) currentActive.classList.remove('active'); button.classList.add('active'); const selectedCategory = button.dataset.category; searchInput.value = ''; generateAppCards(filterAppsByCategory(selectedCategory)); }); });
+            homeLink.addEventListener('click', () => { let currentActive = document.querySelector('.category.active'); if(currentActive) currentActive.classList.remove('active'); let allCategory = document.querySelector('.category[data-category="all"]'); if(allCategory) allCategory.classList.add('active'); searchInput.value = ''; generateAppCards(apps); });
+            let searchTimeout; searchInput.addEventListener('input', () => { clearTimeout(searchTimeout); searchTimeout = setTimeout(() => { const searchTerm = searchInput.value; let currentActive = document.querySelector('.category.active'); if(currentActive) currentActive.classList.remove('active'); let allCategory = document.querySelector('.category[data-category="all"]'); if(allCategory) allCategory.classList.add('active'); generateAppCards(filterAppsBySearch(searchTerm)); }, 250); });
+            closeModalBtn.addEventListener('click', closeAppModal); closeModalBtnBottom.addEventListener('click', closeAppModal);
+            modal.addEventListener('click', (event) => { if (event.target === modal) closeAppModal(); });
+            document.addEventListener('keydown', (event) => { if (event.key === 'Escape' && modal.classList.contains('show')) closeAppModal(); });
+            console.log("Script initialisé avec succès.");
+        }
+
+    </script>
+</body>
+</html>
