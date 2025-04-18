@@ -212,12 +212,18 @@
 
     <!-- Main -->
     <main>
+        <!-- *** MODIFICATION HTML : AJOUT DES NOUVELLES CATÉGORIES *** -->
         <div class="categories">
             <div class="category active" data-category="all">Tous</div>
             <div class="category" data-category="musique">Musique</div>
             <div class="category" data-category="developpement">Développement personnel</div>
             <div class="category" data-category="jeux">Jeux</div>
+            <div class="category" data-category="utilitaires">Utilitaires</div>
+            <div class="category" data-category="sante-bien-etre">Santé & Bien-être</div>
+            <div class="category" data-category="organisation-productivite">Organisation & Productivité</div>
         </div>
+        <!-- *** FIN MODIFICATION HTML *** -->
+
         <div class="apps-grid" id="appsGrid">
             <!-- Cartes générées par JS -->
         </div>
@@ -258,15 +264,15 @@
 
     <script defer>
         // --- Données des Applications ---
-        // *** Structure mise à jour : picto et name séparés ***
+        // *** MODIFICATION JS : MISE À JOUR DES CATÉGORIES DANS LES DONNÉES ***
         const apps = [
             {
                 id: 'danslatetedunchampion',
-                picto: '🌟🌟🌟🌟', // <-- Picto séparé
-                name: 'Dans la Tête d\'un Champion', // <-- Nom sans picto
+                picto: '🌟🌟🌟🌟',
+                name: 'Dans la Tête d\'un Champion',
                 tech: ['html'],
-                category: 'jeux',
-                description: 'Dans la Tête d\'un Champion est un jeu de réflexion et de stratégie qui met à l\'épreuve vos compétences cognitives et tactiques. Inspiré des jeux télévisés, il propose des défis où vous devez sélectionner et placer des réponses dans une grille pour accumuler des points. Avec des options de mise (75% ou 100% des gains), des statistiques de réussite (par exemple, 89%), et des historiques de parties, ce jeu offre une expérience immersive pour les amateurs de quiz et de challenges intellectuels.',
+                category: 'jeux', // <- Reste 'jeux'
+                description: 'Dans la Tête d\'un Champion est un jeu de réflexion et de stratégie...',
                 updated: 'Il y a 4 jours',
                 demoUrl: 'https://ericsotoca.github.io/awale/',
                 sourceUrl: 'https://ericsotoca.github.io/awale/',
@@ -276,11 +282,11 @@
             },
             {
                 id: 'larouedelavie',
-                picto: '🌟🌟🌟', // <-- Picto séparé
-                name: 'La Roue de la Vie', // <-- Nom sans picto
+                picto: '🌟🌟🌟',
+                name: 'La Roue de la Vie',
                 tech: ['javascript'],
-                category: 'developpement',
-                description: 'La Roue de la Vie est un outil interactif conçu pour vous aider à évaluer et équilibrer les différents aspects de votre vie personnelle. À travers une interface intuitive, vous pouvez noter des domaines clés tels que la santé physique, le mental, et d\'autres aspects de votre bien-être sur une échelle de 1 à 10. L\'application génère une visualisation graphique sous forme de roue, vous permettant d\'identifier les déséquilibres et de définir des objectifs pour améliorer votre épanouissement global.',
+                category: 'sante-bien-etre', // <- MODIFIÉ (anciennement 'developpement')
+                description: 'La Roue de la Vie est un outil interactif conçu pour vous aider à évaluer et équilibrer...',
                 updated: 'Il y a 20 heures',
                 demoUrl: 'https://ericsotoca.github.io/larouedelavie/',
                 sourceUrl: 'https://ericsotoca.github.io/larouedelavie/',
@@ -290,11 +296,11 @@
             },
             {
                 id: 'ERICochet',
-                picto: '🌟🌟🌟', // <-- Picto séparé
-                name: 'Robo-Casse-Tête', // <-- Nom sans picto
+                picto: '🌟🌟🌟',
+                name: 'Robo-Casse-Tête',
                 tech: ['javascript'],
-                category: 'jeux',
-                description: 'Robo-Casse-Tête est un jeu de réflexion stratégique où les joueurs doivent guider un robot de la couleur correspondante vers une cible spécifique sur un plateau de 16x16 cases. Les robots glissent jusqu’à rencontrer un obstacle (mur ou autre robot), et les autres robots peuvent être déplacés pour servir de murs mobiles. L’objectif est d’atteindre la cible en un minimum de coups, en utilisant les flèches ou des boutons pour les déplacements, avec une interface adaptée aux smartphones.',
+                category: 'jeux', // <- Reste 'jeux'
+                description: 'Robo-Casse-Tête est un jeu de réflexion stratégique où les joueurs doivent guider un robot...',
                 updated: 'Il y a 20 heures',
                 demoUrl: 'https://ericsotoca.github.io/ERICochet/',
                 sourceUrl: 'https://ericsotoca.github.io/ERICochet/',
@@ -307,8 +313,8 @@
                 picto: '🌟🌟🌟',
                 name: 'Zen Acouphenes',
                 tech: ['javascript'],
-                category: 'developpement',
-                description: 'Acouphènes Zen : Votre compagnon pour mieux comprendre et gérer vos acouphènes au quotidien grâce à l\'auto-hypnose et aux sons thérapeutiques.',
+                category: 'sante-bien-etre', // <- MODIFIÉ (anciennement 'developpement')
+                description: 'Acouphènes Zen : Votre compagnon pour mieux comprendre et gérer vos acouphènes...',
                 updated: 'Il y a 20 heures',
                 demoUrl: 'https://ericsotoca.github.io/Acouphenes/',
                 sourceUrl: 'https://ericsotoca.github.io/Acouphenes/',
@@ -321,7 +327,7 @@
                 picto: '🌟🌟🌟',
                 name: 'Annuaire Mancala',
                 tech: ['javascript'],
-                category: 'developpement',
+                category: 'utilitaires', // <- MODIFIÉ (anciennement 'developpement')
                 description: 'Annuaire Mancala : Joueurs, Coachs, Organisateurs, Animateurs, Arbitres, Sponsors.',
                 updated: 'Il y a 20 heures',
                 demoUrl: 'https://mancala.softr.app/',
@@ -332,11 +338,11 @@
             },
             {
                 id: 'mesrituels',
-                picto: '🌟', // <-- Picto séparé
-                name: 'Mes Rituels', // <-- Nom sans picto
+                picto: '🌟',
+                name: 'Mes Rituels',
                 tech: ['html'],
-                category: 'developpement',
-                description: 'Transformez votre quotidien avec une application conçue pour intégrer des habitudes positives dans votre routine. "Rituels Quotidiens" est votre compagnon idéal pour cultiver le bien-être, la productivité et la croissance personnelle grâce à une approche structurée et intuitive.',
+                category: 'organisation-productivite', // <- MODIFIÉ (anciennement 'developpement')
+                description: 'Transformez votre quotidien avec une application conçue pour intégrer des habitudes positives...',
                 updated: 'Il y a 10 heures',
                 demoUrl: 'https://ericsotoca.github.io/rituels/',
                 sourceUrl: 'https://ericsotoca.github.io/rituels/',
@@ -346,11 +352,11 @@
             },
             {
                 id: 'siestefm',
-                picto: '🌟', // <-- Picto séparé
-                name: 'Sieste FM', // <-- Nom sans picto
+                picto: '🌟',
+                name: 'Sieste FM',
                 tech: ['html'],
-                category: 'musique',
-                description: 'Sieste FM est une webradio conçue pour favoriser la relaxation et la méditation. Elle propose une sélection de musiques apaisantes, telles que "Blues in the Light of Dawn", pour créer une ambiance propice au repos. L\'application inclut des options de minuterie (10, 15, 30 minutes ou illimité) pour programmer une sieste, ainsi qu\'une fonction d\'alarme musicale pour un réveil en douceur. Parfaite pour une pause détente à tout moment de la journée.',
+                category: 'musique', // <- Reste 'musique' (ou pourrait être 'sante-bien-etre' aussi)
+                description: 'Sieste FM est une webradio conçue pour favoriser la relaxation et la méditation...',
                 updated: 'Il y a 10 heures',
                 demoUrl: 'https://ericsotoca.github.io/SiesteFM/',
                 sourceUrl: 'https://ericsotoca.github.io/SiesteFM/',
@@ -363,8 +369,8 @@
                 picto: '🌟',
                 name: 'Enneagramme',
                 tech: ['javascript'],
-                category: 'developpement',
-                description: 'Choisissez le test qui vous convient pour découvrir votre type de personnalité, vos forces et vos axes de développement.',
+                category: 'developpement', // <- Reste 'developpement'
+                description: 'Choisissez le test qui vous convient pour découvrir votre type de personnalité...',
                 updated: 'Il y a 20 heures',
                 demoUrl: 'https://ericsotoca.github.io/Enneagramme/',
                 sourceUrl: 'https://ericsotoca.github.io/Enneagramme/',
@@ -375,10 +381,10 @@
             {
                 id: 'mesobjectifs',
                 picto: '🌟',
-                name: 'Mon Parcours d\'Objectifs', // Avec échappement pour comparaison
+                name: 'Mon Parcours d\'Objectifs',
                 tech: ['javascript'],
-                category: 'developpement',
-                description: 'Cette application a été conçue pour vous accompagner dans la définition, le suivi et l\'atteinte de vos objectifs personnels, quels que soient les domaines qui comptent pour vous : santé, famille, finances, carrière, loisirs, développement personnel, relations sociales ou cadre de vie. Grâce à une structure intuitive et personnalisable, elle vous permet d\'organiser vos aspirations.',
+                category: 'organisation-productivite', // <- MODIFIÉ (anciennement 'developpement')
+                description: 'Cette application a été conçue pour vous accompagner dans la définition, le suivi...',
                 updated: 'Il y a 20 heures',
                 demoUrl: 'https://ericsotoca.github.io/MesObjectifs/',
                 sourceUrl: 'https://ericsotoca.github.io/MesObjectifs/',
@@ -389,10 +395,10 @@
             {
                 id: 'annuaireia',
                 picto: '🌟',
-                name: 'Annuaire',
+                name: 'Annuaire IA', // Nom changé pour la cohérence
                 tech: ['javascript'],
-                category: 'developpement',
-                description: 'L\'objectif principal est d\'offrir un point de départ simple, organisé et curaté pour explorer l\'écosystème des technologies IA, avec des descriptions et des titres informatifs pour chaque lien.',
+                category: 'utilitaires', // <- MODIFIÉ (anciennement 'developpement')
+                description: 'L\'objectif principal est d\'offrir un point de départ simple, organisé et curaté pour explorer l\'écosystème...',
                 updated: 'Il y a 20 heures',
                 demoUrl: 'https://ericsotoca.github.io/AnnuaireIA',
                 sourceUrl: 'https://ericsotoca.github.io/AnnuaireIA',
@@ -405,7 +411,7 @@
                 picto: '🌟',
                 name: 'Calculatrice',
                 tech: ['javascript'],
-                category: 'developpement',
+                category: 'utilitaires', // <- MODIFIÉ (anciennement 'developpement')
                 description: 'Calculatrice toute simple... ou pas ;-)',
                 updated: 'Il y a 20 heures',
                 demoUrl: 'https://ericsotoca.github.io/Calculatrice/',
@@ -419,8 +425,8 @@
                 picto: '🌟',
                 name: 'Harmonie',
                 tech: ['javascript'],
-                category: 'developpement',
-                description: 'Harmonie est une application innovante conçue pour accompagner les utilisateurs dans leur quête d\’équilibre et de bien-être à travers une approche structurée basée sur la Roue de la Vie. Cette méthodologie éprouvée permet d\’évaluer et d\’améliorer huit domaines clés de l\’existence : Santé, Famille, Finances, Carrière, Loisirs, Développement personnel, Relations sociales et Cadre de vie. Harmonie se distingue par son interface intuitive et ses fonctionnalités personnalisées, offrant un suivi détaillé et des recommandations pratiques pour une progression mesurable.',
+                category: 'sante-bien-etre', // <- MODIFIÉ (anciennement 'developpement')
+                description: 'Harmonie est une application innovante conçue pour accompagner les utilisateurs...',
                 updated: 'Il y a 20 heures',
                 demoUrl: 'https://ericsotoca.github.io/Harmonie/',
                 sourceUrl: 'https://ericsotoca.github.io/Harmonie/',
@@ -428,8 +434,8 @@
                 previewImage: 'images/harmonie_preview.png',
                 license: null
             }
-            // Ajoutez d'autres applications ici en suivant le même format picto/name
         ];
+        // *** FIN MODIFICATION JS ***
 
         // --- Éléments du DOM ---
         const appsGrid = document.getElementById('appsGrid');
@@ -451,7 +457,13 @@
         const modalColumnLeft = modal?.querySelector('.modal-column-left');
 
         // --- Fonctions ---
-        function capitalizeFirstLetter(string) { if (!string) return ''; return string.charAt(0).toUpperCase() + string.slice(1); }
+        function capitalizeFirstLetter(string) {
+            if (!string) return '';
+            // Gère les cas comme "sante-bien-etre" -> "Santé & Bien-être" pour l'affichage
+            string = string.replace(/-/g, ' & ');
+            return string.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+        }
+
 
         function generateAppCards(appsToShow) {
             if (!appsGrid) { console.error("appsGrid non trouvé!"); return; }
@@ -463,7 +475,6 @@
                 appCard.dataset.id = app.id;
                 const shortDescription = app.description.length > 100 ? app.description.substring(0, 100) + '...' : app.description;
 
-                // *** MODIFIÉ : Utilisation de app.picto et app.name séparément avec <br> ***
                 const appNameHTML = `
                     <div class="app-name">
                         ${app.picto ? `<span class="app-picto">${app.picto}</span><br>` : ''}
@@ -485,29 +496,27 @@
             });
         }
         function filterAppsByCategory(category) { return category === 'all' ? apps : apps.filter(app => app.category === category); }
-        // La recherche se fait toujours sur le nom et la description, pas sur le picto.
         function filterAppsBySearch(term) { const lowerCaseTerm = term.toLowerCase().trim(); if (!lowerCaseTerm) return apps; return apps.filter(app => app.name.toLowerCase().includes(lowerCaseTerm) || app.description.toLowerCase().includes(lowerCaseTerm)); }
 
         function openAppModal(app) {
             if (!modal || !app) { console.error("Modale ou données App manquantes."); return; }
 
-            // Utilise app.name pour l'alt text
             if (modalIcon) modalIcon.innerHTML = `<img src="${app.image || ''}" alt="Icône ${app.name || 'App'}">`; else console.warn("modalIcon non trouvé");
 
-            // *** MODIFIÉ : Affiche picto (si existe) + espace + nom dans le titre ***
             if (modalTitle) {
                  modalTitle.textContent = `${app.picto ? app.picto + ' ' : ''}${app.name || 'Application'}`;
             } else {
                  console.warn("modalTitle non trouvé");
             }
 
+            // Utilise la fonction capitalizeFirstLetter pour un affichage propre des catégories
             if (modalCategory) modalCategory.textContent = capitalizeFirstLetter(app.category) || 'Divers'; else console.warn("modalCategory non trouvé");
+
             if (modalDescription) modalDescription.textContent = app.description || 'Pas de description.'; else console.warn("modalDescription non trouvé");
             if (startAppBtn) { startAppBtn.href = app.demoUrl || '#'; } else { console.warn("startAppBtn non trouvé"); }
             if (modalImagePreviewContainer && modalImagePreview) {
                 if (app.previewImage && app.previewImage.trim() !== '') {
                     modalImagePreview.src = app.previewImage;
-                    // Utilise app.name pour l'alt text
                     modalImagePreview.alt = `Aperçu de ${app.name || 'App'}`;
                     modalImagePreviewContainer.classList.remove('hidden');
                 } else {
@@ -516,10 +525,7 @@
             } else { console.warn("Élément(s) image preview non trouvés"); }
             modal.classList.add('show'); document.body.classList.add('modal-open');
 
-            // Reset scroll position (important pour mobile où la modale peut scroller)
             if (modalContent) { modalContent.scrollTop = 0; }
-            // Si on voulait scroller que la colonne gauche (moins pertinent sur mobile)
-            // if (modalColumnLeft) { modalColumnLeft.scrollTop = 0; }
         }
 
         function closeAppModal() {
@@ -535,7 +541,9 @@
              console.error("ERREUR CRITIQUE: Un ou plusieurs éléments essentiels du DOM n'ont pas été trouvés. Vérifiez les IDs HTML.");
         } else {
             generateAppCards(apps); updateCopyrightYear();
-            categoryButtons.forEach(button => { button.addEventListener('click', () => { let currentActive = document.querySelector('.category.active'); if(currentActive) currentActive.classList.remove('active'); button.classList.add('active'); const selectedCategory = button.dataset.category; searchInput.value = ''; generateAppCards(filterAppsByCategory(selectedCategory)); }); });
+            // --- Récupère les nouveaux boutons de catégorie après modification HTML ---
+            const updatedCategoryButtons = document.querySelectorAll('.category'); // <- Important de re-sélectionner après modif HTML ou s'assurer que le script s'exécute après
+            updatedCategoryButtons.forEach(button => { button.addEventListener('click', () => { let currentActive = document.querySelector('.category.active'); if(currentActive) currentActive.classList.remove('active'); button.classList.add('active'); const selectedCategory = button.dataset.category; searchInput.value = ''; generateAppCards(filterAppsByCategory(selectedCategory)); }); });
             homeLink.addEventListener('click', () => { let currentActive = document.querySelector('.category.active'); if(currentActive) currentActive.classList.remove('active'); let allCategory = document.querySelector('.category[data-category="all"]'); if(allCategory) allCategory.classList.add('active'); searchInput.value = ''; generateAppCards(apps); });
             let searchTimeout; searchInput.addEventListener('input', () => { clearTimeout(searchTimeout); searchTimeout = setTimeout(() => { const searchTerm = searchInput.value; let currentActive = document.querySelector('.category.active'); if(currentActive) currentActive.classList.remove('active'); let allCategory = document.querySelector('.category[data-category="all"]'); if(allCategory) allCategory.classList.add('active'); generateAppCards(filterAppsBySearch(searchTerm)); }, 250); });
             closeModalBtn.addEventListener('click', closeAppModal); closeModalBtnBottom.addEventListener('click', closeAppModal);
