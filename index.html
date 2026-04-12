@@ -240,7 +240,10 @@
     <!-- Main -->
     <main>
         <h1 class="hero-title">Mon Univers Créatif</h1>
-        <p class="hero-subtitle">Explorez tous mes projets, applications web et expérimentations de développement.</p>
+        <p class="hero-subtitle">
+            Explorez tous mes projets, applications web et expérimentations de développement.<br>
+            <strong style="color: var(--accent);" id="repoCountDisplay">Applications répertoriées : 82</strong>
+        </p>
 
         <div class="categories">
             <div class="category active" data-category="all">Tous les projets</div>
@@ -281,244 +284,66 @@
     </div>
 
     <footer>
-        © <span id="copyright-year"></span> Eric Sotoca - Portfolio Premium Exhaustif
-    </footer>
-
-    <script defer>
-        const apps = [
-            // --- PROJETS PEA & FINANCE ---
-            {
-                id: 'pearetrait', picto: '💶', name: 'PEA-Retrait', category: 'finance',
-                description: 'Outil de calcul et de simulation pour les retraits sur Plan d\'Épargne en Actions (PEA).',
-                demoUrl: 'https://ericsotoca.github.io/PEA-Retrait/', sourceUrl: 'https://github.com/ericsotoca/PEA-Retrait',
-                image: '', previewImage: ''
-            },
-            {
-                id: 'etfmomentum', picto: '📈', name: 'ETF Momentum Analyzer', category: 'finance',
-                description: 'Analyseur de momentum pour les ETF. Outil d\'aide à la décision pour le PEA avec algorithmes, matrice de signaux (MM200/RSI) et système de gestion de portefeuille.',
-                demoUrl: 'https://ericsotoca.github.io/ETF-Momentum/', sourceUrl: 'https://github.com/ericsotoca/ETF-Momentum',
-                image: '', previewImage: ''
-            },
-            {
-                id: 'etfsimulator', picto: '📊', name: 'ETF Swing Dashboard', category: 'finance',
-                description: 'Dashboard professionnel et simulateur de portefeuille ETF (Swing Trading). Intégration d\'indicateurs avancés de rendement et d\'aide à la diversification (filtrage sectoriel).',
-                demoUrl: 'https://ericsotoca.github.io/ETF-Swing-Dashboard/', sourceUrl: 'https://github.com/ericsotoca/ETF-Swing-Dashboard',
-                image: '', previewImage: ''
-            },
-            // --- PROJETS EXISTANTS MIGRÉS ---
-            {
-                id: 'danslatetedunchampion', picto: '🏆', name: 'Dans la Tête d\'un Champion', category: 'jeux',
-                description: 'Le jeu de réflexion Awalé ultime ! Analysez la partie, devinez le coup du champion et misez sur votre intuition. Affûtez votre stratégie !',
-                demoUrl: 'https://ericsotoca.github.io/awale/', sourceUrl: 'https://github.com/ericsotoca/awale',
-                image: 'images/logo_danslatetedunchampion.png', previewImage: 'images/danslatetedunchampion_preview.png'
-            },
-            {
-                id: 'larouedelavie', picto: '🎡', name: 'La Roue de la Vie', category: 'sante-bien-etre',
-                description: 'Un outil interactif conçu pour vous aider à évaluer et équilibrer les différents domaines de votre vie de manière visuelle et intuitive.',
-                demoUrl: 'https://ericsotoca.github.io/larouedelavie/', sourceUrl: 'https://github.com/ericsotoca/larouedelavie',
-                image: 'images/logo_larouedelavie.png', previewImage: 'images/larouedelavie_preview.png'
-            },
-            {
-                id: 'ERICochet', picto: '🤖', name: 'Robo-Casse-Tête', category: 'jeux',
-                description: 'Un jeu de réflexion stratégique où les joueurs doivent guider un robot complexe à travers divers obstacles technologiques.',
-                demoUrl: 'https://ericsotoca.github.io/ERICochet/', sourceUrl: 'https://github.com/ericsotoca/ERICochet',
-                image: 'images/logo_ERICochet.png', previewImage: 'images/ERICochet_preview.png'
-            },
-            {
-                id: 'acouphenes', picto: '🦻', name: 'Zen Acouphenes', category: 'sante-bien-etre',
-                description: 'Votre compagnon pour mieux comprendre et gérer vos acouphènes au quotidien, grâce à des outils de relaxation et de suivi.',
-                demoUrl: 'https://ericsotoca.github.io/Acouphenes/', sourceUrl: 'https://github.com/ericsotoca/Acouphenes',
-                image: 'images/logo_acouphenes.png', previewImage: 'images/acouphenes_preview.png'
-            },
-            {
-                id: 'annuairemancala', picto: '🌍', name: 'Annuaire Mancala', category: 'utilitaires',
-                description: 'Annuaire dédié aux passionnés du Mancala : Trouvez des Joueurs, Coachs, Organisateurs, Animateurs, Arbitres, et Sponsors.',
-                demoUrl: 'https://mancala.softr.app/', sourceUrl: 'https://github.com/ericsotoca',
-                image: 'images/logo_annuairemancala.png', previewImage: 'images/annuairemancala_preview.png'
-            },
-            {
-                id: 'qrcodes', picto: '📱', name: 'QR Codes Pro', category: 'utilitaires',
-                description: 'Créez facilement des QR codes personnalisés pour des URLs ou des textes. Interface élégante, personnalisation des couleurs et téléchargement rapide.',
-                demoUrl: 'https://ericsotoca.github.io/QRCodes/', sourceUrl: 'https://github.com/ericsotoca/QRCodes',
-                image: 'images/logo_qrcodes.png', previewImage: 'images/qrcodes_preview.png'
-            },
-            {
-                id: 'mesrituels', picto: '🧘', name: 'Mes Rituels', category: 'organisation-productivite',
-                description: 'Transformez votre quotidien avec une application conçue pour intégrer et suivre des habitudes positives sur la durée.',
-                demoUrl: 'https://ericsotoca.github.io/rituels/', sourceUrl: 'https://github.com/ericsotoca/rituels',
-                image: 'images/logo_mesrituels.png', previewImage: 'images/mesrituels_preview.png'
-            },
-            {
-                id: 'siestefm', picto: '🎧', name: 'Sieste FM', category: 'sante-bien-etre',
-                description: 'Webradio conçue pour favoriser la relaxation, la méditation et aider à l\'endormissement optimal avec des sons binauraux et apaisants.',
-                demoUrl: 'https://ericsotoca.github.io/SiesteFM/', sourceUrl: 'https://github.com/ericsotoca/SiesteFM',
-                image: 'images/logo_siestefm.png', previewImage: 'images/siestefm_preview.png'
-            },
-            {
-                id: 'enneagramme', picto: '🧩', name: 'Enneagramme', category: 'developpement',
-                description: 'Découvrez votre type de personnalité grâce à ce test Ennéagramme complet, interactif et orienté vers la connaissance de soi.',
-                demoUrl: 'https://ericsotoca.github.io/Enneagramme/', sourceUrl: 'https://github.com/ericsotoca/Enneagramme',
-                image: 'images/logo_enneagramme.png', previewImage: 'images/enneagramme_preview.png'
-            },
-            {
-                id: 'ouestmavoiture', picto: '🚗', name: 'Où est ma voiture ?', category: 'organisation-productivite',
-                description: 'Votre pense-bête de parking en 1 clic ! Sauvegarde la position GPS de votre voiture et lance un guidage interactif pour la retrouver sans stress.',
-                demoUrl: 'https://ericsotoca.github.io/ouestmavoiture/', sourceUrl: 'https://github.com/ericsotoca/ouestmavoiture',
-                image: 'images/logo_ouestmavoiture.png', previewImage: 'images/ouestmavoiture_preview.png'
-            },
-            {
-                id: 'roman', picto: '📖', name: 'Histoire à écouter', category: 'developpement',
-                description: 'Découvrez de formidables histoires immersives à écouter. Idéal pour la détente et l\'imagination auditive.',
-                demoUrl: 'https://ericsotoca.github.io/roman/', sourceUrl: 'https://github.com/ericsotoca/roman',
-                image: 'images/logo_roman.png', previewImage: 'images/roman_preview.png'
-            },
-            {
-                id: 'mesobjectifs', picto: '🎯', name: 'Mon Parcours d\'Objectifs', category: 'organisation-productivite',
-                description: 'Application pour vous accompagner dans la définition, la planification et le suivi visuel de vos objectifs de vie.',
-                demoUrl: 'https://ericsotoca.github.io/MesObjectifs/', sourceUrl: 'https://github.com/ericsotoca/MesObjectifs',
-                image: 'images/logo_MesObjectifs.png', previewImage: 'images/MesObjectifs_preview.png'
-            },
-            {
-                id: 'annuaireia', picto: '🧠', name: 'Annuaire IA', category: 'utilitaires',
-                description: 'Point de départ simple, organisé et curaté pour explorer l\'écosystème incroyable des outils d\'Intelligence Artificielle.',
-                demoUrl: 'https://ericsotoca.github.io/AnnuaireIA', sourceUrl: 'https://github.com/ericsotoca/AnnuaireIA',
-                image: 'images/logo_annuaireia.png', previewImage: 'images/annuaireia_preview.png'
-            },
-            {
-                id: 'hibernation', picto: '🐻', name: 'Hibernation', category: 'utilitaires',
-                description: 'Outil dédié à la déconnexion et la gestion saine des temps de repos numériques (Digital Detox).',
-                demoUrl: 'https://ericsotoca.github.io/Hibernation/', sourceUrl: 'https://github.com/ericsotoca/Hibernation',
-                image: 'images/logo_hibernation.png', previewImage: 'images/hibernation_preview.png'
-            },
-            {
-                id: 'calculatrice', picto: '🔢', name: 'Calculatrice', category: 'utilitaires',
-                description: 'Une calculatrice fonctionnelle, fluide mais avec une identité visuelle moderne. Toute simple... ou pas !',
-                demoUrl: 'https://ericsotoca.github.io/Calculatrice/', sourceUrl: 'https://github.com/ericsotoca/Calculatrice',
-                image: 'images/logo_calculatrice.png', previewImage: 'images/calculatrice_preview.png'
-            },
-            {
-                id: 'harmonie', picto: '☯️', name: 'Harmonie', category: 'sante-bien-etre',
-                description: 'Une application innovante conçue sur-mesure pour accompagner l\'utilisateur vers une meilleure harmonie intérieure.',
-                demoUrl: 'https://ericsotoca.github.io/Harmonie/', sourceUrl: 'https://github.com/ericsotoca/Harmonie',
-                image: 'images/logo_harmonie.png', previewImage: 'images/harmonie_preview.png'
-            },
-            {
-                id: 'poly', picto: '💬', name: '100 Questions Poly', category: 'developpement',
-                description: 'Un incroyable générateur de 100 questions essentielles pour discuter et réfléchir aux dynamiques des relations affectives complexes.',
-                demoUrl: 'https://ericsotoca.github.io/poly', sourceUrl: 'https://github.com/ericsotoca/poly',
-                image: 'images/logo_poly.png', previewImage: 'images/poly_preview.png'
-            },
-            {
-                id: 'interieur', picto: '✨', name: 'Voyage Interieur', category: 'developpement',
-                description: 'Questions profondes pour inviter à l\'introspection, réfléchir à ses véritables émotions et apaiser son bien-être mental.',
-                demoUrl: 'https://ericsotoca.github.io/interieur/', sourceUrl: 'https://github.com/ericsotoca/interieur',
-                image: 'images/logo_interieur.png', previewImage: 'images/interieur_preview.png'
-            },
-            {
-                id: 'futur', picto: '🔮', name: 'Futur & Rêves', category: 'developpement',
-                description: 'Ateliers et questions pour vous aider à structurer votre imagination et planifier sérieusement votre avenir idéal.',
-                demoUrl: 'https://ericsotoca.github.io/futur/', sourceUrl: 'https://github.com/ericsotoca/futur',
-                image: 'images/logo_futur.png', previewImage: 'images/futur_preview.png'
-            },
-            {
-                id: 'decouverte', picto: '🔍', name: 'Découverte Multi-Joueurs', category: 'developpement',
-                description: 'Découvrez vos proches grâce à 50 questions pour apprendre à mieux se connaître mutuellement d\'une façon ludique.',
-                demoUrl: 'https://ericsotoca.github.io/decouverte/', sourceUrl: 'https://github.com/ericsotoca/decouverte',
-                image: 'images/logo_decouverte.png', previewImage: 'images/decouverte_preview.png'
-            },
-
-            // --- NOUVEAUX PROJETS (AJOUTÉS EXHAUSTIVEMENT DEPUI L'API GITHUB) ---
-            {
-                id: 'amicoach', picto: '🤝', name: 'AmiCoach', category: 'developpement',
-                description: 'Un compagnon numérique de coaching personnel et d\'accompagnement. Définissez vos objectifs avec l\'aide de protocoles d\'accompagnement avancés.',
-                demoUrl: 'https://ericsotoca.github.io/AmiCoach/', sourceUrl: 'https://github.com/ericsotoca/AmiCoach',
-                image: '', previewImage: ''
-            },
-            {
-                id: 'audrey_huault', picto: '🌿', name: 'Audrey Huault - RESET', category: 'sante-bien-etre',
-                description: 'Site professionnel développé pour la thérapie, mettant en avant les bienfaits vitaux du programme holistique RESET et NMO.',
-                demoUrl: 'https://ericsotoca.github.io/Audrey_Huault/', sourceUrl: 'https://github.com/ericsotoca/Audrey_Huault',
-                image: '', previewImage: ''
-            },
-            {
-                id: 'brise', picto: '🧊', name: 'Brise Glace', category: 'jeux',
-                description: 'Générateur d\'idées "Brise-Glace" pour lancer la conversation, faciliter l\'intégration dans les groupes ou les réunions professionnelles.',
-                demoUrl: 'https://ericsotoca.github.io/Brise/', sourceUrl: 'https://github.com/ericsotoca/Brise',
-                image: '', previewImage: ''
-            },
-            {
-                id: 'bts', picto: '🎓', name: 'Intervention BTS SIO', category: 'utilitaires',
-                description: 'Documents interactifs et ressources numériques pour l\'accompagnement et la présentation auprès des étudiants en BTS SIO.',
-                demoUrl: 'https://ericsotoca.github.io/BTS/', sourceUrl: 'https://github.com/ericsotoca/BTS',
-                image: '', previewImage: ''
-            },
-            {
-                id: 'calculateur_carbone', picto: '🌍', name: 'Calculateur Carbone', category: 'utilitaires',
-                description: 'Ciblez et comprenez facilement votre empreinte écologique avec ce calculateur interactif, ludique et orienté action.',
-                demoUrl: 'https://ericsotoca.github.io/Calculateur_Carbone/', sourceUrl: 'https://github.com/ericsotoca/Calculateur_Carbone',
-                image: '', previewImage: ''
-            },
-            {
-                id: 'calcul_profond', picto: '🧠', name: 'Calcul Profond', category: 'developpement',
-                description: 'Explorez "L\'art de la simulation mentale". Une application d\'entraînement à la profondeur d\'analyse et à la concentration active.',
-                demoUrl: 'https://ericsotoca.github.io/Calcul_Profond/', sourceUrl: 'https://github.com/ericsotoca/Calcul_Profond',
-                image: '', previewImage: ''
-            },
-            {
-                id: 'carte_membres', picto: '🪪', name: 'Carte Membres', category: 'utilitaires',
-                description: 'Outil de génération et gestion simplifiée de cartes membres pour associations, clubs sportifs, ou de jeux.',
-                demoUrl: 'https://ericsotoca.github.io/carte-membres/', sourceUrl: 'https://github.com/ericsotoca/carte-membres',
-                image: '', previewImage: ''
-            },
-            {
-                id: 'consentement', picto: '✅', name: 'Le Consentement', category: 'developpement',
-                description: 'Outil interactif de sensibilisation et d\'éducation pour mieux appréhender la notion inaliénable de consentement de façon saine.',
-                demoUrl: 'https://ericsotoca.github.io/Consentement/', sourceUrl: 'https://github.com/ericsotoca/Consentement',
-                image: '', previewImage: ''
-            },
-            {
-                id: 'convertisseur', picto: '🎙️', name: 'Convertisseur PDF > Audio', category: 'utilitaires',
-                description: 'Optimisez votre productivité technologique en transformant n\'importe quel document lisible PDF en véritable livre audio.',
-                demoUrl: 'https://ericsotoca.github.io/convertisseur/', sourceUrl: 'https://github.com/ericsotoca/convertisseur',
-                image: '', previewImage: ''
-            },
-            {
-                id: 'coupleconnect', picto: '❤️', name: 'Couple Connect', category: 'developpement',
-                description: 'Expérience web dédiée à la connexion amoureuse, renforçant la communication en couple via des mini-ateliers interactifs.',
-                demoUrl: 'https://ericsotoca.github.io/CoupleConnect/', sourceUrl: 'https://github.com/ericsotoca/CoupleConnect',
-                image: '', previewImage: ''
-            },
-            {
-                id: 'croyances', picto: '🎭', name: 'Croyances Limitantes', category: 'developpement',
-                description: 'Ateliers et outils introspectifs pour neutraliser vos croyances limitantes et transformer votre schéma de pensée subconscient.',
-                demoUrl: 'https://ericsotoca.github.io/croyances/', sourceUrl: 'https://github.com/ericsotoca/croyances',
-                image: '', previewImage: ''
-            },
-            {
-                id: 'doigts', picto: '✌️', name: 'Jeu de Doigts', category: 'jeux',
-                description: 'Un concept de jeu amusant et expérimental basé sur la motricité et les réflexes rapides directement dans le navigateur.',
-                demoUrl: 'https://ericsotoca.github.io/Doigts/', sourceUrl: 'https://github.com/ericsotoca/Doigts',
-                image: '', previewImage: ''
-            },
-            {
-                id: 'ecoute', picto: '👂', name: 'L\'Écoute Active', category: 'developpement',
-                description: 'Pratiques et informations numériques ludiques sur l\'écoute bienveillante, destinée aux coachs ou aux particuliers.',
-                demoUrl: 'https://ericsotoca.github.io/ecoute/', sourceUrl: 'https://github.com/ericsotoca/ecoute',
-                image: '', previewImage: ''
-            },
-            {
-                id: 'emotions', picto: '🌈', name: 'Boussole des Émotions', category: 'sante-bien-etre',
-                description: 'Cartographiez et suivez l\'évolution de vos sentiments via cet outil visuel et thérapeutique de gestion émotionnelle.',
-                demoUrl: 'https://ericsotoca.github.io/emotions/', sourceUrl: 'https://github.com/ericsotoca/emotions',
-                image: '', previewImage: ''
-            },
-            {
-                id: 'ballonimaginaire', picto: '🎈', name: 'Ballon Imaginaire', category: 'jeux',
-                description: 'Expérimentation créative et poétique autour d\'un ballon interactif flottant. Très ludique et amusant !',
-                demoUrl: 'https://ericsotoca.github.io/ballonimaginaire/', sourceUrl: 'https://github.com/ericsotoca/ballonimaginaire',
-                image: '', previewImage: ''
-            }
+        © <span id="copyright-year"></span> Eric Sotoca - Portfolio Premium Exhaustif    <script defer>
+        const repoList = [
+            "carte-membres", "webradio", "WNG2026", "BTS", "playstore", "emotions", "PEA-Retrait",
+            "timing", "roman", "numerologie", "tirage-cartes-oracle", "Harmonie", "mon-calculateur",
+            "TicketMiam", "thegame", "Acouphenes", "SiesteFM", "larouedelavie", "reflexologie", "PEA-ETF",
+            "MesObjectifs", "Enneagramme", "QRCodes", "kiff", "awale", "Consentement", "Brise", "retraite",
+            "Doigts", "ERICochet", "Calculatrice", "ecoute", "oreille", "Hibernation", "Sophrologie", "pmu",
+            "audrey", "OBJECTIF2026", "croyances", "Calcul_Profond", "awale_capture", "decouverte",
+            "Audrey_Huault", "parfum", "sr", "verre", "Favoris", "grok", "MEMOIRE", "poly", "awale_flash",
+            "quizz_awale", "convertisseur", "REVES", "MMS", "ballonimaginaire", "tartre", "CoupleConnect",
+            "futur", "AnnuaireIA", "github-repo-downloader", "histoires", "PDFtoIMAGES", "Calculateur_Carbone",
+            "vie", "maison", "interieur", "Objectifs", "ouestmavoiture", "Sablier", "AmiCoach", "cours-github",
+            "rituels", "sapatunav", "n8n", "n8n-render-lamachine", "CA", "TaCroisiR", "RAYNAIR_2024", "PDFtoMP3",
+            "WildCodeSchool_formation_IA_nov2023"
         ];
+
+        const apps = repoList.map(repo => {
+            const lower = repo.toLowerCase();
+            let cat = 'utilitaires';
+            let picto = '✨';
+
+            if (/(pea|finance|retrait|calculateur|ca|bourse|etf)/.test(lower)) { cat = 'finance'; picto = '💶'; }
+            else if (/(sante|acouphenes|reflexologie|sophrologie|oreille|tartre|harmonie|audrey|vie|respiration)/.test(lower)) { cat = 'sante-bien-etre'; picto = '🌿'; }
+            else if (/(jeu|awale|thegame|doigts|erico|quizz|ballon|pmu|carte)/.test(lower)) { cat = 'jeux'; picto = '🎮'; }
+            else if (/(objectif|timing|sablier|rituel|voiture|favoris)/.test(lower)) { cat = 'organisation-productivite'; picto = '⏳'; }
+            else if (/(croyance|consentement|brise|ecoute|emotion|poly|reve|memoire|futur|interieur|decouverte|numerologie|oracle|kiff|coupleconnect|amicoach)/.test(lower)) { cat = 'developpement'; picto = '🧠'; }
+            else if (/(radio|sieste|mp3|audio|histoire|roman)/.test(lower)) { cat = 'musique'; picto = '🎧'; }
+
+            return {
+                id: repo.toLowerCase().replace(/[^a-z0-9]/g, ''),
+                picto: picto,
+                name: repo.replace(/-/g, ' '),
+                category: cat,
+                description: "Projet expérimental ou application web interactive.",
+                // Correction magique : les URLs respectent désormais la CASSE exacte de ton Github !
+                demoUrl: \`https://ericsotoca.github.io/\${repo}/\`,
+                sourceUrl: \`https://github.com/ericsotoca/\${repo}\`,
+                image: '', previewImage: ''
+            };
+        });
+
+        // Injecter des descriptions personnalisées et belles pour les plus gros projets (surcharge)
+        const customData = {
+            'awale': { desc: 'Dans la Tête d\\'un Champion. Jeu de réflexion Awalé ultime !', name: 'Awalé' },
+            'pearetrait': { desc: 'Outil de calcul et de simulation pour les retraits sur Plan d\\'Épargne en Actions.', name: 'PEA Retrait' },
+            'peaetf': { desc: 'Dashboard professionnel et simulateur ETF pour PEA.', name: 'PEA ETF Analyzer' },
+            'larouedelavie': { desc: 'Outil interactif pour évaluer et équilibrer les différents domaines de votre vie.' },
+            'acouphenes': { desc: 'Votre compagnon pour mieux comprendre et gérer vos acouphènes au quotidien.' },
+            'qrcodes': { desc: 'Créez facilement des QR codes personnalisés pour URLs ou textes.' },
+            'annuaireia': { desc: 'Point de départ simple et curaté pour explorer les outils IA.' }
+        };
+
+        apps.forEach(app => {
+            if (customData[app.id]) {
+                app.description = customData[app.id].desc || app.description;
+                app.name = customData[app.id].name || app.name;
+            }
+        });
+
+        document.getElementById('repoCountDisplay').textContent = `Applications répertoriées : ${apps.length}`;
 
         // UI Logic
         const grid = document.getElementById('appsGrid');
