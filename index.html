@@ -3,207 +3,230 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Play Store d'Eric</title>
+    <title>Portfolio d'Eric Sotoca</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* --- Variables CSS --- */
         :root {
-            --primary-color: #4285f4;
-            --secondary-color: #34a853;
-            --text-color: #333;
-            --bg-light: #f8f9fa;
-            --card-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            --card-hover-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            --category-tag-bg: #e0e0e0;
+            --bg: #0f172a;
+            --bg-card: rgba(30, 41, 59, 0.6);
+            --bg-glass: rgba(15, 23, 42, 0.8);
+            --border: rgba(255, 255, 255, 0.1);
+            --border-hover: rgba(56, 189, 248, 0.5);
+            --text: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent: #38bdf8;
+            --accent-glow: rgba(56, 189, 248, 0.4);
+            --gradient: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
         }
 
-        /* --- Styles Généraux --- */
-        body {
-            font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', Oxygen, Ubuntu, Cantarell, sans-serif;
+        * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            color: var(--text-color);
-            background-color: var(--bg-light);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
             line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
         }
+
         body.modal-open {
-             overflow: hidden; /* Empêche le scroll du body quand la modale est ouverte */
-         }
+            overflow: hidden;
+        }
 
-        /* --- Header --- */
-        header { background-color: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); padding: 1rem; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #eee; }
-        .header-content { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-size: 1.5rem; font-weight: bold; color: var(--primary-color); cursor: pointer; text-decoration: none; }
-        .search-bar { flex-grow: 1; margin: 0 2rem; position: relative; }
-        .search-bar input { width: 100%; padding: 0.75rem 1rem; border-radius: 24px; border: 1px solid #ddd; font-size: 1rem; box-sizing: border-box; }
+        /* Ambient animated blobs */
+        .blobs {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -1; overflow: hidden; pointer-events: none;
+        }
+        .blob {
+            position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.5;
+            animation: float 15s infinite ease-in-out alternate;
+        }
+        .blob-1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background: #38bdf8; }
+        .blob-2 { bottom: -10%; right: -10%; width: 50vw; height: 50vw; background: #818cf8; animation-delay: -7.5s; }
+        
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(10%, 10%) scale(1.1); }
+        }
 
-        /* --- Main Content --- */
-        main { max-width: 1200px; margin: 1.5rem auto; padding: 1rem; }
-        .categories { display: flex; overflow-x: auto; gap: 1rem; padding-bottom: 0.5rem; margin-bottom: 1.5rem; -webkit-overflow-scrolling: touch; }
-        .category { padding: 0.5rem 1rem; background-color: white; border-radius: 20px; white-space: nowrap; cursor: pointer; border: 1px solid #ddd; transition: background-color 0.2s, color 0.2s, border-color 0.2s; font-size: 0.9rem; }
-        .category:hover { background-color: #f0f0f0; }
-        .category.active { background-color: var(--primary-color); color: white; border-color: var(--primary-color); }
+        /* Header */
+        header {
+            position: sticky; top: 0; z-index: 100;
+            background: var(--bg-glass); backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 2rem;
+        }
+        .header-content {
+            max-width: 1400px; margin: 0 auto;
+            display: flex; justify-content: space-between; align-items: center;
+            flex-wrap: wrap; gap: 1rem;
+        }
+        .logo {
+            font-size: 1.5rem; font-weight: 700;
+            background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            cursor: pointer; text-decoration: none;
+        }
+        
+        .search-bar input {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border); color: var(--text);
+            padding: 0.75rem 1.5rem; border-radius: 999px;
+            font-size: 1rem; width: 300px; outline: none;
+            transition: all 0.3s ease; font-family: 'Inter', sans-serif;
+        }
+        .search-bar input:focus {
+            border-color: var(--accent); background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 15px var(--accent-glow);
+        }
 
-        /* --- Grille d'Applications --- */
-        .apps-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
+        /* Main */
+        main { max-width: 1400px; margin: 3rem auto; padding: 0 2rem; }
+        .hero-title { font-size: 3rem; font-weight: 800; margin-bottom: 0.5rem; line-height: 1.2; }
+        .hero-subtitle { font-size: 1.2rem; color: var(--text-muted); margin-bottom: 3rem; }
 
-        /* --- Carte d'Application --- */
-        .app-card { background-color: white; border-radius: 8px; overflow: hidden; box-shadow: var(--card-shadow); transition: transform 0.2s ease-out, box-shadow 0.2s ease-out; cursor: pointer; display: flex; flex-direction: column; }
-        .app-card:hover { transform: translateY(-5px); box-shadow: var(--card-hover-shadow); }
-        .app-icon { height: 150px; display: flex; align-items: center; justify-content: center; background-color: #e9f0fe; overflow: hidden; flex-shrink: 0; }
-        .app-icon img { max-width: 80%; max-height: 80%; object-fit: contain; object-position: center; }
-        .app-info { padding: 1rem; display: flex; flex-direction: column; flex-grow: 1; }
-        .app-name { font-weight: bold; margin-bottom: 0.5rem; font-size: 1.1rem; color: var(--text-color); line-height: 1.3; /* Ajustez si nécessaire */ }
-        .app-picto { /* Style optionnel pour le picto sur la carte */
-            /* exemple: font-size: 1.4em; margin-bottom: 0.1em; display: inline-block; */
-         }
-        .app-name-text { /* Style optionnel pour le texte du nom sur la carte */ }
-        .app-meta { display: flex; align-items: center; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem; font-size: 0.9rem; color: #666; }
-        .tech-tag, .license-tag { padding: 0.25rem 0.6rem; border-radius: 12px; font-size: 0.75rem; line-height: 1.2; }
-        .tech-tag { background-color: #f0f0f0; }
-        .tech-html { background-color: #e34c26; color: white; }
-        .tech-js { background-color: #f7df1e; color: black; }
-        .license-tag { background-color: #e0e0e0; margin-left: auto; }
-        /* Description sur la carte (courte) */
+        .categories {
+            display: flex; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 2.5rem;
+        }
+        .category {
+            background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border);
+            padding: 0.5rem 1.2rem; border-radius: 999px; cursor: pointer;
+            font-size: 0.9rem; font-weight: 500; color: var(--text-muted);
+            transition: all 0.3s ease;
+        }
+        .category:hover { background: rgba(255, 255, 255, 0.1); color: var(--text); }
+        .category.active {
+            background: var(--gradient); color: white; border-color: transparent;
+            box-shadow: 0 4px 15px var(--accent-glow);
+        }
+
+        /* Grid */
+        .apps-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2rem;
+        }
+        
+        /* Card */
+        .app-card {
+            background: var(--bg-card); backdrop-filter: blur(12px);
+            border: 1px solid var(--border); border-radius: 20px;
+            display: flex; flex-direction: column; overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer; position: relative;
+        }
+        .app-card::before {
+            content: ''; position: absolute; inset: 0; border-radius: 20px;
+            padding: 2px; background: var(--gradient); -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor; mask-composite: exclude; opacity: 0; transition: opacity 0.4s ease;
+        }
+        .app-card:hover { transform: translateY(-8px); box-shadow: 0 15px 35px rgba(0,0,0,0.4), 0 0 20px var(--accent-glow); }
+        .app-card:hover::before { opacity: 1; }
+        
+        .app-icon {
+            height: 180px; width: 100%; display: flex; align-items: center; justify-content: center;
+            background: rgba(0, 0, 0, 0.2); position: relative; overflow: hidden;
+        }
+        .app-icon img {
+            width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease;
+        }
+        .app-card:hover .app-icon img { transform: scale(1.05); }
+        /* Fallback icon when no image */
+        .avatar-placeholder {
+            font-size: 4rem; text-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+
+        .app-info { padding: 1.5rem; display: flex; flex-direction: column; flex-grow: 1; }
+        .app-name { font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+        .app-category-badge {
+            background: rgba(255, 255, 255, 0.1); font-size: 0.75rem; padding: 0.2rem 0.6rem;
+            border-radius: 6px; color: var(--accent); margin-bottom: 1rem; width: fit-content; text-transform: uppercase; letter-spacing: 0.5px;
+        }
         .app-description {
-            color: #555; font-size: 0.9rem; margin-bottom: 1rem; flex-grow: 1;
-            overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical; text-overflow: ellipsis;
+            color: var(--text-muted); font-size: 0.95rem; line-height: 1.5;
+            display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; flex-grow: 1;
         }
-        .update-info { font-size: 0.8rem; color: #999; margin-top: auto; padding-top: 0.5rem; }
-
-        /* --- Modale --- */
+        
+        /* Modal */
         .modal {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0,0,0,0.65); z-index: 1000; display: flex;
-            justify-content: center; align-items: center; padding: 1rem;
-            box-sizing: border-box; opacity: 0; visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0s linear 0.3s;
+            position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px);
+            z-index: 1000; display: flex; align-items: center; justify-content: center;
+            opacity: 0; visibility: hidden; transition: all 0.3s ease; padding: 1rem;
         }
-        .modal.show {
-            opacity: 1; visibility: visible;
-            transition: opacity 0.3s ease, visibility 0s linear 0s;
-        }
+        .modal.show { opacity: 1; visibility: visible; }
         .modal-content {
-            position: relative; background: #fff; border-radius: 10px;
-            max-width: 850px; width: 100%; max-height: 90vh;
-            overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-            padding: 0; display: flex; flex-direction: row; /* Par défaut en ligne pour desktop */
-            opacity: 0; transform: scale(0.95);
-            transition: opacity 0.3s ease 0.1s, transform 0.3s ease 0.1s;
+            background: #1e293b; border: 1px solid var(--border); border-radius: 24px;
+            max-width: 900px; width: 100%; max-height: 90vh; overflow-y: auto;
+            position: relative; transform: scale(0.95) translateY(20px); opacity: 0;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex; flex-direction: column; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
-        .modal.show .modal-content { opacity: 1; transform: scale(1); }
-        .close-modal { /* Bouton X */
-            position: absolute; top: 10px; right: 15px; font-size: 1.8rem;
-            line-height: 1; cursor: pointer; color: #aaa;
-            transition: color 0.2s, transform 0.2s; z-index: 1012;
+        .modal.show .modal-content { transform: scale(1) translateY(0); opacity: 1; }
+        
+        .modal-header {
+            padding: 2rem; border-bottom: 1px solid var(--border);
+            display: flex; align-items: flex-start; justify-content: space-between; gap: 2rem;
+            background: rgba(255, 255, 255, 0.02);
         }
-        .close-modal:hover { color: #555; transform: scale(1.1); }
-
-        /* --- Structure Colonnes Modale (Desktop) --- */
-        .modal-column-left {
-            flex: 1; min-width: 0; padding: 2rem 1.5rem 2rem 2rem;
-            display: flex; flex-direction: column; overflow-y: auto;
-            max-height: 90vh; box-sizing: border-box;
+        .modal-title-area { flex-grow: 1; }
+        .modal-title { font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem; }
+        
+        .close-modal {
+            background: rgba(255,255,255,0.1); border: none; color: white;
+            width: 40px; height: 40px; border-radius: 50%; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; font-size: 1.5rem;
+            transition: background 0.2s; flex-shrink: 0;
         }
-        .modal-left-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; flex-shrink: 0; }
-        .modal-icon { width: 55px; height: 55px; border-radius: 10px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; overflow: hidden; border: 1px solid #eee; background-color: #f8f8f8; }
-        .modal-icon img { max-width: 85%; max-height: 85%; object-fit: contain; }
-        .modal-left-title-area { flex-grow: 1; }
-        #modalTitle { margin: 0 0 0.2rem 0; font-size: 1.5rem; color: var(--text-color); line-height: 1.3; font-weight: 600; }
-        #modalCategory { font-size: 0.85rem; color: #555; background-color: var(--category-tag-bg); padding: 0.2rem 0.6rem; border-radius: 12px; display: inline-block; }
-        /* Description dans la modale (complète) */
-        #modalDescription {
-             line-height: 1.65; color: #555; font-size: 0.95rem;
-             margin-bottom: 1.5rem; flex-grow: 1; /* Pousse boutons */
+        .close-modal:hover { background: rgba(255,255,255,0.2); }
+
+        .modal-body { padding: 2rem; display: flex; gap: 2rem; flex-wrap: wrap; }
+        .modal-desc { flex: 1; min-width: 300px; font-size: 1.05rem; color: var(--text-muted); line-height: 1.7; }
+        .modal-image-preview {
+            flex: 1; min-width: 300px; border-radius: 12px; overflow: hidden;
+            border: 1px solid var(--border); background: rgba(0,0,0,0.2);
+            display: flex; align-items: center; justify-content: center;
         }
-        .modal-left-actions { margin-top: auto; padding-top: 1rem; flex-shrink: 0; display: flex; flex-direction: column; gap: 0.8rem; align-items: center; }
-        #closeModalBtnBottom { background-color: transparent; border: 1px solid #ccc; color: #777; padding: 0.5rem 1.5rem; border-radius: 20px; font-size: 0.9rem; cursor: pointer; transition: background-color 0.2s, color 0.2s, border-color 0.2s; text-decoration: none; text-align: center; }
-        #closeModalBtnBottom:hover { background-color: #f0f0f0; border-color: #aaa; color: #333; }
-
-        .modal-column-right {
-            flex: 0 0 45%; background-color: #f4f5f7; overflow: hidden;
-            position: relative; display: flex; align-items: center; justify-content: center;
+        .modal-image-preview img { max-width: 100%; height: auto; display: block; }
+        
+        .modal-footer {
+            padding: 2rem; border-top: 1px solid var(--border);
+            display: flex; justify-content: flex-end; gap: 1rem; background: rgba(255,255,255,0.02);
         }
-        .modal-column-right.hidden { display: none; }
-        #modalImagePreviewContainer { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; padding: 1rem; box-sizing: border-box; }
-        #modalImagePreview { display: block; max-width: 100%; max-height: 100%; height: auto; width: auto; object-fit: contain; border-radius: 6px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
 
-        /* --- Boutons (général) --- */
-        .btn { display: inline-block; padding: 0.75rem 2rem; border-radius: 25px; border: none; cursor: pointer; font-weight: 500; font-size: 1rem; transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s; text-decoration: none; text-align: center; }
-        .btn-primary { background: linear-gradient(45deg, var(--primary-color), var(--secondary-color)); color: white; box-shadow: 0 2px 5px rgba(0, 100, 255, 0.3); }
-        .btn-primary:hover, .btn-primary:focus { background: linear-gradient(45deg, #3367d6, #2e8b43); transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0, 100, 255, 0.4); outline: none; }
+        .btn {
+            padding: 0.75rem 1.5rem; border-radius: 12px; font-weight: 600; cursor: pointer;
+            transition: all 0.2s ease; border: none; font-family: inherit; font-size: 1rem;
+            text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem;
+        }
+        .btn-ghost { background: transparent; color: var(--text); border: 1px solid var(--border); }
+        .btn-ghost:hover { background: rgba(255,255,255,0.1); }
+        .btn-primary { background: var(--gradient); color: white; box-shadow: 0 4px 15px var(--accent-glow); }
+        .btn-primary:hover { filter: brightness(1.1); transform: translateY(-2px); }
 
-        /* --- Footer --- */
-        footer { text-align: center; padding: 2rem 1rem; background-color: white; margin-top: 2rem; border-top: 1px solid #eee; font-size: 0.9rem; color: #666; }
+        footer { text-align: center; padding: 2rem; margin-top: 4rem; color: var(--text-muted); border-top: 1px solid var(--border); font-size: 0.9rem; }
 
-        /* --- Responsive --- */
         @media (max-width: 768px) {
-            .modal-content {
-                flex-direction: column; /* Passe en mode colonne */
-                max-width: 500px;
-                max-height: 85vh;
-                overflow-y: auto; /* Active le scroll pour la modale entière si besoin */
-                overflow-x: hidden;
-            }
-            /* Retire les limites de hauteur spécifiques aux colonnes sur mobile */
-            .modal-column-left, .modal-column-right {
-                max-height: none;
-                overflow-y: visible; /* Le scroll est géré par .modal-content */
-            }
-
-            /* ------ MODIFICATION ICI ------ */
-            /* Colonne de texte (gauche) vient EN PREMIER */
-            .modal-column-left {
-                padding: 1.5rem;
-                order: 1; /* <- Changé de 2 à 1 */
-            }
-
-            /* Colonne d'image (droite) vient APRÈS */
-            .modal-column-right {
-                order: 2; /* <- Changé de 1 à 2 */
-                flex-basis: auto; /* Hauteur auto */
-                width: 100%;
-                background-color: #e9edf0;
-                margin-top: 1rem; /* Ajoute un peu d'espace avant l'image */
-            }
-            /* ------ FIN MODIFICATION ------ */
-
-            #modalImagePreviewContainer { padding: 1rem 0.5rem 0.5rem 0.5rem; } /* Ajuste padding image */
-
-            .modal-left-actions {
-                margin-top: 1.5rem; /* Espace avant les boutons */
-                padding-top: 0; /* Reset padding top car géré par margin-top */
-             }
-
-            /* Ajustements de taille pour mobile */
-            .modal-icon { width: 45px; height: 45px; }
-            #modalTitle { font-size: 1.3rem; }
-            #modalCategory { font-size: 0.8rem; }
-            #modalDescription { font-size: 0.9rem; margin-bottom: 1.5rem; }
-            #startAppBtn { font-size: 0.95rem; padding: 0.6rem 1.5rem; }
-            #closeModalBtnBottom { font-size: 0.85rem; padding: 0.4rem 1.2rem; }
+            .hero-title { font-size: 2.2rem; }
+            .header-content { flex-direction: column; align-items: flex-start; }
+            .search-bar input { width: 100%; }
+            .modal-body { flex-direction: column; }
         }
-
-         @media (max-width: 480px) {
-              .header-content { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
-              .search-bar { width: 100%; margin: 0.5rem 0 0 0; }
-              .apps-grid { grid-template-columns: 1fr; gap: 1rem; }
-              .logo { font-size: 1.3rem; } .search-bar input { font-size: 0.9rem; } .category { font-size: 0.85rem; padding: 0.4rem 0.8rem; }
-              .modal-content { max-width: 95%; }
-              .modal-column-left { padding: 1.2rem; }
-              #modalTitle { font-size: 1.2rem; }
-              /* Sur très petit écran, l'image peut prendre moins de place */
-               .modal-column-right { margin-top: 0.8rem; }
-               #modalImagePreviewContainer { padding-top: 0.8rem;}
-         }
-
     </style>
 </head>
 <body>
+
+    <div class="blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+    </div>
+
     <!-- Header -->
     <header>
         <div class="header-content">
-            <div class="logo" id="homeLink" title="Retour à l'accueil">Play Store d'Eric</div>
+            <a href="#" class="logo" id="homeLink">💎 Eric Sotoca</a>
             <div class="search-bar">
                 <input type="text" placeholder="Rechercher une application..." id="searchInput">
             </div>
@@ -212,461 +235,395 @@
 
     <!-- Main -->
     <main>
-        <!-- *** MODIFICATION HTML : AJOUT DES NOUVELLES CATÉGORIES *** -->
+        <h1 class="hero-title">Mon Univers Créatif</h1>
+        <p class="hero-subtitle">Explorez tous mes projets, applications web et expérimentations de développement.</p>
+
         <div class="categories">
-            <div class="category active" data-category="all">Tous</div>
-            <div class="category" data-category="jeux">Jeux</div>
-            <div class="category" data-category="utilitaires">Utilitaires</div>
+            <div class="category active" data-category="all">Tous les projets</div>
+            <div class="category" data-category="finance">Finance / PEA</div>
             <div class="category" data-category="sante-bien-etre">Santé & Bien-être</div>
-            <div class="category" data-category="organisation-productivite">Organisation & Productivité</div>
-            <div class="category" data-category="musique">Musique</div>
-            <div class="category" data-category="developpement">Développement personnel</div>
+            <div class="category" data-category="developpement">Dev Personnel</div>
+            <div class="category" data-category="jeux">Jeux</div>
+            <div class="category" data-category="utilitaires">Utilitaires & Outils</div>
+            <div class="category" data-category="organisation-productivite">Productivité</div>
         </div>
-        <!-- *** FIN MODIFICATION HTML *** -->
 
         <div class="apps-grid" id="appsGrid">
-            <!-- Cartes générées par JS -->
+            <!-- Injecté via JS -->
         </div>
     </main>
 
-    <!-- Modale -->
+    <!-- Modal -->
     <div id="appModal" class="modal">
         <div class="modal-content">
-            <span class="close-modal" id="closeModal" title="Fermer">×</span>
-
-            <!-- Colonne Gauche: Infos + Actions (Sera en haut sur mobile grâce au CSS) -->
-            <div class="modal-column-left">
-                <div class="modal-left-header">
-                    <div class="modal-icon" id="modalIcon"></div>
-                    <div class="modal-left-title-area">
-                        <h2 id="modalTitle">Nom App</h2>
-                        <span id="modalCategory">Catégorie</span>
-                    </div>
+            <div class="modal-header">
+                <div class="modal-title-area">
+                    <h2 class="modal-title" id="modalTitle">Project Name</h2>
+                    <div class="app-category-badge" id="modalCategory">Category</div>
                 </div>
-                <div class="modal-description" id="modalDescription">Description...</div>
-                <div class="modal-left-actions">
-                    <a id="startAppBtn" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Démarrer l'application</a>
-                    <button id="closeModalBtnBottom" class="btn">Fermer</button>
+                <button class="close-modal" id="closeModal">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-desc" id="modalDescription">Description goes here...</div>
+                <div class="modal-image-preview" id="modalImagePreviewContainer">
+                    <img id="modalImagePreview" src="" alt="Aperçu">
                 </div>
             </div>
-
-            <!-- Colonne Droite: Image Preview (Sera en bas sur mobile grâce au CSS) -->
-            <div class="modal-column-right hidden" id="modalImagePreviewContainer">
-                 <img id="modalImagePreview" src="" alt="Aperçu" loading="lazy">
+            <div class="modal-footer">
+                <a id="codeBtn" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">Voir le Code</a>
+                <a id="startAppBtn" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Lancer l'Application 🚀</a>
             </div>
         </div>
     </div>
 
-    <!-- Footer -->
     <footer>
-        © <span id="copyright-year"></span> Play Store d'Eric Sotoca - Tous droits réservés
+        © <span id="copyright-year"></span> Eric Sotoca - Portfolio Premium Exhaustif
     </footer>
 
     <script defer>
-        // --- Données des Applications ---
-        // *** MODIFICATION JS : MISE À JOUR DES CATÉGORIES DANS LES DONNÉES ***
         const apps = [
+            // --- PROJETS PEA & FINANCE ---
             {
-                id: 'danslatetedunchampion',
-                picto: '🌟🌟🌟🌟',
-                name: 'Dans la Tête d\'un Champion',
-                tech: ['html'],
-                category: 'jeux', // <- Reste 'jeux'
-                description: 'Dans la Tête d\'un Champion : Le jeu de réflexion Awalé ultime ! Analysez la partie, devinez le coup du champion et misez sur votre intuition. Affûtez votre stratégie !',
-                updated: 'Il y a 4 jours',
-                demoUrl: 'https://ericsotoca.github.io/awale/',
-                sourceUrl: 'https://ericsotoca.github.io/awale/',
-                image: 'images/logo_danslatetedunchampion.png',
-                previewImage: 'images/danslatetedunchampion_preview.png',
-                license: null
+                id: 'pearetrait', picto: '💶', name: 'PEA-Retrait', category: 'finance',
+                description: 'Outil de calcul et de simulation pour les retraits sur Plan d\'Épargne en Actions (PEA).',
+                demoUrl: 'https://ericsotoca.github.io/PEA-Retrait/', sourceUrl: 'https://github.com/ericsotoca/PEA-Retrait',
+                image: '', previewImage: ''
             },
             {
-                id: 'larouedelavie',
-                picto: '🌟🌟🌟',
-                name: 'La Roue de la Vie',
-                tech: ['javascript'],
-                category: 'sante-bien-etre', // <- MODIFIÉ (anciennement 'developpement')
-                description: 'La Roue de la Vie est un outil interactif conçu pour vous aider à évaluer et équilibrer...',
-                updated: 'Il y a 20 heures',
-                demoUrl: 'https://ericsotoca.github.io/larouedelavie/',
-                sourceUrl: 'https://ericsotoca.github.io/larouedelavie/',
-                image: 'images/logo_larouedelavie.png',
-                previewImage: 'images/larouedelavie_preview.png',
-                license: null
+                id: 'etfmomentum', picto: '📈', name: 'ETF Momentum Analyzer', category: 'finance',
+                description: 'Analyseur de momentum pour les ETF. Outil d\'aide à la décision pour le PEA avec algorithmes, matrice de signaux (MM200/RSI) et système de gestion de portefeuille.',
+                demoUrl: 'https://ericsotoca.github.io/ETF-Momentum/', sourceUrl: 'https://github.com/ericsotoca/ETF-Momentum',
+                image: '', previewImage: ''
             },
             {
-                id: 'ERICochet',
-                picto: '🌟🌟🌟',
-                name: 'Robo-Casse-Tête',
-                tech: ['javascript'],
-                category: 'jeux', // <- Reste 'jeux'
-                description: 'Robo-Casse-Tête est un jeu de réflexion stratégique où les joueurs doivent guider un robot...',
-                updated: 'Il y a 20 heures',
-                demoUrl: 'https://ericsotoca.github.io/ERICochet/',
-                sourceUrl: 'https://ericsotoca.github.io/ERICochet/',
-                image: 'images/logo_ERICochet.png',
-                previewImage: 'images/ERICochet_preview.png',
-                license: null
+                id: 'etfsimulator', picto: '📊', name: 'ETF Swing Dashboard', category: 'finance',
+                description: 'Dashboard professionnel et simulateur de portefeuille ETF (Swing Trading). Intégration d\'indicateurs avancés de rendement et d\'aide à la diversification (filtrage sectoriel).',
+                demoUrl: 'https://ericsotoca.github.io/ETF-Swing-Dashboard/', sourceUrl: 'https://github.com/ericsotoca/ETF-Swing-Dashboard',
+                image: '', previewImage: ''
+            },
+            // --- PROJETS EXISTANTS MIGRÉS ---
+            {
+                id: 'danslatetedunchampion', picto: '🏆', name: 'Dans la Tête d\'un Champion', category: 'jeux',
+                description: 'Le jeu de réflexion Awalé ultime ! Analysez la partie, devinez le coup du champion et misez sur votre intuition. Affûtez votre stratégie !',
+                demoUrl: 'https://ericsotoca.github.io/awale/', sourceUrl: 'https://github.com/ericsotoca/awale',
+                image: 'images/logo_danslatetedunchampion.png', previewImage: 'images/danslatetedunchampion_preview.png'
             },
             {
-                id: 'acouphenes',
-                picto: '🌟🌟🌟',
-                name: 'Zen Acouphenes',
-                tech: ['javascript'],
-                category: 'sante-bien-etre', // <- MODIFIÉ (anciennement 'developpement')
-                description: 'Acouphènes Zen : Votre compagnon pour mieux comprendre et gérer vos acouphènes...',
-                updated: 'Il y a 20 heures',
-                demoUrl: 'https://ericsotoca.github.io/Acouphenes/',
-                sourceUrl: 'https://ericsotoca.github.io/Acouphenes/',
-                image: 'images/logo_acouphenes.png',
-                previewImage: 'images/acouphenes_preview.png',
-                license: null
+                id: 'larouedelavie', picto: '🎡', name: 'La Roue de la Vie', category: 'sante-bien-etre',
+                description: 'Un outil interactif conçu pour vous aider à évaluer et équilibrer les différents domaines de votre vie de manière visuelle et intuitive.',
+                demoUrl: 'https://ericsotoca.github.io/larouedelavie/', sourceUrl: 'https://github.com/ericsotoca/larouedelavie',
+                image: 'images/logo_larouedelavie.png', previewImage: 'images/larouedelavie_preview.png'
             },
             {
-                id: 'annuairemancala',
-                picto: '🌟🌟🌟',
-                name: 'Annuaire Mancala',
-                tech: ['javascript'],
-                category: 'utilitaires', // <- MODIFIÉ (anciennement 'developpement')
-                description: 'Annuaire Mancala : Joueurs, Coachs, Organisateurs, Animateurs, Arbitres, Sponsors.',
-                updated: 'Il y a 20 heures',
-                demoUrl: 'https://mancala.softr.app/',
-                sourceUrl: 'https://mancala.softr.app/',
-                image: 'images/logo_annuairemancala.png',
-                previewImage: 'images/annuairemancala_preview.png',
-                license: null
-            },
-
-            {
-                id: 'qrcodes',
-                picto: '🌟🌟🌟',
-                name: 'QR Codes',
-                tech: ['javascript'],
-                category: 'utilitaires', 
-                description: 'Créez facilement des QR codes personnalisés pour des URLs, textes ou liens en quelques secondes. Grâce à une interface élégante et intuitive, personnalisez vos QR codes avec des couleurs et tailles, prévisualisez-les instantanément et téléchargez-les en image. Idéal pour partager du contenu sans effort.',
-                updated: 'Il y a 2 heures',
-                demoUrl: 'https://ericsotoca.github.io/QRCodes/',
-                sourceUrl: 'https://ericsotoca.github.io/QRCodes/',
-                image: 'images/logo_qrcodes.png',
-                previewImage: 'images/qrcodes_preview.png',
-                license: null
+                id: 'ERICochet', picto: '🤖', name: 'Robo-Casse-Tête', category: 'jeux',
+                description: 'Un jeu de réflexion stratégique où les joueurs doivent guider un robot complexe à travers divers obstacles technologiques.',
+                demoUrl: 'https://ericsotoca.github.io/ERICochet/', sourceUrl: 'https://github.com/ericsotoca/ERICochet',
+                image: 'images/logo_ERICochet.png', previewImage: 'images/ERICochet_preview.png'
             },
             {
-                id: 'mesrituels',
-                picto: '🌟',
-                name: 'Mes Rituels',
-                tech: ['html'],
-                category: 'organisation-productivite', // <- MODIFIÉ (anciennement 'developpement')
-                description: 'Transformez votre quotidien avec une application conçue pour intégrer des habitudes positives...',
-                updated: 'Il y a 10 heures',
-                demoUrl: 'https://ericsotoca.github.io/rituels/',
-                sourceUrl: 'https://ericsotoca.github.io/rituels/',
-                image: 'images/logo_mesrituels.png',
-                previewImage: 'images/mesrituels_preview.png',
-                license: null
+                id: 'acouphenes', picto: '🦻', name: 'Zen Acouphenes', category: 'sante-bien-etre',
+                description: 'Votre compagnon pour mieux comprendre et gérer vos acouphènes au quotidien, grâce à des outils de relaxation et de suivi.',
+                demoUrl: 'https://ericsotoca.github.io/Acouphenes/', sourceUrl: 'https://github.com/ericsotoca/Acouphenes',
+                image: 'images/logo_acouphenes.png', previewImage: 'images/acouphenes_preview.png'
             },
             {
-                id: 'siestefm',
-                picto: '🌟',
-                name: 'Sieste FM',
-                tech: ['html'],
-                category: 'musique', // <- Reste 'musique' (ou pourrait être 'sante-bien-etre' aussi)
-                description: 'Sieste FM est une webradio conçue pour favoriser la relaxation et la méditation...',
-                updated: 'Il y a 10 heures',
-                demoUrl: 'https://ericsotoca.github.io/SiesteFM/',
-                sourceUrl: 'https://ericsotoca.github.io/SiesteFM/',
-                image: 'images/logo_siestefm.png',
-                previewImage: 'images/siestefm_preview.png',
-                license: null
+                id: 'annuairemancala', picto: '🌍', name: 'Annuaire Mancala', category: 'utilitaires',
+                description: 'Annuaire dédié aux passionnés du Mancala : Trouvez des Joueurs, Coachs, Organisateurs, Animateurs, Arbitres, et Sponsors.',
+                demoUrl: 'https://mancala.softr.app/', sourceUrl: 'https://github.com/ericsotoca',
+                image: 'images/logo_annuairemancala.png', previewImage: 'images/annuairemancala_preview.png'
             },
             {
-                id: 'enneagramme',
-                picto: '🌟',
-                name: 'Enneagramme',
-                tech: ['javascript'],
-                category: 'developpement', // <- Reste 'developpement'
-                description: 'Choisissez le test qui vous convient pour découvrir votre type de personnalité...',
-                updated: 'Il y a 20 heures',
-                demoUrl: 'https://ericsotoca.github.io/Enneagramme/',
-                sourceUrl: 'https://ericsotoca.github.io/Enneagramme/',
-                image: 'images/logo_enneagramme.png',
-                previewImage: 'images/enneagramme_preview.png',
-                license: null
+                id: 'qrcodes', picto: '📱', name: 'QR Codes Pro', category: 'utilitaires',
+                description: 'Créez facilement des QR codes personnalisés pour des URLs ou des textes. Interface élégante, personnalisation des couleurs et téléchargement rapide.',
+                demoUrl: 'https://ericsotoca.github.io/QRCodes/', sourceUrl: 'https://github.com/ericsotoca/QRCodes',
+                image: 'images/logo_qrcodes.png', previewImage: 'images/qrcodes_preview.png'
             },
             {
-                id: 'ouestmavoiture',
-                picto: '🌟',
-                name: 'Où est ma voiture ?',
-                tech: ['javascript'],
-                category: 'organisation-productivite', 
-                description: 'Où est ma voiture ? Votre pense-bête de parking. Sauvegarde la position GPS de votre voiture en 1 clic. Affiche la carte et lance le guidage pour la retrouver facilement.',
-                updated: 'Il y a 20 heures',
-                demoUrl: 'https://ericsotoca.github.io/ouestmavoiture/',
-                sourceUrl: 'https://ericsotoca.github.io/ouestmavoiture/',
-                image: 'images/logo_ouestmavoiture.png',
-                previewImage: 'images/ouestmavoiture_preview.png',
-                license: null
+                id: 'mesrituels', picto: '🧘', name: 'Mes Rituels', category: 'organisation-productivite',
+                description: 'Transformez votre quotidien avec une application conçue pour intégrer et suivre des habitudes positives sur la durée.',
+                demoUrl: 'https://ericsotoca.github.io/rituels/', sourceUrl: 'https://github.com/ericsotoca/rituels',
+                image: 'images/logo_mesrituels.png', previewImage: 'images/mesrituels_preview.png'
             },
             {
-                id: 'roman',
-                picto: '🌟',
-                name: 'Histoire à écouter',
-                tech: ['javascript'],
-                category: 'utilitaires', 
-                description: 'Quelques histoires à écouter.',
-                updated: 'Il y a 20 heures',
-                demoUrl: 'https://ericsotoca.github.io/roman/',
-                sourceUrl: 'https://ericsotoca.github.io/roman/',
-                image: 'images/logo_roman.png',
-                previewImage: 'images/roman_preview.png',
-                license: null
-            },            
-            {
-                id: 'mesobjectifs',
-                picto: '🌟',
-                name: 'Mon Parcours d\'Objectifs',
-                tech: ['javascript'],
-                category: 'organisation-productivite', // <- MODIFIÉ (anciennement 'developpement')
-                description: 'Cette application a été conçue pour vous accompagner dans la définition, le suivi...',
-                updated: 'Il y a 20 heures',
-                demoUrl: 'https://ericsotoca.github.io/MesObjectifs/',
-                sourceUrl: 'https://ericsotoca.github.io/MesObjectifs/',
-                image: 'images/logo_MesObjectifs.png',
-                previewImage: 'images/MesObjectifs_preview.png',
-                license: null
+                id: 'siestefm', picto: '🎧', name: 'Sieste FM', category: 'sante-bien-etre',
+                description: 'Webradio conçue pour favoriser la relaxation, la méditation et aider à l\'endormissement optimal avec des sons binauraux et apaisants.',
+                demoUrl: 'https://ericsotoca.github.io/SiesteFM/', sourceUrl: 'https://github.com/ericsotoca/SiesteFM',
+                image: 'images/logo_siestefm.png', previewImage: 'images/siestefm_preview.png'
             },
             {
-                id: 'annuaireia',
-                picto: '🌟',
-                name: 'Annuaire IA', // Nom changé pour la cohérence
-                tech: ['javascript'],
-                category: 'utilitaires', // <- MODIFIÉ (anciennement 'developpement')
-                description: 'L\'objectif principal est d\'offrir un point de départ simple, organisé et curaté pour explorer l\'écosystème...',
-                updated: 'Il y a 20 heures',
-                demoUrl: 'https://ericsotoca.github.io/AnnuaireIA',
-                sourceUrl: 'https://ericsotoca.github.io/AnnuaireIA',
-                image: 'images/logo_annuaireia.png',
-                previewImage: 'images/annuaireia_preview.png',
-                license: null
+                id: 'enneagramme', picto: '🧩', name: 'Enneagramme', category: 'developpement',
+                description: 'Découvrez votre type de personnalité grâce à ce test Ennéagramme complet, interactif et orienté vers la connaissance de soi.',
+                demoUrl: 'https://ericsotoca.github.io/Enneagramme/', sourceUrl: 'https://github.com/ericsotoca/Enneagramme',
+                image: 'images/logo_enneagramme.png', previewImage: 'images/enneagramme_preview.png'
+            },
+            {
+                id: 'ouestmavoiture', picto: '🚗', name: 'Où est ma voiture ?', category: 'organisation-productivite',
+                description: 'Votre pense-bête de parking en 1 clic ! Sauvegarde la position GPS de votre voiture et lance un guidage interactif pour la retrouver sans stress.',
+                demoUrl: 'https://ericsotoca.github.io/ouestmavoiture/', sourceUrl: 'https://github.com/ericsotoca/ouestmavoiture',
+                image: 'images/logo_ouestmavoiture.png', previewImage: 'images/ouestmavoiture_preview.png'
+            },
+            {
+                id: 'roman', picto: '📖', name: 'Histoire à écouter', category: 'developpement',
+                description: 'Découvrez de formidables histoires immersives à écouter. Idéal pour la détente et l\'imagination auditive.',
+                demoUrl: 'https://ericsotoca.github.io/roman/', sourceUrl: 'https://github.com/ericsotoca/roman',
+                image: 'images/logo_roman.png', previewImage: 'images/roman_preview.png'
+            },
+            {
+                id: 'mesobjectifs', picto: '🎯', name: 'Mon Parcours d\'Objectifs', category: 'organisation-productivite',
+                description: 'Application pour vous accompagner dans la définition, la planification et le suivi visuel de vos objectifs de vie.',
+                demoUrl: 'https://ericsotoca.github.io/MesObjectifs/', sourceUrl: 'https://github.com/ericsotoca/MesObjectifs',
+                image: 'images/logo_MesObjectifs.png', previewImage: 'images/MesObjectifs_preview.png'
+            },
+            {
+                id: 'annuaireia', picto: '🧠', name: 'Annuaire IA', category: 'utilitaires',
+                description: 'Point de départ simple, organisé et curaté pour explorer l\'écosystème incroyable des outils d\'Intelligence Artificielle.',
+                demoUrl: 'https://ericsotoca.github.io/AnnuaireIA', sourceUrl: 'https://github.com/ericsotoca/AnnuaireIA',
+                image: 'images/logo_annuaireia.png', previewImage: 'images/annuaireia_preview.png'
+            },
+            {
+                id: 'hibernation', picto: '🐻', name: 'Hibernation', category: 'utilitaires',
+                description: 'Outil dédié à la déconnexion et la gestion saine des temps de repos numériques (Digital Detox).',
+                demoUrl: 'https://ericsotoca.github.io/Hibernation/', sourceUrl: 'https://github.com/ericsotoca/Hibernation',
+                image: 'images/logo_hibernation.png', previewImage: 'images/hibernation_preview.png'
+            },
+            {
+                id: 'calculatrice', picto: '🔢', name: 'Calculatrice', category: 'utilitaires',
+                description: 'Une calculatrice fonctionnelle, fluide mais avec une identité visuelle moderne. Toute simple... ou pas !',
+                demoUrl: 'https://ericsotoca.github.io/Calculatrice/', sourceUrl: 'https://github.com/ericsotoca/Calculatrice',
+                image: 'images/logo_calculatrice.png', previewImage: 'images/calculatrice_preview.png'
+            },
+            {
+                id: 'harmonie', picto: '☯️', name: 'Harmonie', category: 'sante-bien-etre',
+                description: 'Une application innovante conçue sur-mesure pour accompagner l\'utilisateur vers une meilleure harmonie intérieure.',
+                demoUrl: 'https://ericsotoca.github.io/Harmonie/', sourceUrl: 'https://github.com/ericsotoca/Harmonie',
+                image: 'images/logo_harmonie.png', previewImage: 'images/harmonie_preview.png'
+            },
+            {
+                id: 'poly', picto: '💬', name: '100 Questions Poly', category: 'developpement',
+                description: 'Un incroyable générateur de 100 questions essentielles pour discuter et réfléchir aux dynamiques des relations affectives complexes.',
+                demoUrl: 'https://ericsotoca.github.io/poly', sourceUrl: 'https://github.com/ericsotoca/poly',
+                image: 'images/logo_poly.png', previewImage: 'images/poly_preview.png'
+            },
+            {
+                id: 'interieur', picto: '✨', name: 'Voyage Interieur', category: 'developpement',
+                description: 'Questions profondes pour inviter à l\'introspection, réfléchir à ses véritables émotions et apaiser son bien-être mental.',
+                demoUrl: 'https://ericsotoca.github.io/interieur/', sourceUrl: 'https://github.com/ericsotoca/interieur',
+                image: 'images/logo_interieur.png', previewImage: 'images/interieur_preview.png'
+            },
+            {
+                id: 'futur', picto: '🔮', name: 'Futur & Rêves', category: 'developpement',
+                description: 'Ateliers et questions pour vous aider à structurer votre imagination et planifier sérieusement votre avenir idéal.',
+                demoUrl: 'https://ericsotoca.github.io/futur/', sourceUrl: 'https://github.com/ericsotoca/futur',
+                image: 'images/logo_futur.png', previewImage: 'images/futur_preview.png'
+            },
+            {
+                id: 'decouverte', picto: '🔍', name: 'Découverte Multi-Joueurs', category: 'developpement',
+                description: 'Découvrez vos proches grâce à 50 questions pour apprendre à mieux se connaître mutuellement d\'une façon ludique.',
+                demoUrl: 'https://ericsotoca.github.io/decouverte/', sourceUrl: 'https://github.com/ericsotoca/decouverte',
+                image: 'images/logo_decouverte.png', previewImage: 'images/decouverte_preview.png'
             },
 
+            // --- NOUVEAUX PROJETS (AJOUTÉS EXHAUSTIVEMENT DEPUI L'API GITHUB) ---
             {
-                id: 'hibernation',
-                picto: '🌟',
-                name: 'Hibernation',
-                tech: ['javascript'],
-                category: 'utilitaires', // <- MODIFIÉ (anciennement 'developpement')
-                description: 'Hibernation ',
-                updated: 'Il y a 20 heures',
-                demoUrl: 'https://ericsotoca.github.io/Hibernation/',
-                sourceUrl: 'https://ericsotoca.github.io/Hibernation/',
-                image: 'images/logo_hibernation.png',
-                previewImage: 'images/hibernation_preview.png',
-                license: null
+                id: 'amicoach', picto: '🤝', name: 'AmiCoach', category: 'developpement',
+                description: 'Un compagnon numérique de coaching personnel et d\'accompagnement. Définissez vos objectifs avec l\'aide de protocoles d\'accompagnement avancés.',
+                demoUrl: 'https://ericsotoca.github.io/AmiCoach/', sourceUrl: 'https://github.com/ericsotoca/AmiCoach',
+                image: '', previewImage: ''
             },
             {
-                id: 'calculatrice',
-                picto: '🌟',
-                name: 'Calculatrice',
-                tech: ['javascript'],
-                category: 'utilitaires', // <- MODIFIÉ (anciennement 'developpement')
-                description: 'Calculatrice toute simple... ou pas ;-)',
-                updated: 'Il y a 20 heures',
-                demoUrl: 'https://ericsotoca.github.io/Calculatrice/',
-                sourceUrl: 'https://ericsotoca.github.io/Calculatrice/',
-                image: 'images/logo_calculatrice.png',
-                previewImage: 'images/calculatrice_preview.png',
-                license: null
+                id: 'audrey_huault', picto: '🌿', name: 'Audrey Huault - RESET', category: 'sante-bien-etre',
+                description: 'Site professionnel développé pour la thérapie, mettant en avant les bienfaits vitaux du programme holistique RESET et NMO.',
+                demoUrl: 'https://ericsotoca.github.io/Audrey_Huault/', sourceUrl: 'https://github.com/ericsotoca/Audrey_Huault',
+                image: '', previewImage: ''
             },
             {
-                id: 'harmonie',
-                picto: '🌟',
-                name: 'Harmonie',
-                tech: ['javascript'],
-                category: 'sante-bien-etre', // <- MODIFIÉ (anciennement 'developpement')
-                description: 'Harmonie est une application innovante conçue pour accompagner les utilisateurs...',
-                updated: 'Il y a 20 heures',
-                demoUrl: 'https://ericsotoca.github.io/Harmonie/',
-                sourceUrl: 'https://ericsotoca.github.io/Harmonie/',
-                image: 'images/logo_harmonie.png',
-                previewImage: 'images/harmonie_preview.png',
-                license: null
+                id: 'brise', picto: '🧊', name: 'Brise Glace', category: 'jeux',
+                description: 'Générateur d\'idées "Brise-Glace" pour lancer la conversation, faciliter l\'intégration dans les groupes ou les réunions professionnelles.',
+                demoUrl: 'https://ericsotoca.github.io/Brise/', sourceUrl: 'https://github.com/ericsotoca/Brise',
+                image: '', previewImage: ''
             },
             {
-                id: 'poly',
-                picto: '🌟',
-                name: '100 Questions Poly', // Nom changé pour la cohérence
-                tech: ['javascript'],
-                category: 'developpement', // <- MODIFIÉ (anciennement 'developpement')
-                description: '100 duestions pour réfléchir à la notion de Relation Poly...',
-                updated: 'Il y a 20 heures',
-                demoUrl: 'https://ericsotoca.github.io/poly',
-                sourceUrl: 'https://ericsotoca.github.io/poly',
-                image: 'images/logo_poly.png',
-                previewImage: 'images/poly_preview.png',
-                license: null
-            },
-
-            {
-                id: 'interieur',
-                picto: '🌟',
-                name: 'Voyage Interieur',
-                tech: ['javascript'],
-                category: 'developpement',
-                description: 'Voyage Intérieur - Questions pour réfléchir à ses émotions et son bien-être mental.',
-                updated: 'Il y a 20 heures',
-                demoUrl: 'https://ericsotoca.github.io/interieur/',
-                sourceUrl: 'https://ericsotoca.github.io/interieur/',
-                image: 'images/logo_interieur.png',
-                previewImage: 'images/interieur_preview.png',
-                license: null
+                id: 'bts', picto: '🎓', name: 'Intervention BTS SIO', category: 'utilitaires',
+                description: 'Documents interactifs et ressources numériques pour l\'accompagnement et la présentation auprès des étudiants en BTS SIO.',
+                demoUrl: 'https://ericsotoca.github.io/BTS/', sourceUrl: 'https://github.com/ericsotoca/BTS',
+                image: '', previewImage: ''
             },
             {
-                id: 'futur',
-                picto: '🌟',
-                name: 'Futur',
-                tech: ['javascript'],
-                category: 'developpement', // <- MODIFIÉ (anciennement 'developpement')
-                description: 'Rêves et Futur - Questions pour imaginer et planifier son avenir idéal',
-                updated: 'Il y a 20 heures',
-                demoUrl: 'https://ericsotoca.github.io/futur/',
-                sourceUrl: 'https://ericsotoca.github.io/futur/',
-                image: 'images/logo_futur.png',
-                previewImage: 'images/futur_preview.png',
-                license: null
+                id: 'calculateur_carbone', picto: '🌍', name: 'Calculateur Carbone', category: 'utilitaires',
+                description: 'Ciblez et comprenez facilement votre empreinte écologique avec ce calculateur interactif, ludique et orienté action.',
+                demoUrl: 'https://ericsotoca.github.io/Calculateur_Carbone/', sourceUrl: 'https://github.com/ericsotoca/Calculateur_Carbone',
+                image: '', previewImage: ''
             },
             {
-                id: 'decouverte',
-                picto: '🌟',
-                name: 'Découverte',
-                tech: ['javascript'],
-                category: 'developpement', // <- MODIFIÉ (anciennement 'developpement')
-                description: '50 questions pour se découvrir à deux...',
-                updated: 'Il y a 20 heures',
-                demoUrl: 'https://ericsotoca.github.io/decouverte/',
-                sourceUrl: 'https://ericsotoca.github.io/decouverte/',
-                image: 'images/logo_decouverte.png',
-                previewImage: 'images/decouverte_preview.png',
-                license: null
+                id: 'calcul_profond', picto: '🧠', name: 'Calcul Profond', category: 'developpement',
+                description: 'Explorez "L\'art de la simulation mentale". Une application d\'entraînement à la profondeur d\'analyse et à la concentration active.',
+                demoUrl: 'https://ericsotoca.github.io/Calcul_Profond/', sourceUrl: 'https://github.com/ericsotoca/Calcul_Profond',
+                image: '', previewImage: ''
+            },
+            {
+                id: 'carte_membres', picto: '🪪', name: 'Carte Membres', category: 'utilitaires',
+                description: 'Outil de génération et gestion simplifiée de cartes membres pour associations, clubs sportifs, ou de jeux.',
+                demoUrl: 'https://ericsotoca.github.io/carte-membres/', sourceUrl: 'https://github.com/ericsotoca/carte-membres',
+                image: '', previewImage: ''
+            },
+            {
+                id: 'consentement', picto: '✅', name: 'Le Consentement', category: 'developpement',
+                description: 'Outil interactif de sensibilisation et d\'éducation pour mieux appréhender la notion inaliénable de consentement de façon saine.',
+                demoUrl: 'https://ericsotoca.github.io/Consentement/', sourceUrl: 'https://github.com/ericsotoca/Consentement',
+                image: '', previewImage: ''
+            },
+            {
+                id: 'convertisseur', picto: '🎙️', name: 'Convertisseur PDF > Audio', category: 'utilitaires',
+                description: 'Optimisez votre productivité technologique en transformant n\'importe quel document lisible PDF en véritable livre audio.',
+                demoUrl: 'https://ericsotoca.github.io/convertisseur/', sourceUrl: 'https://github.com/ericsotoca/convertisseur',
+                image: '', previewImage: ''
+            },
+            {
+                id: 'coupleconnect', picto: '❤️', name: 'Couple Connect', category: 'developpement',
+                description: 'Expérience web dédiée à la connexion amoureuse, renforçant la communication en couple via des mini-ateliers interactifs.',
+                demoUrl: 'https://ericsotoca.github.io/CoupleConnect/', sourceUrl: 'https://github.com/ericsotoca/CoupleConnect',
+                image: '', previewImage: ''
+            },
+            {
+                id: 'croyances', picto: '🎭', name: 'Croyances Limitantes', category: 'developpement',
+                description: 'Ateliers et outils introspectifs pour neutraliser vos croyances limitantes et transformer votre schéma de pensée subconscient.',
+                demoUrl: 'https://ericsotoca.github.io/croyances/', sourceUrl: 'https://github.com/ericsotoca/croyances',
+                image: '', previewImage: ''
+            },
+            {
+                id: 'doigts', picto: '✌️', name: 'Jeu de Doigts', category: 'jeux',
+                description: 'Un concept de jeu amusant et expérimental basé sur la motricité et les réflexes rapides directement dans le navigateur.',
+                demoUrl: 'https://ericsotoca.github.io/Doigts/', sourceUrl: 'https://github.com/ericsotoca/Doigts',
+                image: '', previewImage: ''
+            },
+            {
+                id: 'ecoute', picto: '👂', name: 'L\'Écoute Active', category: 'developpement',
+                description: 'Pratiques et informations numériques ludiques sur l\'écoute bienveillante, destinée aux coachs ou aux particuliers.',
+                demoUrl: 'https://ericsotoca.github.io/ecoute/', sourceUrl: 'https://github.com/ericsotoca/ecoute',
+                image: '', previewImage: ''
+            },
+            {
+                id: 'emotions', picto: '🌈', name: 'Boussole des Émotions', category: 'sante-bien-etre',
+                description: 'Cartographiez et suivez l\'évolution de vos sentiments via cet outil visuel et thérapeutique de gestion émotionnelle.',
+                demoUrl: 'https://ericsotoca.github.io/emotions/', sourceUrl: 'https://github.com/ericsotoca/emotions',
+                image: '', previewImage: ''
+            },
+            {
+                id: 'ballonimaginaire', picto: '🎈', name: 'Ballon Imaginaire', category: 'jeux',
+                description: 'Expérimentation créative et poétique autour d\'un ballon interactif flottant. Très ludique et amusant !',
+                demoUrl: 'https://ericsotoca.github.io/ballonimaginaire/', sourceUrl: 'https://github.com/ericsotoca/ballonimaginaire',
+                image: '', previewImage: ''
             }
         ];
-        // *** FIN MODIFICATION JS ***
 
-        // --- Éléments du DOM ---
-        const appsGrid = document.getElementById('appsGrid');
+        // UI Logic
+        const grid = document.getElementById('appsGrid');
         const searchInput = document.getElementById('searchInput');
-        const categoryButtons = document.querySelectorAll('.category');
-        const homeLink = document.getElementById('homeLink');
+        const categoriesInputs = document.querySelectorAll('.category');
         const modal = document.getElementById('appModal');
-        const closeModalBtn = document.getElementById('closeModal');
-        const copyrightYearSpan = document.getElementById('copyright-year');
-        const modalContent = modal?.querySelector('.modal-content');
-        const modalIcon = document.getElementById('modalIcon');
-        const modalTitle = document.getElementById('modalTitle');
-        const modalCategory = document.getElementById('modalCategory');
-        const modalDescription = document.getElementById('modalDescription');
-        const startAppBtn = document.getElementById('startAppBtn');
-        const closeModalBtnBottom = document.getElementById('closeModalBtnBottom');
-        const modalImagePreview = document.getElementById('modalImagePreview');
-        const modalImagePreviewContainer = document.getElementById('modalImagePreviewContainer');
-        const modalColumnLeft = modal?.querySelector('.modal-column-left');
+        
+        document.getElementById('copyright-year').textContent = new Date().getFullYear();
 
-        // --- Fonctions ---
-        function capitalizeFirstLetter(string) {
-            if (!string) return '';
-            // Gère les cas comme "sante-bien-etre" -> "Santé & Bien-être" pour l'affichage
-            string = string.replace(/-/g, ' & ');
-            return string.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-        }
+        function renderApps(list) {
+            grid.innerHTML = '';
+            if (list.length === 0) {
+                grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: var(--text-muted); opacity: 0.7;">Aucune application ne correspond à cette recherche.</p>';
+                return;
+            }
+            list.forEach(app => {
+                const card = document.createElement('div');
+                card.className = 'app-card';
+                
+                // Gérer les images manquantes sublimement (placeholder avec UI Avatars)
+                const imgTag = (app.image && app.image.trim() !== '') 
+                    ? `<img src="${app.image}" alt="${app.name}" loading="lazy">`
+                    : `<div class="avatar-placeholder">${app.picto || '✨'}</div>`;
 
+                // Déterminer un label visuel
+                const categoryLabels = {
+                    'finance': 'Finance / PEA',
+                    'sante-bien-etre': 'Santé & Bien-être',
+                    'developpement': 'Dev Personnel',
+                    'jeux': 'Jeux',
+                    'utilitaires': 'Utilitaires',
+                    'organisation-productivite': 'Productivité',
+                    'musique': 'Audio/Musique'
+                };
+                const catLabel = categoryLabels[app.category] || 'Autre';
 
-        function generateAppCards(appsToShow) {
-            if (!appsGrid) { console.error("appsGrid non trouvé!"); return; }
-            appsGrid.innerHTML = '';
-            if (!appsToShow || appsToShow.length === 0) { appsGrid.innerHTML = '<p style="grid-column: 1 / -1; text-align: center; color: #777;">Aucune application trouvée.</p>'; return; }
-            appsToShow.forEach(app => {
-                const appCard = document.createElement('div');
-                appCard.className = 'app-card';
-                appCard.dataset.id = app.id;
-                const shortDescription = app.description.length > 100 ? app.description.substring(0, 100) + '...' : app.description;
-
-                const appNameHTML = `
-                    <div class="app-name">
-                        ${app.picto ? `<span class="app-picto">${app.picto}</span><br>` : ''}
-                        <span class="app-name-text">${app.name || 'Nom App'}</span>
+                card.innerHTML = `
+                    <div class="app-icon">${imgTag}</div>
+                    <div class="app-info">
+                        <div class="app-category-badge">${catLabel}</div>
+                        <div class="app-name">${app.name}</div>
+                        <div class="app-description">${app.description}</div>
                     </div>
                 `;
-
-                appCard.innerHTML = `
-                    <div class="app-icon"><img src="${app.image || 'images/placeholder.png'}" alt="Icône ${app.name || 'App'}" loading="lazy"></div>
-                    <div class="app-info">
-                        ${appNameHTML}
-                        <div class="app-meta"></div>
-                        <div class="app-description">${shortDescription}</div>
-                        <div class="update-info">Mis à jour ${app.updated || 'récemment'}</div>
-                    </div>`;
-                if (typeof openAppModal === 'function') { appCard.addEventListener('click', () => openAppModal(app)); }
-                else { console.warn("Fonction openAppModal non trouvée lors de la création de la carte."); }
-                appsGrid.appendChild(appCard);
+                card.addEventListener('click', () => openModal(app, catLabel));
+                grid.appendChild(card);
             });
         }
-        function filterAppsByCategory(category) { return category === 'all' ? apps : apps.filter(app => app.category === category); }
-        function filterAppsBySearch(term) { const lowerCaseTerm = term.toLowerCase().trim(); if (!lowerCaseTerm) return apps; return apps.filter(app => app.name.toLowerCase().includes(lowerCaseTerm) || app.description.toLowerCase().includes(lowerCaseTerm)); }
 
-        function openAppModal(app) {
-            if (!modal || !app) { console.error("Modale ou données App manquantes."); return; }
+        function openModal(app, catLabel) {
+            document.getElementById('modalTitle').textContent = (app.picto ? app.picto + ' ' : '') + app.name;
+            document.getElementById('modalCategory').textContent = catLabel;
+            document.getElementById('modalDescription').textContent = app.description;
+            document.getElementById('startAppBtn').href = app.demoUrl;
+            document.getElementById('codeBtn').href = app.sourceUrl;
 
-            if (modalIcon) modalIcon.innerHTML = `<img src="${app.image || ''}" alt="Icône ${app.name || 'App'}">`; else console.warn("modalIcon non trouvé");
+            const previewContainer = document.getElementById('modalImagePreviewContainer');
+            const previewImg = document.getElementById('modalImagePreview');
 
-            if (modalTitle) {
-                 modalTitle.textContent = `${app.picto ? app.picto + ' ' : ''}${app.name || 'Application'}`;
+            if (app.previewImage && app.previewImage.trim() !== '') {
+                previewImg.src = app.previewImage;
+                previewContainer.style.display = 'flex';
+            } else if (app.image && app.image.trim() !== '') {
+                previewImg.src = app.image;
+                previewContainer.style.display = 'flex';
             } else {
-                 console.warn("modalTitle non trouvé");
+                previewContainer.style.display = 'none';
             }
 
-            // Utilise la fonction capitalizeFirstLetter pour un affichage propre des catégories
-            if (modalCategory) modalCategory.textContent = capitalizeFirstLetter(app.category) || 'Divers'; else console.warn("modalCategory non trouvé");
-
-            if (modalDescription) modalDescription.textContent = app.description || 'Pas de description.'; else console.warn("modalDescription non trouvé");
-            if (startAppBtn) { startAppBtn.href = app.demoUrl || '#'; } else { console.warn("startAppBtn non trouvé"); }
-            if (modalImagePreviewContainer && modalImagePreview) {
-                if (app.previewImage && app.previewImage.trim() !== '') {
-                    modalImagePreview.src = app.previewImage;
-                    modalImagePreview.alt = `Aperçu de ${app.name || 'App'}`;
-                    modalImagePreviewContainer.classList.remove('hidden');
-                } else {
-                    modalImagePreview.src = ''; modalImagePreview.alt = ''; modalImagePreviewContainer.classList.add('hidden');
-                }
-            } else { console.warn("Élément(s) image preview non trouvés"); }
-            modal.classList.add('show'); document.body.classList.add('modal-open');
-
-            if (modalContent) { modalContent.scrollTop = 0; }
+            modal.classList.add('show');
+            document.body.classList.add('modal-open');
         }
 
-        function closeAppModal() {
-             if (!modal) return;
-            modal.classList.remove('show'); document.body.classList.remove('modal-open');
-            if (modalImagePreview) modalImagePreview.src = '';
-            if (modalImagePreviewContainer) modalImagePreviewContainer.classList.add('hidden');
-        }
-        function updateCopyrightYear() { if (copyrightYearSpan) { copyrightYearSpan.textContent = new Date().getFullYear(); } else { console.warn("copyrightYearSpan non trouvé"); } }
-
-        // --- Initialisation & Écouteurs d'Événements ---
-        if(!appsGrid || !categoryButtons || !homeLink || !searchInput || !modal || !closeModalBtn || !closeModalBtnBottom || !copyrightYearSpan) {
-             console.error("ERREUR CRITIQUE: Un ou plusieurs éléments essentiels du DOM n'ont pas été trouvés. Vérifiez les IDs HTML.");
-        } else {
-            generateAppCards(apps); updateCopyrightYear();
-            // --- Récupère les nouveaux boutons de catégorie après modification HTML ---
-            const updatedCategoryButtons = document.querySelectorAll('.category'); // <- Important de re-sélectionner après modif HTML ou s'assurer que le script s'exécute après
-            updatedCategoryButtons.forEach(button => { button.addEventListener('click', () => { let currentActive = document.querySelector('.category.active'); if(currentActive) currentActive.classList.remove('active'); button.classList.add('active'); const selectedCategory = button.dataset.category; searchInput.value = ''; generateAppCards(filterAppsByCategory(selectedCategory)); }); });
-            homeLink.addEventListener('click', () => { let currentActive = document.querySelector('.category.active'); if(currentActive) currentActive.classList.remove('active'); let allCategory = document.querySelector('.category[data-category="all"]'); if(allCategory) allCategory.classList.add('active'); searchInput.value = ''; generateAppCards(apps); });
-            let searchTimeout; searchInput.addEventListener('input', () => { clearTimeout(searchTimeout); searchTimeout = setTimeout(() => { const searchTerm = searchInput.value; let currentActive = document.querySelector('.category.active'); if(currentActive) currentActive.classList.remove('active'); let allCategory = document.querySelector('.category[data-category="all"]'); if(allCategory) allCategory.classList.add('active'); generateAppCards(filterAppsBySearch(searchTerm)); }, 250); });
-            closeModalBtn.addEventListener('click', closeAppModal); closeModalBtnBottom.addEventListener('click', closeAppModal);
-            modal.addEventListener('click', (event) => { if (event.target === modal) closeAppModal(); });
-            document.addEventListener('keydown', (event) => { if (event.key === 'Escape' && modal.classList.contains('show')) closeAppModal(); });
-            console.log("Script initialisé avec succès.");
+        function closeModal() {
+            modal.classList.remove('show');
+            document.body.classList.remove('modal-open');
         }
 
+        document.getElementById('closeModal').addEventListener('click', closeModal);
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+
+        // Filtering
+        let currentCategory = 'all';
+        function filterContent() {
+            const term = searchInput.value.toLowerCase();
+            const filtered = apps.filter(app => {
+                const matchCat = currentCategory === 'all' || app.category === currentCategory;
+                const matchName = app.name.toLowerCase().includes(term);
+                const matchDesc = app.description.toLowerCase().includes(term);
+                return matchCat && (matchName || matchDesc);
+            });
+            renderApps(filtered);
+        }
+
+        categoriesInputs.forEach(btn => {
+            btn.addEventListener('click', () => {
+                categoriesInputs.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentCategory = btn.dataset.category;
+                filterContent();
+            });
+        });
+
+        searchInput.addEventListener('input', filterContent);
+
+        // Init
+        renderApps(apps);
     </script>
 </body>
 </html>
