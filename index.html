@@ -253,6 +253,7 @@
             <div class="category" data-category="jeux">Jeux</div>
             <div class="category" data-category="utilitaires">Utilitaires & Outils</div>
             <div class="category" data-category="organisation-productivite">Productivité</div>
+            <div class="category" data-category="musique">Audio &amp; Médias</div>
         </div>
 
         <div class="apps-grid" id="appsGrid">
@@ -325,22 +326,118 @@
             };
         });
 
-        // Injecter des descriptions personnalisées et belles pour les plus gros projets (surcharge)
+        // Descriptions, noms et images personnalisés pour tous les projets
         const customData = {
-            'hypnozen': { desc: 'Application de relaxation et de méditation par hypnose.', name: 'HypnoZen' },
-            'awale': { desc: 'Dans la Tête d\'un Champion. Jeu de réflexion Awalé ultime !', name: 'Awalé' },
-            'pearetrait': { desc: 'Outil de calcul et de simulation pour les retraits sur Plan d\'Épargne en Actions.', name: 'PEA Retrait' },
-            'peaetf': { desc: 'Dashboard professionnel et simulateur ETF pour PEA.', name: 'PEA ETF Analyzer' },
-            'larouedelavie': { desc: 'Outil interactif pour évaluer et équilibrer les différents domaines de votre vie.' },
-            'acouphenes': { desc: 'Votre compagnon pour mieux comprendre et gérer vos acouphènes au quotidien.' },
-            'qrcodes': { desc: 'Créez facilement des QR codes personnalisés pour URLs ou textes.' },
-            'annuaireia': { desc: 'Point de départ simple et curaté pour explorer les outils IA.' }
+            // === FINANCE / PEA ===
+            'hypnozen':             { name: 'HypnoZen 🧘', desc: 'Application de relaxation par auto-hypnose. Ambiances sonores procédurales (Zen, Océan, Forêt) générées via Web Audio API. Fonctionne hors-ligne, zéro dépendance externe.' },
+            'pearetrait':           { name: 'PEA Retrait', desc: 'Simulateur professionnel de retraits sur Plan d\'Épargne en Actions. Calcule le capital restant, les plus-values imposables et optimise votre stratégie de retrait sur l\'horizon retraite.', image: 'images/logo_retraite.png' },
+            'peaetf':               { name: 'PEA ETF Analyzer', desc: 'Dashboard professionnel de gestion ETF pour PEA. Score de momentum 0-100, matrice de signaux MM200/RSI, sizing automatique des positions, graphiques en aire avec overlays SMA.' },
+            'calculateur':          { name: 'Calculatrice Pro', desc: 'Calculatrice avancée avec historique des opérations, fonctions scientifiques et interface optimisée pour une saisie rapide.', image: 'images/logo_calculatrice.png', preview: 'images/calculatrice_preview.png' },
+            'moncalculateur':       { name: 'Mon Calculateur', desc: 'Calculateur financier personnalisé pour estimer rendements, mensualités et objectifs d\'épargne selon vos paramètres.', image: 'images/logo_retraite.png' },
+            'calculateurcarbone':   { name: 'Calculateur Carbone', desc: 'Estimez votre empreinte carbone personnelle. Analyse vos transports, alimentation, logement et consommation, et propose des pistes de réduction concrètes.' },
+            'ca':                   { name: 'Suivi CA', desc: 'Tableau de bord simple pour suivre son chiffre d\'affaires mensuel et annuel, avec visualisation graphique de l\'évolution.' },
+            'retraite':             { name: 'Simulateur Retraite', desc: 'Projetez votre retraite : revenus attendus, âge optimal de départ, écart avec vos besoins. Compare les scénarios départ anticipé vs. taux plein.', image: 'images/logo_retraite.png' },
+
+            // === SANTÉ & BIEN-ÊTRE ===
+            'acouphenes':           { name: 'Acouphènes', desc: 'Votre compagnon pour mieux vivre avec les acouphènes. Sons masquants, exercices de relaxation auditive, journal de suivi et conseils pratiques au quotidien.', image: 'images/logo_acouphenes.png', preview: 'images/acouphenes_preview.png' },
+            'harmonie':             { name: 'Harmonie', desc: 'Application de pleine conscience et d\'harmonie corps-esprit. Exercices de cohérence cardiaque, méditations guidées et bilan de bien-être quotidien.', image: 'images/logo_harmonie.png', preview: 'images/harmonie_preview.png' },
+            'sophrologie':          { name: 'Sophrologie', desc: 'Séances de sophrologie guidées : relaxation dynamique, visualisation positive, ancrage. Idéal pour gérer le stress avant un examen ou une prise de parole.' },
+            'reflexologie':         { name: 'Réflexologie', desc: 'Cartographie interactive des zones réflexes des pieds. Identifiez les points de stimulation correspondant à chaque organe et apprenez les techniques de massage.' },
+            'tartre':               { name: 'Santé Dentaire', desc: 'Guide interactif de santé bucco-dentaire : prévention du tartre, techniques de brossage optimales et suivi de vos rendez-vous dentaires.' },
+            'ballonimaginaire':     { name: 'Ballon Imaginaire', desc: 'Outil de visualisation guidée par l\'image du ballon imaginaire — une technique d\'hypnose légère pour relâcher les tensions et retrouver la sérénité.' },
+            'oreille':              { name: 'Santé de l\'Oreille', desc: 'Guide complet pour la santé auditive : prévention des pertes auditives, exercices d\'entraînement auditif et conseils pour protéger votre capital sonore.' },
+            'audrey':               { name: 'Audrey Huault', desc: 'Site professionnel de la thérapeute Audrey Huault (Gap) : Hypnose, EMDR/MNO et Médecine Traditionnelle Chinoise. Présentation des soins et prise de contact.' },
+            'audreyhuault':         { name: 'Audrey Huault Pro', desc: 'Version évoluée du site thérapeute : Hypnose, EMDR/MNO et Médecine Traditionnelle Chinoise. Design premium, formulaire de contact et page de présentation détaillée.' },
+            'ecoute':               { name: 'Écoute Active', desc: 'Entraînez-vous à l\'écoute active et bienveillante. Exercices pratiques, grilles d\'auto-évaluation et conseils pour améliorer votre qualité de présence aux autres.' },
+            'vie':                  { name: 'Ma Vie', desc: 'Tableau de bord holiste de votre vie : santé, relations, finances, épanouissement. Suivez vos indicateurs de bien-être sur la durée et visualisez votre progression.' },
+
+            // === DÉVELOPPEMENT PERSONNEL ===
+            'larouedelavie':        { name: 'La Roue de la Vie', desc: 'Outil graphique interactif pour évaluer et rééquilibrer les 8 domaines clés de votre vie : Santé, Famille, Finance, Carrière, Épanouissement… Résultats instantanés en radar.', image: 'images/larouedelavie.png', preview: 'images/larouedelavie_preview.png' },
+            'enneagramme':          { name: 'Ennéagramme', desc: 'Découvrez votre type de personnalité parmi les 9 profils de l\'Ennéagramme. Quiz interactif, descriptions détaillées des types et des chemins de croissance personnelle.', image: 'images/logo_enneagramme.png', preview: 'images/enneagramme_preview.png' },
+            'croyances':            { name: 'Croyances Limitantes', desc: 'Identifiez et transformez vos croyances limitantes. Protocole guidé en 5 étapes : identification, questionnement, reformulation, ancrage de la nouvelle croyance.' },
+            'emotions':             { name: 'Roue des Émotions', desc: 'Explorez la roue des émotions de Plutchik en version interactive. Identifiez vos émotions primaires et secondaires, et développez votre intelligence émotionnelle.' },
+            'numerologie':          { name: 'Numérologie', desc: 'Calculez vos chiffres numérologiques (chemin de vie, expression, intime) à partir de votre prénom et date de naissance, avec interprétation détaillée.' },
+            'consentement':         { name: 'Consentement Éclairé', desc: 'Outil pédagogique sur le consentement dans les relations. Quiz de situations, cadre légal simplifié et guide pour des conversations ouvertes et respectueuses.' },
+            'coupleconnect':        { name: 'CoupleConnect', desc: 'Renforcer la communication dans le couple. Questions de connexion, jeux de dialogue bienveillant et exercices pour raviver la complicité quotidienne.' },
+            'amicoach':             { name: 'AmiCoach', desc: 'Votre coach amical IA ! Posez vos questions, exprimez vos doutes — obtenez des réponses bienveillantes et des exercices adaptés à votre situation du moment.' },
+            'kiff':                 { name: 'Mon Kiff', desc: 'Cultivez ce qui vous fait vibrer ! Listez, explorez et amplifiez vos sources de plaisir authentique pour vivre une vie plus alignée avec vos véritables désirs.' },
+            'brise':                { name: 'Brise-Glace', desc: 'Des questions puissantes pour briser la glace et créer de vraies connexions. Idéal pour les soirées, team buildings, thérapies de groupe ou premiers rendez-vous.', image: '' },
+            'decouverte':           { name: 'Découverte de Soi', desc: 'Parcours guidé de découverte de soi : forces, valeurs, talents cachés. Exercices introspectifs et bilan de personnalité pour mieux vous connaître.', image: 'images/logo_decouverte.png' },
+            'futur':                { name: 'Lettre du Futur', desc: 'Écrivez une lettre à votre futur vous — ou lisez une lettre inspirante de votre moi idéal. Outil puissant de projection pour clarifier ses ambitions.', image: 'images/logo_futur.png' },
+            'reves':                { name: 'Journal de Rêves', desc: 'Consignez, analysez et interprétez vos rêves. Symboles récurrents, émotions, thèmes — construisez votre propre dictionnaire onirique personnel.' },
+            'memoire':              { name: 'Mémoire+', desc: 'Entraînez et boostez votre mémoire avec des exercices progressifs : mémorisation de chiffres, listes, visages. Méthodes mnémotechniques expliquées étape par étape.' },
+            'calculprofond':        { name: 'Calcul Profond', desc: 'Simulateur de pensée profonde et de prises de décision complexes. Pondérez vos options, cartographiez les conséquences et clarifiez vos choix difficiles.' },
+            'interieur':            { name: 'Voyage Intérieur', desc: 'Méditez et explorez votre paysage intérieur. Visualisations guidées, journaling structuré et carte de vos états d\'âme pour un développement personnel en profondeur.', image: 'images/logo_interieur.png' },
+            'poly':                 { name: 'Polyglotte', desc: 'Application d\'apprentissage de vocabulaire multilingue par flashcards. Méthode de répétition espacée Leitner pour une mémorisation durable.', image: 'images/logo_poly.png', preview: 'images/poly_preview.png' },
+
+            // === JEUX ===
+            'awale':                { name: '🎯 Awalé — Dans la Tête d\'un Champion', desc: 'La version ultime du jeu de stratégie africain Awalé ! Intelligence artificielle avancée, tutoriels, niveaux de difficulté. Plus de 50 000 parties jouées. PWA installable.', image: 'images/danslatetedunchampion.png', preview: 'images/danslatetedunchampion_preview.png' },
+            'awalecapture':         { name: 'Awalé Capture', desc: 'Variante tactique du jeu Awalé axée sur la capture maximale. Complément parfait au jeu principal — voir aussi le repo awale pour la version complète.' },
+            'awaleflash':           { name: 'Awalé Flash', desc: 'Entraînez votre réflexe tactique avec Awalé Flash : des positions à résoudre contre la montre. Idéal pour progresser rapidement — voir aussi le repo awale.' },
+            'quizzawale':           { name: 'Quiz Awalé', desc: 'Testez vos connaissances sur le jeu Awalé : règles, stratégies, histoire africaine du jeu. Des centaines de questions pour tous niveaux — voir aussi le repo awale.' },
+            'thegame':              { name: 'The Game', desc: 'Jeu de logique et de stratégie aux règles simples mais à la profondeur insoupçonnée. Pouvez-vous toujours jouer en respectant les contraintes ?' },
+            'doigts':               { name: 'Jeu des Doigts', desc: 'Le célèbre jeu de compte sur les doigts en version numérique. Affûtez vos réflexes mathématiques et battez votre meilleur score !' },
+            'pmu':                  { name: 'PMU Simulator', desc: 'Simulateur de paris hippiques pour s\'entraîner aux stratégies de mise sans risquer un centime. Analysez les cotes et testez vos systèmes.' },
+            'tiragecartesracle':    { name: 'Tirage Oracle', desc: 'Effectuez un tirage de cartes oracle interactif. Cartes illustrées, messages intuitifs et interprétations pour chaque position du tirage.' },
+            'ericochet':            { name: 'ERICochet', desc: 'Jeu de ricochet cérébral : gérez les rebonds et atteignez la cible. Physique réaliste et niveaux progressifs pour un jeu addictif.', image: 'images/logo_ERICochet.png', preview: 'images/ERICochet_preview.png' },
+
+            // === OBJECTIFS & PRODUCTIVITÉ (regroupés) ===
+            'objectifs':            { name: 'Gestionnaire Objectifs', desc: 'Définissez, planifiez et suivez vos objectifs de vie avec méthode SMART. Tableaux de bord visuels, jalons et rappels — voir aussi MesObjectifs et OBJECTIF2026.' },
+            'mesobjectifs':         { name: 'Mes Objectifs', desc: 'Votre espace personnel de suivi d\'objectifs : vision board, indicateurs de progression et célébration des petites victoires. Voir aussi Objectifs et OBJECTIF2026.', image: 'images/logo_MesObjectifs.png', preview: 'images/MesObjectifs_preview.png' },
+            'objectif2026':         { name: 'OBJECTIF 2026', desc: 'Challenge annuel 2026 : définissez vos 3 objectifs majeurs de l\'année, planifiez par trimestre et suivez votre progression mois par mois. Voir aussi MesObjectifs.' },
+            'timing':               { name: 'Timing', desc: 'Gestionnaire de timing pour événements et présentations. Configurez vos créneaux, suivez le temps en direct et restez dans les délais impartis.' },
+            'sablier':              { name: 'Sablier', desc: 'Sablier numérique et minuteur polyvalent. Compte à rebours, chronomètre, timer Pomodoro pour les sessions de travail concentré.' },
+            'ouestmavoiture':       { name: 'Où est ma voiture ?', desc: 'Ne cherchez plus votre voiture ! Enregistrez sa position d\'un tap, retrouvez-la sur carte avec itinéraire pédestre, même sans connexion.', image: 'images/logo_ouestmavoiture.png', preview: 'images/ouestmavoiture_preview.png' },
+            'favoris':              { name: 'Mes Favoris', desc: 'Gestionnaire de favoris web personnel et visuel. Organisez vos liens par catégories avec aperçu miniature, recherche et export. Alternative à Pocket.' },
+            'rituels':              { name: 'Mes Rituels', desc: 'Construisez et ancrez vos rituels quotidiens : morning routine, soir, semaine. Visualisez vos habitudes sous forme de chaîne de succès (Don\'t break the chain).', image: 'images/logo_mesrituels.png', preview: 'images/mesrituels_preview.png' },
+            'hibernation':          { name: 'Hibernation', desc: 'Minuteur d\'hibernation pour votre PC. Planifiez l\'extinction automatique de votre ordinateur à une heure précise ou après un délai, sans logiciel à installer.', image: 'images/logo_hibernation.png', preview: 'images/hibernation_preview.png' },
+
+            // === UTILITAIRES & OUTILS ===
+            'annuaireia':           { name: 'Annuaire IA', desc: 'Répertoire curaté des meilleurs outils d\'intelligence artificielle, classés par usage : rédaction, image, code, audio, vidéo, productivité. Mis à jour régulièrement.', image: 'images/logo_annuaireia.png', preview: 'images/annuaireia_preview.png' },
+            'qrcodes':              { name: 'Générateur QR', desc: 'Créez des QR codes personnalisés en quelques secondes : URL, texte, email, WiFi, carte de visite. Export PNG en haute résolution, personnalisation couleurs et logo.', image: 'images/logo_qrcodes.png', preview: 'images/qrcodes_preview.png' },
+            'pdftoimages':          { name: 'PDF → Images', desc: 'Convertissez vos fichiers PDF en images JPG ou PNG haute qualité, page par page. Traitement 100% local dans votre navigateur, sans envoi sur serveur.' },
+            'pdftomp3':             { name: 'PDF → MP3', desc: 'Transformez vos documents PDF en podcasts audio. Sélectionnez la voix, la vitesse et le format, et écoutez vos lectures en déplacement.' },
+            'convertisseur':        { name: 'Convertisseur', desc: 'Convertisseur universel : unités de mesure, devises, températures, poids, distances. Interface rapide et précision maximale pour tous vos besoins de conversion.' },
+            'githubrepodownloader': { name: 'GitHub Downloader', desc: 'Téléchargez facilement le contenu d\'un repo GitHub public sans avoir Git installé. Collez l\'URL, récupérez un ZIP propre du code source.' },
+            'parfum':               { name: 'Guide Parfums', desc: 'Guide interactif pour trouver votre parfum idéal. Quiz olfactif, pyramide de notes, famille de fragrances et recommandations personnalisées.' },
+            'grok':                 { name: 'Interface Grok', desc: 'Interface simplifiée et personnalisée pour interagir avec Grok AI (xAI). Prompts prédéfinis, historique de conversation et export des échanges.' },
+            'maison':               { name: 'Ma Maison', desc: 'Application de gestion du foyer : planification des travaux, suivi des garanties, inventaire des équipements et calendrier d\'entretien préventif.' },
+            'interieur':            { name: 'Design Intérieur', desc: 'Explorez des palettes de couleurs et des styles de décoration intérieure. Visualisez des ambiances (Scandinave, Bohème, Industriel) pour renouveler votre espace.', image: 'images/logo_interieur.png' },
+            'mms':                  { name: 'MMS', desc: 'Outil de messagerie et de partage multimedia simplifié. Composez et visualisez des messages enrichis (texte + images) depuis votre navigateur.' },
+            'sr':                   { name: 'Speed Reading', desc: 'Entraîneur de lecture rapide : RSVP (Rapid Serial Visual Presentation), expansion de champ de vision et exercices de compréhension pour doubler votre vitesse de lecture.' },
+            'verre':                { name: 'Verre d\'Eau', desc: 'Tracker d\'hydratation quotidienne. Enregistrez vos verres bus, visualisez votre progression vers l\'objectif et recevez des rappels pour rester bien hydraté.' },
+
+            // === AUDIO & MÉDIAS ===
+            'siestefm':             { name: 'SiesteFM 📻', desc: 'La radio de la sieste parfaite. Musiques douces, sons naturels et ambiances relaxantes sélectionnés pour accompagner votre sieste et améliorer sa qualité.', image: 'images/logo_siestefm.png', preview: 'images/siestefm_preview.png' },
+            'webradio':             { name: 'Sotoca WebRadio', desc: 'Webradio personnalisée avec lecteur intégré, programmation de playlists et interface stylée. Streamez vos stations favorites et créez vos propres listes d\'écoute.', image: 'images/logo_sotocawebradio.png', preview: 'images/sotocawebradio_preview.png' },
+            'histoires':            { name: 'Histoires', desc: 'Bibliothèque d\'histoires interactives et de contes audio. Histoires pour enfants, récits de voyage et fictions sonores à écouter ou à lire.' },
+            'roman':                { name: 'Roman Interactif', desc: 'Écrivez ou lisez un roman dont vous êtes le héros. Choix narratifs, branches d\'histoire et illustrations générées pour une lecture immersive.', image: 'images/logo_roman.png', preview: 'images/roman_preview.png' },
+
+            // === PROJETS CLIENTS & ÉVÉNEMENTIELS ===
+            'wng2026':              { name: 'WNG 2026', desc: 'Application événementielle pour la Délégation Française. Programme, accréditations, infos pratiques et communications officielles pour les participants.' },
+            'ticketmiam':           { name: 'TicketMiam 🍽️', desc: 'Application de gestion des tickets repas et des commandes de restauration collective. Suivi en temps réel, statistiques de consommation et exports.' },
+            'bts':                  { name: 'BTS SIO', desc: 'Supports de cours et exercices pratiques pour les étudiants en BTS SIO. Révisions structurées, QCM corrigés et projets guidés pour l\'examen.' },
+            'tacroisi r':           { name: 'TaCroisiR', desc: 'Application de planification de croisière : itinéraires, escales, activités et budget. Organisez et partagez votre aventure maritime facilement.' },
+            'raynair2024':          { name: 'Raynair 2024', desc: 'Outil de planification de voyage low-cost façon Ryanair. Comparateur de dates flexibles, alertes prix et optimisation des combinaisons vol + hébergement.' },
+            'coursgithub':          { name: 'Cours GitHub', desc: 'Formation Git & GitHub simplifiée pour débutants. Commandes essentielles, workflows, gestion des branches — du premier commit au déploiement.' },
+            'wild codes choolformationianov2023': { name: 'Formation IA — Wild Code School', desc: 'Supports de la formation Intelligence Artificielle dispensée à la Wild Code School (novembre 2023). Exercices pratiques, ressources et projets étudiants.' },
+
+            // === DIvers ===
+            'cartemembers':         { name: 'Cartes Membres', desc: 'Système de gestion des cartes de membres pour associations ou clubs. Création, attribution, suivi des adhésions et des renouvellements.' },
+            'playstore':            { name: 'Play Store', desc: 'Publications et ressources liées aux applications publiées sur le Google Play Store. Listings, captures d\'écran et descriptions des apps Android.' },
+            'n8n':                  { name: 'n8n Automation', desc: 'Workflows d\'automatisation no-code basés sur n8n. Intégrations entre services web, gestion de déclencheurs et automatisation de tâches répétitives.' },
+            'n8nrenderlamachine':   { name: 'n8n — La Machine', desc: 'Instance n8n hébergée sur Render.com pour des automatisations cloud permanentes. Workflows de veille, alertes et synchronisations entre applications.' },
+            'sapatunav':            { name: 'SapatuNav', desc: 'Application de navigation et d\'orientation simplifiée. Boussole, points de repère et suivi de trajet pour randonneurs et promeneurs débutants.' },
+            'wng20 26':             { name: 'WNG 2026', desc: 'Portail officiel de la délégation française pour les World Nomad Games 2026. Programme sportif, équipes, résultats et informations pratiques.' }
         };
 
         apps.forEach(app => {
-            if (customData[app.id]) {
-                app.description = customData[app.id].desc || app.description;
-                app.name = customData[app.id].name || app.name;
+            const match = customData[app.id];
+            if (match) {
+                if (match.name)    app.name = match.name;
+                if (match.desc)    app.description = match.desc;
+                if (match.image)   app.image = match.image;
+                if (match.preview) app.previewImage = match.preview;
             }
         });
 
