@@ -3,20 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio d'Eric Sotoca</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Eric Sotoca — Univers & Portfolio d'Applications</title>
+    <meta name="description" content="Portfolio interactif d'Eric Sotoca : découvrez plus de 100 applications rangées par thématiques (Thaïlande, Finance, Santé, Dev Personnel, Jeux, Audio 3D, IA).">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #0f172a;
-            --bg-card: rgba(30, 41, 59, 0.6);
-            --bg-glass: rgba(15, 23, 42, 0.8);
-            --border: rgba(255, 255, 255, 0.1);
-            --border-hover: rgba(56, 189, 248, 0.5);
+            --bg: #0b0f19;
+            --bg-elevated: #111827;
+            --bg-card: rgba(17, 24, 39, 0.7);
+            --bg-card-hover: rgba(30, 41, 59, 0.85);
+            --bg-glass: rgba(11, 15, 25, 0.85);
+            --border: rgba(255, 255, 255, 0.08);
+            --border-hover: rgba(56, 189, 248, 0.4);
             --text: #f8fafc;
             --text-muted: #94a3b8;
+            --text-dim: #64748b;
             --accent: #38bdf8;
-            --accent-glow: rgba(56, 189, 248, 0.4);
-            --gradient: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
+            --accent-glow: rgba(56, 189, 248, 0.35);
+            --thai-accent: #f59e0b;
+            --thai-glow: rgba(245, 158, 11, 0.4);
+            --gradient: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
+            --thai-gradient: linear-gradient(135deg, #f59e0b 0%, #ef4444 50%, #ec4899 100%);
         }
 
         * {
@@ -25,8 +34,12 @@
             padding: 0;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: var(--bg);
             color: var(--text);
             line-height: 1.6;
@@ -38,477 +51,2004 @@
             overflow: hidden;
         }
 
-        /* Ambient animated blobs */
+        /* Blobs d'ambiance animés */
         .blobs {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            z-index: -1; overflow: hidden; pointer-events: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            overflow: hidden;
+            pointer-events: none;
         }
         .blob {
-            position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.5;
-            animation: float 15s infinite ease-in-out alternate;
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(140px);
+            opacity: 0.35;
+            animation: float 20s infinite ease-in-out alternate;
         }
-        .blob-1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background: #38bdf8; }
-        .blob-2 { bottom: -10%; right: -10%; width: 50vw; height: 50vw; background: #818cf8; animation-delay: -7.5s; }
+        .blob-1 { top: -15%; left: -10%; width: 55vw; height: 55vw; background: #0284c7; }
+        .blob-2 { bottom: -20%; right: -10%; width: 50vw; height: 50vw; background: #6366f1; animation-delay: -7s; }
+        .blob-3 { top: 40%; left: 40%; width: 45vw; height: 45vw; background: #d97706; opacity: 0.2; animation-delay: -12s; }
         
         @keyframes float {
             0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(10%, 10%) scale(1.1); }
+            50% { transform: translate(6%, 8%) scale(1.08); }
+            100% { transform: translate(-5%, -4%) scale(0.95); }
         }
 
         /* Header */
         header {
-            position: sticky; top: 0; z-index: 100;
-            background: var(--bg-glass); backdrop-filter: blur(16px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border);
-            padding: 1rem 2rem;
-        }
-        .header-content {
-            max-width: 1400px; margin: 0 auto;
-            display: flex; justify-content: space-between; align-items: center;
-            flex-wrap: wrap; gap: 1rem;
-        }
-        .logo {
-            font-size: 1.5rem; font-weight: 700;
-            background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            cursor: pointer; text-decoration: none;
-        }
-        
-        .search-bar input {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--border); color: var(--text);
-            padding: 0.75rem 1.5rem; border-radius: 999px;
-            font-size: 1rem; width: 300px; outline: none;
-            transition: all 0.3s ease; font-family: 'Inter', sans-serif;
-        }
-        .search-bar input:focus {
-            border-color: var(--accent); background: rgba(255, 255, 255, 0.1);
-            box-shadow: 0 0 15px var(--accent-glow);
-        }
-
-        /* Main */
-        main { max-width: 1400px; margin: 3rem auto; padding: 0 2rem; }
-        .hero-title { font-size: 3rem; font-weight: 800; margin-bottom: 0.5rem; line-height: 1.2; }
-        .hero-subtitle { font-size: 1.2rem; color: var(--text-muted); margin-bottom: 3rem; }
-
-        .categories {
-            display: flex; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 2.5rem;
-        }
-        .category {
-            background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border);
-            padding: 0.5rem 1.2rem; border-radius: 999px; cursor: pointer;
-            font-size: 0.9rem; font-weight: 500; color: var(--text-muted);
+            padding: 0.9rem 2rem;
             transition: all 0.3s ease;
         }
-        .category:hover { background: rgba(255, 255, 255, 0.1); color: var(--text); }
-        .category.active {
-            background: var(--gradient); color: white; border-color: transparent;
+        .header-content {
+            max-width: 1440px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+        }
+        .logo-badge {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: var(--gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
             box-shadow: 0 4px 15px var(--accent-glow);
         }
-
-        /* Grid */
-        .apps-grid {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2rem;
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+        }
+        .brand-name {
+            font-size: 1.3rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .brand-sub {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
         }
         
-        /* Card */
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-grow: 1;
+            justify-content: flex-end;
+        }
+        .search-bar {
+            position: relative;
+            max-width: 380px;
+            width: 100%;
+        }
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-dim);
+            pointer-events: none;
+            font-size: 0.95rem;
+        }
+        .search-bar input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 0.7rem 1rem 0.7rem 2.6rem;
+            border-radius: 999px;
+            font-size: 0.92rem;
+            outline: none;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+        .search-bar input:focus {
+            border-color: var(--accent);
+            background: rgba(255, 255, 255, 0.09);
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+        .search-bar input::placeholder {
+            color: var(--text-dim);
+        }
+
+        .header-stats {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid rgba(56, 189, 248, 0.25);
+            padding: 0.45rem 0.9rem;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--accent);
+            white-space: nowrap;
+        }
+
+        /* Hero */
+        .hero {
+            max-width: 1440px;
+            margin: 2.5rem auto 1.5rem;
+            padding: 0 2rem;
+            text-align: center;
+        }
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.35rem 1rem;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 1.2rem;
+        }
+        .hero-title {
+            font-size: clamp(2.3rem, 5vw, 3.8rem);
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            line-height: 1.15;
+            margin-bottom: 1rem;
+        }
+        .hero-title span {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero-subtitle {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            max-width: 780px;
+            margin: 0 auto 2.5rem;
+            line-height: 1.6;
+        }
+
+        /* Navigation thématique sticky / bar de filtres */
+        .nav-categories-wrapper {
+            position: sticky;
+            top: 73px;
+            z-index: 90;
+            background: rgba(11, 15, 25, 0.92);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+            padding: 0.75rem 2rem;
+            margin-bottom: 3rem;
+        }
+        .nav-categories {
+            max-width: 1440px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            overflow-x: auto;
+            scrollbar-width: none;
+            padding: 0.2rem 0;
+        }
+        .nav-categories::-webkit-scrollbar {
+            display: none;
+        }
+        .nav-item {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border);
+            padding: 0.55rem 1.1rem;
+            border-radius: 999px;
+            cursor: pointer;
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            transition: all 0.25s ease;
+            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            user-select: none;
+        }
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.09);
+            color: var(--text);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+        }
+        .nav-item.active {
+            background: var(--gradient);
+            color: #fff;
+            border-color: transparent;
+            box-shadow: 0 4px 15px var(--accent-glow);
+        }
+        .nav-item.thai-nav {
+            border-color: rgba(245, 158, 11, 0.4);
+            color: #fbbf24;
+            background: rgba(245, 158, 11, 0.1);
+        }
+        .nav-item.thai-nav:hover {
+            background: rgba(245, 158, 11, 0.2);
+            box-shadow: 0 4px 15px var(--thai-glow);
+        }
+        .nav-item.thai-nav.active {
+            background: var(--thai-gradient);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 4px 18px var(--thai-glow);
+        }
+        .nav-item .count-badge {
+            font-size: 0.72rem;
+            padding: 0.1rem 0.45rem;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.15);
+            font-weight: 700;
+        }
+
+        /* Container principal */
+        main {
+            max-width: 1440px;
+            margin: 0 auto;
+            padding: 0 2rem 5rem;
+        }
+
+        /* Sections Thématiques */
+        .theme-section {
+            margin-bottom: 4.5rem;
+            scroll-margin-top: 150px;
+        }
+        .theme-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 1.8rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .theme-title-area {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .theme-icon-box {
+            width: 50px;
+            height: 50px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            flex-shrink: 0;
+        }
+        .theme-section.thailande-section .theme-icon-box {
+            background: rgba(245, 158, 11, 0.15);
+            border-color: rgba(245, 158, 11, 0.35);
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.2);
+        }
+        .theme-heading {
+            font-size: 1.7rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .theme-count {
+            font-size: 0.8rem;
+            padding: 0.25rem 0.7rem;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+        .theme-section.thailande-section .theme-count {
+            background: rgba(245, 158, 11, 0.2);
+            color: #fbbf24;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+        .theme-desc {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+            max-width: 800px;
+        }
+
+        /* Bannière Spéciale Thaïlande */
+        .thailande-highlight-banner {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.15) 0%, rgba(239, 68, 68, 0.1) 50%, rgba(17, 24, 39, 0.7) 100%);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 20px;
+            padding: 1.25rem 1.75rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            box-shadow: 0 10px 30px rgba(245, 158, 11, 0.1);
+        }
+        .thailande-highlight-banner .flag-badge {
+            font-size: 2.4rem;
+            line-height: 1;
+        }
+        .thailande-highlight-banner h3 {
+            font-size: 1.15rem;
+            color: #fbbf24;
+            margin-bottom: 0.2rem;
+            font-weight: 700;
+        }
+        .thailande-highlight-banner p {
+            font-size: 0.92rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        /* Grille des cartes */
+        .apps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.6rem;
+        }
+
+        /* Carte Application */
         .app-card {
-            background: var(--bg-card); backdrop-filter: blur(12px);
-            border: 1px solid var(--border); border-radius: 20px;
-            display: flex; flex-direction: column; overflow: hidden;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            cursor: pointer; position: relative;
+            background: var(--bg-card);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            cursor: pointer;
+            position: relative;
         }
         .app-card::before {
-            content: ''; position: absolute; inset: 0; border-radius: 20px;
-            padding: 2px; background: var(--gradient); -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor; mask-composite: exclude; opacity: 0; transition: opacity 0.4s ease;
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 18px;
+            padding: 2px;
+            background: var(--gradient);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.35s ease;
+            pointer-events: none;
         }
-        .app-card:hover { transform: translateY(-8px); box-shadow: 0 15px 35px rgba(0,0,0,0.4), 0 0 20px var(--accent-glow); }
-        .app-card:hover::before { opacity: 1; }
-        
-        .app-icon {
-            height: 150px; width: 100%; display: flex; align-items: center; justify-content: center;
-            background: rgba(0, 0, 0, 0.2); position: relative; overflow: hidden;
+        .theme-section.thailande-section .app-card::before {
+            background: var(--thai-gradient);
         }
-        .app-icon img {
-            width: 72px; height: 72px; object-fit: contain; transition: transform 0.5s ease;
-            border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        .app-card:hover {
+            transform: translateY(-6px);
+            background: var(--bg-card-hover);
+            box-shadow: 0 18px 35px rgba(0, 0, 0, 0.45), 0 0 25px var(--accent-glow);
+            border-color: rgba(56, 189, 248, 0.3);
         }
-        .app-card:hover .app-icon img { transform: scale(1.1); }
-        /* Fallback icon when no image */
-        .avatar-placeholder {
-            font-size: 3.5rem; text-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            display: flex; align-items: center; justify-content: center;
-            width: 72px; height: 72px; transition: transform 0.5s ease;
+        .theme-section.thailande-section .app-card:hover {
+            box-shadow: 0 18px 35px rgba(0, 0, 0, 0.45), 0 0 25px var(--thai-glow);
+            border-color: rgba(245, 158, 11, 0.4);
         }
-        .app-card:hover .avatar-placeholder { transform: scale(1.1); }
+        .app-card:hover::before {
+            opacity: 1;
+        }
 
-        .app-info { padding: 1.5rem; display: flex; flex-direction: column; flex-grow: 1; }
-        .app-name { font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
-        .app-category-badge {
-            background: rgba(255, 255, 255, 0.1); font-size: 0.75rem; padding: 0.2rem 0.6rem;
-            border-radius: 6px; color: var(--accent); margin-bottom: 1rem; width: fit-content; text-transform: uppercase; letter-spacing: 0.5px;
+        .app-header-area {
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.03) 0%, rgba(0, 0, 0, 0.25) 100%);
+            border-bottom: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+        .app-header-area img {
+            width: 68px;
+            height: 68px;
+            object-fit: contain;
+            border-radius: 14px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            transition: transform 0.4s ease;
+        }
+        .app-card:hover .app-header-area img {
+            transform: scale(1.1);
+        }
+        .avatar-placeholder {
+            width: 68px;
+            height: 68px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.2rem;
+            transition: transform 0.4s ease;
+        }
+        .app-card:hover .avatar-placeholder {
+            transform: scale(1.12);
+        }
+
+        .app-info {
+            padding: 1.4rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+        .app-tags {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+            flex-wrap: wrap;
+        }
+        .app-tag {
+            font-size: 0.72rem;
+            padding: 0.2rem 0.6rem;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.06);
+            color: var(--text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .app-tag.live {
+            background: rgba(16, 185, 129, 0.15);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+        .app-tag.thai {
+            background: rgba(245, 158, 11, 0.15);
+            color: #fbbf24;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .app-name {
+            font-size: 1.18rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            line-height: 1.3;
+            color: var(--text);
         }
         .app-description {
-            color: var(--text-muted); font-size: 0.95rem; line-height: 1.5;
-            display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; flex-grow: 1;
+            color: var(--text-muted);
+            font-size: 0.92rem;
+            line-height: 1.55;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            flex-grow: 1;
+            margin-bottom: 1.25rem;
         }
-        
+
+        .app-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-top: auto;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .app-btn {
+            flex: 1;
+            padding: 0.55rem 0.8rem;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-align: center;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+        .app-btn-outline {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+        }
+        .app-btn-outline:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text);
+        }
+        .app-btn-launch {
+            background: rgba(56, 189, 248, 0.15);
+            border: 1px solid rgba(56, 189, 248, 0.35);
+            color: #7dd3fc;
+        }
+        .app-btn-launch:hover {
+            background: var(--accent);
+            color: #0b0f19;
+            box-shadow: 0 4px 15px var(--accent-glow);
+        }
+        .theme-section.thailande-section .app-btn-launch {
+            background: rgba(245, 158, 11, 0.2);
+            border-color: rgba(245, 158, 11, 0.4);
+            color: #fde68a;
+        }
+        .theme-section.thailande-section .app-btn-launch:hover {
+            background: var(--thai-accent);
+            color: #0b0f19;
+            box-shadow: 0 4px 15px var(--thai-glow);
+        }
+
         /* Modal */
         .modal {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px);
-            z-index: 1000; display: flex; align-items: center; justify-content: center;
-            opacity: 0; visibility: hidden; transition: all 0.3s ease; padding: 1rem;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.82);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            padding: 1.5rem;
         }
-        .modal.show { opacity: 1; visibility: visible; }
+        .modal.show {
+            opacity: 1;
+            visibility: visible;
+        }
         .modal-content {
-            background: #1e293b; border: 1px solid var(--border); border-radius: 24px;
-            max-width: 900px; width: 100%; max-height: 90vh; overflow-y: auto;
-            position: relative; transform: scale(0.95) translateY(20px); opacity: 0;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            display: flex; flex-direction: column; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            max-width: 850px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            transform: scale(0.96) translateY(15px);
+            opacity: 0;
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
         }
-        .modal.show .modal-content { transform: scale(1) translateY(0); opacity: 1; }
+        .modal.show .modal-content {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+        }
         
         .modal-header {
-            padding: 2rem; border-bottom: 1px solid var(--border);
-            display: flex; align-items: flex-start; justify-content: space-between; gap: 2rem;
+            padding: 1.8rem 2rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 1.5rem;
             background: rgba(255, 255, 255, 0.02);
         }
-        .modal-title-area { flex-grow: 1; }
-        .modal-title { font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem; }
-        
+        .modal-title-area {
+            flex-grow: 1;
+        }
+        .modal-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 0.4rem;
+            letter-spacing: -0.5px;
+        }
+        .modal-category-badge {
+            background: rgba(56, 189, 248, 0.15);
+            font-size: 0.78rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 6px;
+            color: var(--accent);
+            display: inline-block;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 700;
+        }
         .close-modal {
-            background: rgba(255,255,255,0.1); border: none; color: white;
-            width: 40px; height: 40px; border-radius: 50%; cursor: pointer;
-            display: flex; align-items: center; justify-content: center; font-size: 1.5rem;
-            transition: background 0.2s; flex-shrink: 0;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--border);
+            color: white;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            transition: all 0.2s;
+            flex-shrink: 0;
         }
-        .close-modal:hover { background: rgba(255,255,255,0.2); }
+        .close-modal:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.08);
+        }
 
-        .modal-body { padding: 2rem; display: flex; gap: 2rem; flex-wrap: wrap; }
-        .modal-desc { flex: 1; min-width: 300px; font-size: 1.05rem; color: var(--text-muted); line-height: 1.7; }
-        .modal-image-preview {
-            flex: 1; min-width: 300px; border-radius: 12px; overflow: hidden;
-            border: 1px solid var(--border); background: rgba(0,0,0,0.2);
-            display: flex; align-items: center; justify-content: center;
+        .modal-body {
+            padding: 2rem;
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
         }
-        .modal-image-preview img { max-width: 100%; height: auto; display: block; }
+        .modal-desc {
+            flex: 1;
+            min-width: 280px;
+            font-size: 1.05rem;
+            color: var(--text-muted);
+            line-height: 1.7;
+        }
+        .modal-image-preview {
+            flex: 1;
+            min-width: 280px;
+            border-radius: 14px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            background: rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            max-height: 320px;
+        }
+        .modal-image-preview img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: cover;
+            display: block;
+        }
         
         .modal-footer {
-            padding: 2rem; border-top: 1px solid var(--border);
-            display: flex; justify-content: flex-end; gap: 1rem; background: rgba(255,255,255,0.02);
+            padding: 1.5rem 2rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            background: rgba(255, 255, 255, 0.02);
+            flex-wrap: wrap;
         }
-
         .btn {
-            padding: 0.75rem 1.5rem; border-radius: 12px; font-weight: 600; cursor: pointer;
-            transition: all 0.2s ease; border: none; font-family: inherit; font-size: 1rem;
-            text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem;
+            padding: 0.75rem 1.6rem;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            font-size: 0.95rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
         }
-        .btn-ghost { background: transparent; color: var(--text); border: 1px solid var(--border); }
-        .btn-ghost:hover { background: rgba(255,255,255,0.1); }
-        .btn-primary { background: var(--gradient); color: white; box-shadow: 0 4px 15px var(--accent-glow); }
-        .btn-primary:hover { filter: brightness(1.1); transform: translateY(-2px); }
+        .btn-ghost {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+        .btn-ghost:hover {
+            background: rgba(255, 255, 255, 0.12);
+        }
+        .btn-primary {
+            background: var(--gradient);
+            color: white;
+            box-shadow: 0 4px 15px var(--accent-glow);
+            border: none;
+        }
+        .btn-primary:hover {
+            filter: brightness(1.1);
+            transform: translateY(-2px);
+        }
 
-        footer { text-align: center; padding: 2rem; margin-top: 4rem; color: var(--text-muted); border-top: 1px solid var(--border); font-size: 0.9rem; }
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            border-top: 1px solid var(--border);
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            background: rgba(11, 15, 25, 0.5);
+        }
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Message quand aucun résultat */
+        .empty-results {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            background: var(--bg-card);
+            border-radius: 18px;
+            border: 1px solid var(--border);
+            margin: 2rem 0;
+            display: none;
+        }
 
         @media (max-width: 768px) {
-            .hero-title { font-size: 2.2rem; }
-            .header-content { flex-direction: column; align-items: flex-start; }
-            .search-bar input { width: 100%; }
+            header { padding: 0.8rem 1rem; }
+            .header-content { flex-direction: column; align-items: stretch; gap: 0.8rem; }
+            .header-actions { justify-content: space-between; }
+            .search-bar { max-width: 100%; }
+            .hero { padding: 0 1rem; margin-top: 1.5rem; }
+            .nav-categories-wrapper { top: 125px; padding: 0.6rem 1rem; }
+            main { padding: 0 1rem 3rem; }
+            .apps-grid { grid-template-columns: 1fr; }
             .modal-body { flex-direction: column; }
         }
     </style>
 </head>
 <body>
 
+    <!-- Blobs immersifs -->
     <div class="blobs">
         <div class="blob blob-1"></div>
         <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
     </div>
 
-    <!-- Header -->
+    <!-- En-tête -->
     <header>
         <div class="header-content">
-            <a href="#" class="logo" id="homeLink">💎 Eric Sotoca</a>
-            <div class="search-bar">
-                <input type="text" placeholder="Rechercher une application..." id="searchInput">
+            <a href="#" class="brand">
+                <div class="logo-badge">💎</div>
+                <div class="brand-text">
+                    <span class="brand-name">Eric Sotoca</span>
+                    <span class="brand-sub">Applications & Projets GitHub</span>
+                </div>
+            </a>
+            <div class="header-actions">
+                <div class="search-bar">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" placeholder="Rechercher une application (nom, mot-clé, tech)..." id="searchInput" autocomplete="off">
+                </div>
+                <div class="header-stats" id="totalAppsBadge">
+                    ⚡ Chargement...
+                </div>
             </div>
         </div>
     </header>
 
-    <!-- Main -->
-    <main>
-        <h1 class="hero-title">Mon Univers Créatif</h1>
+    <!-- Hero d'introduction -->
+    <section class="hero">
+        <div class="hero-badge">🌐 Écosystème GitHub & Déploiements Live</div>
+        <h1 class="hero-title">Toutes mes applications <span>rangées par thématique</span></h1>
         <p class="hero-subtitle">
-            Explorez tous mes projets, applications web et expérimentations de développement.<br>
-            <strong style="color: var(--accent);" id="repoCountDisplay">Applications répertoriées : 82</strong>
+            Explorez l'ensemble de mes projets classés par domaines d'expertise : de nos aventures et outils en <strong>Thaïlande</strong> aux stratégies de <strong>Finance PEA</strong>, du <strong>Bien-être</strong> à l'<strong>Awalé</strong>, en passant par l'<strong>Audio 3D</strong> et l'<strong>Intelligence Artificielle</strong>.
         </p>
+    </section>
 
-        <div class="categories">
-            <div class="category active" data-category="all">Tous les projets</div>
-            <div class="category" data-category="finance">Finance / PEA</div>
-            <div class="category" data-category="sante-bien-etre">Santé & Bien-être</div>
-            <div class="category" data-category="developpement">Dev Personnel</div>
-            <div class="category" data-category="jeux">Jeux</div>
-            <div class="category" data-category="utilitaires">Utilitaires & Outils</div>
-            <div class="category" data-category="organisation-productivite">Productivité</div>
-            <div class="category" data-category="musique">Audio &amp; Médias</div>
+    <!-- Navigation Thématique Sticky -->
+    <nav class="nav-categories-wrapper">
+        <div class="nav-categories" id="navCategories">
+            <!-- Rendu dynamique des onglets -->
+        </div>
+    </nav>
+
+    <!-- Contenu Principal : Sections Thématiques -->
+    <main id="mainContainer">
+        <!-- Message aucun résultat lors d'une recherche -->
+        <div class="empty-results" id="emptyResults">
+            <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🔍</div>
+            <p>Aucune application ne correspond à votre recherche « <strong id="searchedTermText"></strong> ».</p>
+            <p style="font-size: 0.9rem; color: var(--text-dim); margin-top: 0.5rem;">Essayez avec un autre mot-clé (ex: thaïlande, dtv, pea, awalé, audio, etc.).</p>
         </div>
 
-        <div class="apps-grid" id="appsGrid">
-            <!-- Injecté via JS -->
+        <div id="themeSectionsContainer">
+            <!-- Sections injectées dynamiquement par thématique -->
         </div>
     </main>
 
-    <!-- Modal -->
+    <!-- Modal Détails Application -->
     <div id="appModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
                 <div class="modal-title-area">
-                    <h2 class="modal-title" id="modalTitle">Project Name</h2>
-                    <div class="app-category-badge" id="modalCategory">Category</div>
+                    <h2 class="modal-title" id="modalTitle">Titre du Projet</h2>
+                    <span class="modal-category-badge" id="modalCategory">Catégorie</span>
                 </div>
-                <button class="close-modal" id="closeModal">×</button>
+                <button class="close-modal" id="closeModal" aria-label="Fermer">×</button>
             </div>
             <div class="modal-body">
-                <div class="modal-desc" id="modalDescription">Description goes here...</div>
+                <div class="modal-desc" id="modalDescription">Description du projet...</div>
                 <div class="modal-image-preview" id="modalImagePreviewContainer">
-                    <img id="modalImagePreview" src="" alt="Aperçu">
+                    <img id="modalImagePreview" src="" alt="Aperçu du projet">
                 </div>
             </div>
             <div class="modal-footer">
-                <a id="codeBtn" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">Voir le Code</a>
-                <a id="startAppBtn" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Lancer l'Application 🚀</a>
+                <a id="codeBtn" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">💻 Code Source GitHub</a>
+                <a id="startAppBtn" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-primary">🚀 Lancer l'Application</a>
             </div>
         </div>
     </div>
 
+    <!-- Pied de page -->
     <footer>
-        © <span id="copyright-year"></span> Eric Sotoca - Portfolio Premium Exhaustif    <script defer>
-        const repoList = [
-            "HypnoZen", "carte-membres", "webradio", "WNG2026", "BTS", "playstore", "emotions", "PEA-Retrait",
-            "timing", "roman", "numerologie", "tirage-cartes-oracle", "Harmonie", "mon-calculateur",
-            "TicketMiam", "thegame", "Acouphenes", "SiesteFM", "larouedelavie", "reflexologie", "PEA-ETF",
-            "MesObjectifs", "Enneagramme", "QRCodes", "kiff", "awale", "Consentement", "Brise", "retraite",
-            "Doigts", "ERICochet", "Calculatrice", "ecoute", "oreille", "Hibernation", "Sophrologie", "pmu",
-            "audrey", "OBJECTIF2026", "croyances", "Calcul_Profond", "awale_capture", "decouverte",
-            "Audrey_Huault", "parfum", "sr", "verre", "Favoris", "grok", "MEMOIRE", "poly", "awale_flash",
-            "quizz_awale", "convertisseur", "REVES", "MMS", "ballonimaginaire", "tartre", "CoupleConnect",
-            "futur", "AnnuaireIA", "github-repo-downloader", "histoires", "PDFtoIMAGES", "Calculateur_Carbone",
-            "vie", "maison", "interieur", "Objectifs", "ouestmavoiture", "Sablier", "AmiCoach", "cours-github",
-            "rituels", "sapatunav", "n8n", "n8n-render-lamachine", "CA", "TaCroisiR", "RAYNAIR_2024", "PDFtoMP3",
-            "WildCodeSchool_formation_IA_nov2023"
+        <p>© <span id="copyright-year"></span> <strong>Eric Sotoca</strong> — Portfolio officiel GitHub Pages.</p>
+        <p style="margin-top: 0.4rem;">Conçu et maintenu avec passion · Retrouvez l'ensemble des dépôts sur <a href="https://github.com/ericsotoca" target="_blank" rel="noopener noreferrer">github.com/ericsotoca</a></p>
+    </footer>
+
+    <!-- Script de Données & Interactivité -->
+    <script>
+        // Définition des thématiques ordonnées
+        const themes = [
+            {
+                id: 'thailande',
+                name: 'Thaïlande & Voyage',
+                icon: '🇹🇭',
+                color: '#f59e0b',
+                isSpecial: true,
+                description: 'Applications pour voyager, s\'expatrier, préparer son road-trip, gérer le visa DTV, explorer la culture et la langue thaïlandaise.'
+            },
+            {
+                id: 'finance',
+                name: 'Finance, Bourse & Retraite',
+                icon: '💶',
+                color: '#10b981',
+                description: 'Gestion de portefeuille PEA, stratégies indicielle et momentum ETF, simulateurs de rentes et de retraite.'
+            },
+            {
+                id: 'sante-bien-etre',
+                name: 'Santé, Thérapie & Bien-être',
+                icon: '🌿',
+                color: '#06b6d4',
+                description: 'Auto-hypnose, soulagement des acouphènes, réflexologie plantaire, cohérence cardiaque et accompagnement thérapeutique.'
+            },
+            {
+                id: 'developpement',
+                name: 'Développement Personnel & Relations',
+                icon: '🧠',
+                color: '#a855f7',
+                description: 'Outils d\'introspection, bilans de vie, tests de compatibilité de couple, intelligence émotionnelle et coaching personnel.'
+            },
+            {
+                id: 'jeux',
+                name: 'Jeux & Divertissement',
+                icon: '🎮',
+                color: '#ec4899',
+                description: 'Intelligence artificielle sur le jeu ancestral d\'Awalé, jeux de réflexion, casse-têtes et simulateurs tactiques.'
+            },
+            {
+                id: 'audio-medias',
+                name: 'Audio Spatial 3D & Médias',
+                icon: '🎧',
+                color: '#6366f1',
+                description: 'Expérimentations sonores immersives en 3D spatiale (HRTF), webradio relaxante et fictions interactives.'
+            },
+            {
+                id: 'outils-ia',
+                name: 'Outils Web, IA & Productivité',
+                icon: '🛠️',
+                color: '#3b82f6',
+                description: 'Assistants IA, générateurs QR codes, trackers d\'habitudes quotidiennes, convertisseurs et utilitaires bio-informatiques.'
+            }
         ];
 
-        const apps = repoList.map(repo => {
-            const lower = repo.toLowerCase();
-            let cat = 'utilitaires';
-            let picto = '✨';
+        // Catalogue complet des projets avec classification thématique et métadonnées soignées
+        const allProjects = [
+            // ==========================================
+            // 🇹🇭 1. THAÏLANDE & VOYAGE
+            // ==========================================
+            {
+                repo: 'DTV-Thailand-Manager',
+                name: 'DTV Thailand Manager 🇹🇭',
+                theme: 'thailande',
+                picto: '📋',
+                desc: 'Outil complet et interactif pour préparer, contrôler et suivre votre demande de Destination Thailand Visa (DTV) : checklists, justificatifs financiers et étapes consulaires.',
+                hasPages: true
+            },
+            {
+                repo: 'ThaiWander',
+                name: 'ThaiWander — Road Trip Thaïlande',
+                theme: 'thailande',
+                picto: '🗺️',
+                desc: 'Planificateur de road trip et camping en Thaïlande. Itinéraire interactif, cartographie dynamique et assistant intelligent connecté à l\'IA pour explorer le pays.',
+                hasPages: true
+            },
+            {
+                repo: 'Remix_ThaiWander',
+                name: 'ThaiWander Remix 🌴',
+                theme: 'thailande',
+                picto: '🧭',
+                desc: 'Version enrichie du guide de voyage et de camping en Thaïlande avec carte interactive et recommandations personnalisées de parcours.',
+                hasPages: true
+            },
+            {
+                repo: 'Thailand-Trip-Packing',
+                name: 'Thailand Trip Packing 🧳',
+                theme: 'thailande',
+                picto: '🎒',
+                desc: 'Application web progressive (PWA) interactive et 100% hors-ligne pour préparer et gérer les bagages d\'un long séjour en Thaïlande (optimisée pour 57 jours).',
+                hasPages: true
+            },
+            {
+                repo: 'Calcul-Mental-Baht-en-Euro',
+                name: 'Calcul Baht Thaïlandais ⇄ Euro',
+                theme: 'thailande',
+                picto: '💱',
+                desc: 'Entraînement au calcul mental rapide pour convertir instantanément les Bahts (THB) en Euros (€) sans calculatrice, spécialement pensé pour les voyageurs.',
+                hasPages: true
+            },
+            {
+                repo: 'LEXTHAILANDIA',
+                name: 'JurisThai — LexThailandia ⚖️',
+                theme: 'thailande',
+                picto: '🏛️',
+                desc: 'Plateforme interactive d\'apprentissage et de vulgarisation du droit judiciaire thaïlandais (trilingue thaï, anglais, français) avec quiz juridiques et tuteur IA.',
+                hasPages: true
+            },
+            {
+                repo: 'EbookTH',
+                name: 'Alliance — Guide Franco-Thaï 📖',
+                theme: 'thailande',
+                picto: '🤝',
+                desc: 'Guide interactif intelligent et dénué de clichés pour décoder la culture et les relations interculturelles entre femmes thaïlandaises et hommes français.',
+                hasPages: true
+            },
+            {
+                repo: 'Alliance_1',
+                name: 'Alliance — Ebook Landing Page',
+                theme: 'thailande',
+                picto: '📕',
+                desc: 'Portail bilingue (thaïlandais et français) de présentation du livre ALLIANCE : guide d\'analyse psychologique et relationnelle pour couples franco-thaïlandais.',
+                hasPages: true
+            },
+            {
+                repo: 'Sawasdee-Amour',
+                name: 'Sawasdee-Amour Academy ❤️',
+                theme: 'thailande',
+                picto: '🎓',
+                desc: 'Académie et guide complet d\'accompagnement sur les relations interculturelles, humaines et juridiques franco-thaïlandaises.',
+                hasPages: true
+            },
+            {
+                repo: 'Sawasdee-Love',
+                name: 'Sawasdee-Love 💌',
+                theme: 'thailande',
+                picto: '🌸',
+                desc: 'Guide bienveillant de rencontre et de complicité interculturelle France-Thaïlande avec conseils pratiques pour une relation harmonieuse.',
+                hasPages: true
+            },
+            {
+                repo: 'Sabaidee-Love',
+                name: 'Sabaidee-Love 🌺',
+                theme: 'thailande',
+                picto: '💫',
+                desc: 'Guide culturel et de rencontre dédié aux échanges et à l\'harmonie relationnelle France - Laos & Thaïlande.',
+                hasPages: true
+            },
+            {
+                repo: 'TH_GB_FR',
+                name: 'Harmonie Linguistique (FR / EN / TH)',
+                theme: 'thailande',
+                picto: '🗣️',
+                desc: 'Espace complice d\'apprentissage linguistique trilingue (Français, Anglais, Thaï) pour couple avec fiches de dialogue et cursus interactif.',
+                hasPages: true
+            },
+            {
+                repo: 'Rose',
+                name: 'Rose — Espace Complice FR-TH',
+                theme: 'thailande',
+                picto: '🌹',
+                desc: 'Espace d\'apprentissage linguistique intime et complice bilingue pour approfondir la communication de couple franco-thaï.',
+                hasPages: true
+            },
+            {
+                repo: 'TH_202608070930',
+                name: 'Alliance — Guide Édition 2026',
+                theme: 'thailande',
+                picto: '📘',
+                desc: 'Ressources et modules interactifs du guide culturel et psychologique pour relations franco-thaïlandaises.',
+                hasPages: false
+            },
+            {
+                repo: 'EBOOK_TH_FR',
+                name: 'Ebook TH-FR Bilingue',
+                theme: 'thailande',
+                picto: '📚',
+                desc: 'Ressources textuelles et structure bilingue du guide culturel franco-thaïlandais.',
+                hasPages: false
+            },
 
-            if (/(pea|finance|retrait|calculateur|ca|bourse|etf)/.test(lower)) { cat = 'finance'; picto = '💶'; }
-            else if (/(sante|acouphenes|reflexologie|sophrologie|oreille|tartre|harmonie|audrey|vie|respiration)/.test(lower)) { cat = 'sante-bien-etre'; picto = '🌿'; }
-            else if (/(jeu|awale|thegame|doigts|erico|quizz|ballon|pmu|carte)/.test(lower)) { cat = 'jeux'; picto = '🎮'; }
-            else if (/(objectif|timing|sablier|rituel|voiture|favoris)/.test(lower)) { cat = 'organisation-productivite'; picto = '⏳'; }
-            else if (/(croyance|consentement|brise|ecoute|emotion|poly|reve|memoire|futur|interieur|decouverte|numerologie|oracle|kiff|coupleconnect|amicoach)/.test(lower)) { cat = 'developpement'; picto = '🧠'; }
-            else if (/(radio|sieste|mp3|audio|histoire|roman)/.test(lower)) { cat = 'musique'; picto = '🎧'; }
+            // ==========================================
+            // 💶 2. FINANCE, BOURSE & RETRAITE
+            // ==========================================
+            {
+                repo: 'PEA-ETF',
+                name: 'PEA-ETF Analyzer 📈',
+                theme: 'finance',
+                picto: '📊',
+                desc: 'Dashboard professionnel de gestion ETF pour PEA : score de momentum 0-100, matrice de signaux MM200/RSI, sizing automatique des positions et graphiques interactifs.',
+                image: 'images/logo_retraite.png',
+                hasPages: true
+            },
+            {
+                repo: 'PEA_Academie',
+                name: 'PEA Académie 🎓',
+                theme: 'finance',
+                picto: '🏛️',
+                desc: 'Formation complète d\'investissement en bourse exclusivement par le biais des ETF indiciels sur le support fiscal avantageux du PEA.',
+                hasPages: true
+            },
+            {
+                repo: 'PEA-Retrait',
+                name: 'PEA Retrait',
+                theme: 'finance',
+                picto: '💰',
+                desc: 'Simulateur professionnel de retraits sur PEA : calcul du capital restant, fiscalité des plus-values et optimisation des rentes sur l\'horizon retraite.',
+                image: 'images/logo_retraite.png',
+                hasPages: true
+            },
+            {
+                repo: 'retraite',
+                name: 'Simulateur Retraite 🏖️',
+                theme: 'finance',
+                picto: '⏳',
+                desc: 'Projetez votre retraite : estimation des pensions, âge optimal de départ et comparaison des scénarios de départ anticipé vs taux plein.',
+                image: 'images/logo_retraite.png',
+                hasPages: true
+            },
+            {
+                repo: 'Calculatrice',
+                name: 'Calculatrice Pro 🧮',
+                theme: 'finance',
+                picto: '🔢',
+                desc: 'Calculatrice avancée avec historique des opérations, fonctions scientifiques et interface fluide optimisée.',
+                image: 'images/logo_calculatrice.png',
+                preview: 'images/calculatrice_preview.png',
+                hasPages: true
+            },
+            {
+                repo: 'mon-calculateur',
+                name: 'Mon Calculateur Financier',
+                theme: 'finance',
+                picto: '🧮',
+                desc: 'Calculateur financier personnalisé pour estimer rendements d\'épargne, intérêts composés et mensualités.',
+                image: 'images/logo_retraite.png',
+                hasPages: true
+            },
+            {
+                repo: 'Calculateur_Carbone',
+                name: 'Calculateur Carbone 🌱',
+                theme: 'finance',
+                picto: '🌍',
+                desc: 'Estimez votre empreinte carbone personnelle (transports, alimentation, logement) avec des pistes concrètes d\'optimisation.',
+                hasPages: true
+            },
+            {
+                repo: 'CA',
+                name: 'Suivi Chiffre d\'Affaires 💼',
+                theme: 'finance',
+                picto: '📈',
+                desc: 'Tableau de bord épuré pour suivre son chiffre d\'affaires mensuel et annuel avec projection graphique d\'évolution.',
+                hasPages: true
+            },
 
+            // ==========================================
+            // 🌿 3. SANTÉ, THÉRAPIE & BIEN-ÊTRE
+            // ==========================================
+            {
+                repo: 'HypnoZen',
+                name: 'HypnoZen 🧘',
+                theme: 'sante-bien-etre',
+                picto: '✨',
+                desc: 'Application de relaxation profonde par auto-hypnose. Ambiances sonores procédurales (Zen, Océan, Forêt) via Web Audio API. 100% hors-ligne.',
+                hasPages: true
+            },
+            {
+                repo: 'Acouphenes',
+                name: 'Acouphènes — Soulagement 🔕',
+                theme: 'sante-bien-etre',
+                picto: '👂',
+                desc: 'Compagnon au quotidien pour mieux vivre avec les acouphènes : sons masquants personnalisables, exercices de détente et journal de suivi.',
+                image: 'images/logo_acouphenes.png',
+                preview: 'images/acouphenes_preview.png',
+                hasPages: true
+            },
+            {
+                repo: 'Harmonie',
+                name: 'Harmonie Corps-Esprit 🕊️',
+                theme: 'sante-bien-etre',
+                picto: '🌿',
+                desc: 'Pleine conscience, exercices de cohérence cardiaque guidée, méditations apaisantes et bilan de vitalité quotidien.',
+                image: 'images/logo_harmonie.png',
+                preview: 'images/harmonie_preview.png',
+                hasPages: true
+            },
+            {
+                repo: 'Sophrologie',
+                name: 'Sophrologie Guidée 🌸',
+                theme: 'sante-bien-etre',
+                picto: '🧘‍♀️',
+                desc: 'Séances de sophrologie structurées : relaxation dynamique, visualisations positives et ancrage pour libérer le stress.',
+                hasPages: true
+            },
+            {
+                repo: 'reflexologie',
+                name: 'Réflexologie Plantaire 🦶',
+                theme: 'sante-bien-etre',
+                picto: '👣',
+                desc: 'Cartographie interactive des zones réflexes des pieds. Points de stimulation par organe et techniques de massage bien-être.',
+                hasPages: true
+            },
+            {
+                repo: 'audrey',
+                name: 'Audrey Huault — Thérapeute',
+                theme: 'sante-bien-etre',
+                picto: '🌿',
+                desc: 'Site de présentation du cabinet d\'Audrey Huault (Gap) : Hypnose, EMDR/MNO et Médecine Traditionnelle Chinoise.',
+                hasPages: true
+            },
+            {
+                repo: 'Audrey_Huault',
+                name: 'Audrey Huault Pro ✨',
+                theme: 'sante-bien-etre',
+                picto: '🌸',
+                desc: 'Portail étendu et professionnel dédié aux soins thérapeutiques holistiques, hypnose et médecine chinoise.',
+                hasPages: true
+            },
+            {
+                repo: 'oreille',
+                name: 'Santé de l\'Oreille 👂',
+                theme: 'sante-bien-etre',
+                picto: '🎧',
+                desc: 'Guide complet pour préserver son capital auditif : prévention des traumatismes sonores et entraînements auditifs doux.',
+                hasPages: true
+            },
+            {
+                repo: 'tartre',
+                name: 'Santé Bucco-Dentaire 🦷',
+                theme: 'sante-bien-etre',
+                picto: '✨',
+                desc: 'Guide interactif de santé dentaire : prévention du tartre, gestes d\'hygiène optimaux et suivi des rendez-vous.',
+                hasPages: true
+            },
+            {
+                repo: 'ballonimaginaire',
+                name: 'Ballon Imaginaire 🎈',
+                theme: 'sante-bien-etre',
+                picto: '🎈',
+                desc: 'Visualisation guidée basée sur la métaphore du ballon en hypnose légère pour relâcher le poids des tensions accumulées.',
+                hasPages: true
+            },
+            {
+                repo: 'ecoute',
+                name: 'Écoute Active & Bienveillante',
+                theme: 'sante-bien-etre',
+                picto: '🤝',
+                desc: 'Exercices pratiques et grilles d\'évaluation pour perfectionner sa qualité de présence et d\'écoute empathique des autres.',
+                hasPages: true
+            },
+            {
+                repo: 'verre',
+                name: 'Verre d\'Eau — Hydratation 💧',
+                theme: 'sante-bien-etre',
+                picto: '🥤',
+                desc: 'Suivi journalier d\'hydratation pour boire la quantité d\'eau idéale chaque jour avec rappels et barre de progression.',
+                hasPages: true
+            },
+            {
+                repo: 'vie',
+                name: 'Ma Vie — Bilan Global 🌈',
+                theme: 'sante-bien-etre',
+                picto: '🌱',
+                desc: 'Tableau de bord holistique pour suivre ses indicateurs de forme physique, d\'énergie et d\'harmonie de vie.',
+                hasPages: true
+            },
+
+            // ==========================================
+            // 🧠 4. DÉVELOPPEMENT PERSONNEL & RELATIONS
+            // ==========================================
+            {
+                repo: 'larouedelavie',
+                name: 'La Roue de la Vie 🎡',
+                theme: 'developpement',
+                picto: '🎯',
+                desc: 'Outil graphique interactif pour évaluer et équilibrer les 8 domaines fondamentaux de sa vie avec graphique radar instantané.',
+                image: 'images/larouedelavie.png',
+                preview: 'images/larouedelavie_preview.png',
+                hasPages: true
+            },
+            {
+                repo: 'Enneagramme',
+                name: 'Ennéagramme des 9 Profils 🧩',
+                theme: 'developpement',
+                picto: '🧭',
+                desc: 'Découvrez votre profil dominant parmi les 9 types de l\'Ennéagramme avec questionnaire interactif et conseils de croissance.',
+                image: 'images/logo_enneagramme.png',
+                preview: 'images/enneagramme_preview.png',
+                hasPages: true
+            },
+            {
+                repo: 'LDC',
+                name: 'Le Défi Compatibilité v14 💞',
+                theme: 'developpement',
+                picto: '💑',
+                desc: 'Jeu interactif et ludique de rencontre et d\'affinités amoureuses pour mesurer la complicité et les valeurs communes.',
+                hasPages: true
+            },
+            {
+                repo: 'Compa',
+                name: 'Défi Compatibilité — Remix',
+                theme: 'developpement',
+                picto: '❤️',
+                desc: 'Variante interactive du test de complicité et de connexion pour les couples en quête de partage.',
+                hasPages: true
+            },
+            {
+                repo: 'Compatible',
+                name: 'Le Défi Compatibilité ✨',
+                theme: 'developpement',
+                picto: '💌',
+                desc: 'Jeu de découverte complice pour explorer ses affinités, ses envies et ses projets à deux.',
+                hasPages: true
+            },
+            {
+                repo: 'CoupleConnect',
+                name: 'CoupleConnect 💬',
+                theme: 'developpement',
+                picto: '💕',
+                desc: 'Renforcer le dialogue dans le couple : questions profondes, jeux bienveillants et rituels de reconnexion amoureuse.',
+                hasPages: true
+            },
+            {
+                repo: 'astrologie-lieu-de-vie',
+                name: 'AstroCarto — Astrocartographie 🌍',
+                theme: 'developpement',
+                picto: '🗺️',
+                desc: 'Calcul de thème astral projeté sur la carte du monde pour déterminer ses lieux d\'épanouissement et la ville idéale en amour.',
+                hasPages: true
+            },
+            {
+                repo: 'PositionMondiale',
+                name: 'Human Rarity Index 🌐',
+                theme: 'developpement',
+                picto: '💎',
+                desc: 'Calculez votre degré de rareté statistique parmi les 8 milliards d\'êtres humains selon des données démographiques mondiales.',
+                hasPages: true
+            },
+            {
+                repo: 'croyances',
+                name: 'Croyances Limitantes 🔓',
+                theme: 'developpement',
+                picto: '🧠',
+                desc: 'Protocole structuré en 5 étapes pour désactiver les pensées limitantes et ancrer de nouveaux schémas mentaux porteurs.',
+                hasPages: true
+            },
+            {
+                repo: 'emotions',
+                name: 'Roue des Émotions (Plutchik) 🎭',
+                theme: 'developpement',
+                picto: '🌈',
+                desc: 'Explorez la palette de vos émotions primaires et dérivées pour muscler votre intelligence et agilité émotionnelle.',
+                hasPages: true
+            },
+            {
+                repo: 'numerologie',
+                name: 'Numérologie Personnelle 🔢',
+                theme: 'developpement',
+                picto: '✨',
+                desc: 'Chemin de vie, nombre d\'expression et intime : analyse numérique complète issue de votre prénom et date de naissance.',
+                hasPages: true
+            },
+            {
+                repo: 'AmiCoach',
+                name: 'AmiCoach IA 🤖',
+                theme: 'developpement',
+                picto: '💡',
+                desc: 'Coach interactif bienveillant : déposez vos réflexions et obtenez des éclairages constructifs pour avancer sereinement.',
+                hasPages: true
+            },
+            {
+                repo: 'kiff',
+                name: 'Mon Kiff — Joie de Vivre ⚡',
+                theme: 'developpement',
+                picto: '☀️',
+                desc: 'Amplifiez ce qui vous fait vibrer au quotidien : inventaire de vos sources de plaisir authentique.',
+                hasPages: true
+            },
+            {
+                repo: 'MEMOIRE',
+                name: 'Mémoire Vive 🧠',
+                theme: 'developpement',
+                picto: '💡',
+                desc: 'Entraînement cérébral ciblé : mémorisation de séries de chiffres, de listes et d\'associations avec techniques mnémotechniques.',
+                hasPages: true
+            },
+            {
+                repo: 'Consentement',
+                name: 'Consentement Éclairé 🤝',
+                theme: 'developpement',
+                picto: '💬',
+                desc: 'Outil de sensibilisation relationnelle : mises en situation concrètes pour favoriser des échanges clairs et respectueux.',
+                hasPages: true
+            },
+            {
+                repo: 'Brise',
+                name: 'Brise-Glace Interactif ❄️',
+                theme: 'developpement',
+                picto: '🧊',
+                desc: 'Sélection de questions stimulantes pour lancer des conversations profondes et chaleureuses en groupe ou en tête-à-tête.',
+                hasPages: true
+            },
+            {
+                repo: 'decouverte',
+                name: 'Découverte de Soi 🧭',
+                theme: 'developpement',
+                picto: '🔍',
+                desc: 'Voyage introspectif pour mettre en lumière ses talents cachés, ses besoins profonds et ses valeurs motrices.',
+                image: 'images/logo_decouverte.png',
+                hasPages: true
+            },
+            {
+                repo: 'futur',
+                name: 'Lettre du Futur ✉️',
+                theme: 'developpement',
+                picto: '📮',
+                desc: 'Écrivez ou dialoguez avec votre futur vous pour clarifier vos intentions à 5 ou 10 ans et garder le cap.',
+                image: 'images/logo_futur.png',
+                hasPages: true
+            },
+            {
+                repo: 'REVES',
+                name: 'Journal & Interprétation des Rêves 🌙',
+                theme: 'developpement',
+                picto: '🔮',
+                desc: 'Carnet de bord onirique : répertoriez vos songes, repérez les symboles récurrents et dégagez les pistes d\'interprétation.',
+                hasPages: true
+            },
+            {
+                repo: 'interieur',
+                name: 'Voyage Intérieur 🧘',
+                theme: 'developpement',
+                picto: '🌌',
+                desc: 'Espace d\'exploration intérieure guidée : méditations introspectives et cartographie des paysages psychiques.',
+                image: 'images/logo_interieur.png',
+                hasPages: true
+            },
+            {
+                repo: 'Calcul_Profond',
+                name: 'Calcul Profond ♟️',
+                theme: 'developpement',
+                picto: '🎯',
+                desc: 'Aide à la décision complexe : pondérez vos alternatives, projetez les retombées et décidez en toute lucidité.',
+                hasPages: true
+            },
+            {
+                repo: 'poly',
+                name: 'Polyglotte Flashcards 🌍',
+                theme: 'developpement',
+                picto: '📇',
+                desc: 'Mémorisation durable de vocabulaire par répétition espacée (méthode Leitner) pour apprendre de nouvelles langues.',
+                image: 'images/logo_poly.png',
+                preview: 'images/poly_preview.png',
+                hasPages: true
+            },
+
+            // ==========================================
+            // 🎮 5. JEUX & DIVERTISSEMENT
+            // ==========================================
+            {
+                repo: 'awale',
+                name: 'Awalé — Dans la Tête d\'un Champion 🏆',
+                theme: 'jeux',
+                picto: '🎯',
+                desc: 'L\'expérience ultime du jeu de stratégie africain Awalé : intelligence artificielle de haut niveau, tutoriels et tactiques. Plus de 50 000 parties jouées.',
+                image: 'images/danslatetedunchampion.png',
+                preview: 'images/danslatetedunchampion_preview.png',
+                hasPages: true
+            },
+            {
+                repo: 'awale_flash',
+                name: 'Awalé Flash ⚡',
+                theme: 'jeux',
+                picto: '⏱️',
+                desc: 'Entraînement tactique contre la montre : résolvez des positions d\'Awalé en temps limité pour forger vos automatismes.',
+                hasPages: false
+            },
+            {
+                repo: 'awale_capture',
+                name: 'Awalé Capture 🎯',
+                theme: 'jeux',
+                picto: '🎲',
+                desc: 'Variante tactique axée sur la capture sélective et l\'optimisation des greniers de graines.',
+                hasPages: true
+            },
+            {
+                repo: 'quizz_awale',
+                name: 'Quiz Awalé ❓',
+                theme: 'jeux',
+                picto: '🧠',
+                desc: 'Des centaines de questions sur l\'histoire du mancala, les grands maîtres et les subtilités des règles d\'Awalé.',
+                hasPages: true
+            },
+            {
+                repo: 'ERICochet',
+                name: 'ERICochet 🎱',
+                theme: 'jeux',
+                picto: '🎯',
+                desc: 'Jeu d\'adresse physique et de géométrie : calculez les angles de rebond pour atteindre la cible avec le moins de coups possible.',
+                image: 'images/logo_ERICochet.png',
+                preview: 'images/ERICochet_preview.png',
+                hasPages: true
+            },
+            {
+                repo: 'thegame',
+                name: 'The Game 🃏',
+                theme: 'jeux',
+                picto: '🎴',
+                desc: 'Jeu de cartes et de défausse numérique tactique : posez vos cartes par ordre croissant ou décroissant en déjouant les pièges.',
+                hasPages: true
+            },
+            {
+                repo: 'Doigts',
+                name: 'Jeu des Doigts 🖐️',
+                theme: 'jeux',
+                picto: '✋',
+                desc: 'Le célèbre jeu de calcul rapide et d\'élimination avec les doigts revisité dans une interface tactile moderne.',
+                hasPages: true
+            },
+            {
+                repo: 'pmu',
+                name: 'PMU Simulator 🐎',
+                theme: 'jeux',
+                picto: '🏇',
+                desc: 'Simulateur de paris hippiques et de stratégies de mise sans argent réel pour comprendre les probabilités et espérances de gain.',
+                hasPages: true
+            },
+            {
+                repo: 'tirage-cartes-oracle',
+                name: 'Tirage de Cartes Oracle 🔮',
+                theme: 'jeux',
+                picto: '🎴',
+                desc: 'Tirage interactif de cartes inspirantes : messages intuitifs, symboliques positives et interprétation personnalisée.',
+                hasPages: true
+            },
+
+            // ==========================================
+            // 🎧 6. AUDIO SPATIAL 3D & MÉDIAS
+            // ==========================================
+            {
+                repo: 'Spatial_Audio_Compass',
+                name: 'Spatial Audio Compass 🧭',
+                theme: 'audio-medias',
+                picto: '🎧',
+                desc: 'Simulateur acoustique interactif 2D/3D avec paysages sonores en temps réel, trajectoires orbitales programmables et contrôle souris direct.',
+                hasPages: true
+            },
+            {
+                repo: 'Audio3D',
+                name: 'Audio Spatialisateur 3D 🔊',
+                theme: 'audio-medias',
+                picto: '🎛️',
+                desc: 'Générateur de son spatialisé 3D (gauche, droite, élévation) contrôlable au clavier ou par commandes tactiles.',
+                hasPages: true
+            },
+            {
+                repo: 'Audio_3D',
+                name: 'Audio 3D Immersif Live',
+                theme: 'audio-medias',
+                picto: '🔉',
+                desc: 'Moteur de synthèse sonore et positionnement tridimensionnel temps réel avec Web Audio API.',
+                hasPages: true
+            },
+            {
+                repo: 'Spacial',
+                name: 'Spacial HRTF Simulator 🪐',
+                theme: 'audio-medias',
+                picto: '🌌',
+                desc: 'Simulateur de spatialisation binaurale avec filtres HRTF (Head-Related Transfer Function) et orbite audio dynamique.',
+                hasPages: true
+            },
+            {
+                repo: 'Spatial_Audio_EMDR',
+                name: 'Spatial Audio EMDR 💫',
+                theme: 'audio-medias',
+                picto: '✨',
+                desc: 'Stimulation bilatérale alternée sonore spatialisée conçue pour l\'apaisement émotionnel et les protocoles de retraitement.',
+                hasPages: true
+            },
+            {
+                repo: 'SiesteFM',
+                name: 'SiesteFM 📻',
+                theme: 'audio-medias',
+                picto: '😴',
+                desc: 'La webradio idéale pour les micro-siestes réparatrices : musiques douces, battements binauraux et bruits naturels relaxants.',
+                image: 'images/logo_siestefm.png',
+                preview: 'images/siestefm_preview.png',
+                hasPages: true
+            },
+            {
+                repo: 'webradio',
+                name: 'Sotoca WebRadio 🎶',
+                theme: 'audio-medias',
+                picto: '🎵',
+                desc: 'Lecteur webradio haute définition avec gestion de flux personnalisés et sélection éclectique de musiques d\'ambiance.',
+                image: 'images/logo_sotocawebradio.png',
+                preview: 'images/sotocawebradio_preview.png',
+                hasPages: true
+            },
+            {
+                repo: 'roman',
+                name: 'Roman Interactif 📖',
+                theme: 'audio-medias',
+                picto: '🖋️',
+                desc: 'Aventure littéraire dont vous êtes le héros : choix narratifs multiples, arborescences de scénarios et ambiance immersive.',
+                image: 'images/logo_roman.png',
+                preview: 'images/roman_preview.png',
+                hasPages: true
+            },
+            {
+                repo: 'histoires',
+                name: 'Histoires & Contes Audio 📚',
+                theme: 'audio-medias',
+                picto: '🎙️',
+                desc: 'Bibliothèque de récits et contes sonores à savourer seul ou en famille pour s\'évader par la voix et l\'imaginaire.',
+                hasPages: true
+            },
+
+            // ==========================================
+            // 🛠️ 7. OUTILS WEB, IA & PRODUCTIVITÉ
+            // ==========================================
+            {
+                repo: 'AnnuaireIA',
+                name: 'Annuaire IA 🤖',
+                theme: 'outils-ia',
+                picto: '⚡',
+                desc: 'Sélection des meilleurs outils et modèles d\'intelligence artificielle classés par usage : texte, image, code, audio, vidéo.',
+                image: 'images/logo_annuaireia.png',
+                preview: 'images/annuaireia_preview.png',
+                hasPages: true
+            },
+            {
+                repo: 'grok',
+                name: 'Interface Grok AI ⚡',
+                theme: 'outils-ia',
+                picto: '💬',
+                desc: 'Client fluide et ergonomique pour interagir avec l\'intelligence artificielle Grok (xAI) avec templates de prompts.',
+                hasPages: true
+            },
+            {
+                repo: 'QRCodes',
+                name: 'Générateur QR Codes Pro 📱',
+                theme: 'outils-ia',
+                picto: '📷',
+                desc: 'Générez des QR codes stylisés (URL, texte, WiFi, vCard, coordonnées) avec couleurs personnalisées et export haute définition.',
+                image: 'images/logo_qrcodes.png',
+                preview: 'images/qrcodes_preview.png',
+                hasPages: true
+            },
+            {
+                repo: 'rituels',
+                name: 'Mes Rituels Quotidiens ☀️',
+                theme: 'outils-ia',
+                picto: '📅',
+                desc: 'Ancrez de bonnes habitudes du matin et du soir. Suivi visuel de chaînes de régularité pour ne rien lâcher.',
+                image: 'images/logo_mesrituels.png',
+                preview: 'images/mesrituels_preview.png',
+                hasPages: true
+            },
+            {
+                repo: 'MesObjectifs',
+                name: 'Mes Objectifs & Vision Board 🎯',
+                theme: 'outils-ia',
+                picto: '🚀',
+                desc: 'Planifiez vos grands projets avec la méthode SMART : tableau de vision, jalons et célébration des étapes franchies.',
+                image: 'images/logo_MesObjectifs.png',
+                preview: 'images/MesObjectifs_preview.png',
+                hasPages: true
+            },
+            {
+                repo: 'OBJECTIF2026',
+                name: 'Challenge OBJECTIF 2026 🏆',
+                theme: 'outils-ia',
+                picto: '🎯',
+                desc: 'Feuille de route stratégique pour 2026 : découpage en objectifs prioritaires et indicateurs mensuels d\'avancement.',
+                hasPages: true
+            },
+            {
+                repo: 'ouestmavoiture',
+                name: 'Où est ma voiture ? 🚗',
+                theme: 'outils-ia',
+                picto: '📍',
+                desc: 'Ne perdez plus votre voiture : mémorisez l\'emplacement GPS en un clic et retrouvez-la facilement grâce à l\'itinéraire piéton.',
+                image: 'images/logo_ouestmavoiture.png',
+                preview: 'images/ouestmavoiture_preview.png',
+                hasPages: true
+            },
+            {
+                repo: 'Sablier',
+                name: 'Sablier & Minuteur Pomodoro ⏳',
+                theme: 'outils-ia',
+                picto: '⏱️',
+                desc: 'Minuteur polyvalent, sablier visuel et gestionnaire de sessions de concentration avec alertes pour le travail efficace.',
+                hasPages: true
+            },
+            {
+                repo: 'Hibernation',
+                name: 'Hibernation PC 💤',
+                theme: 'outils-ia',
+                picto: '💻',
+                desc: 'Programmez l\'extinction ou la mise en veille différée de votre ordinateur directement depuis votre navigateur.',
+                image: 'images/logo_hibernation.png',
+                preview: 'images/hibernation_preview.png',
+                hasPages: true
+            },
+            {
+                repo: 'Favoris',
+                name: 'Mes Favoris Web ⭐',
+                theme: 'outils-ia',
+                picto: '🔖',
+                desc: 'Gestionnaire visuel de favoris et ressources web classés par tags avec recherche rapide et miniatures.',
+                hasPages: true
+            },
+            {
+                repo: 'ADN',
+                name: 'Analyseur Bio-informatique ADN 🧬',
+                theme: 'outils-ia',
+                picto: '🔬',
+                desc: 'Outil autonome d\'analyse, transcription et traduction de séquences nucléiques et protéiques.',
+                hasPages: true
+            },
+            {
+                repo: 'BLAST-BioParser',
+                name: 'BLAST BioParser 🔬',
+                theme: 'outils-ia',
+                picto: '🧪',
+                desc: 'Parser et visualiseur graphique de résultats d\'alignements biologiques BLAST avec statistiques détaillées.',
+                hasPages: true
+            },
+            {
+                repo: 'PDFtoIMAGES',
+                name: 'PDF → Images Haute Définition 🖼️',
+                theme: 'outils-ia',
+                picto: '📄',
+                desc: 'Convertissez instantanément vos documents PDF en images JPG ou PNG haute qualité, directement dans votre navigateur.',
+                hasPages: true
+            },
+            {
+                repo: 'PDFtoMP3',
+                name: 'PDF → Livre Audio MP3 🎙️',
+                theme: 'outils-ia',
+                picto: '🎧',
+                desc: 'Transformation de documents PDF en enregistrements audio pour écouter ses lectures pendant ses déplacements.',
+                hasPages: false
+            },
+            {
+                repo: 'convertisseur',
+                name: 'Convertisseur Universel 🔄',
+                theme: 'outils-ia',
+                picto: '📐',
+                desc: 'Conversion rapide d\'unités de mesure, devises, températures, distances et formats multimédias.',
+                hasPages: true
+            },
+            {
+                repo: 'github-repo-downloader',
+                name: 'GitHub Downloader 📦',
+                theme: 'outils-ia',
+                picto: '📥',
+                desc: 'Téléchargez en un clic une archive ZIP propre de n\'importe quel dépôt public GitHub sans avoir besoin de Git.',
+                hasPages: true
+            },
+            {
+                repo: 'n8n',
+                name: 'n8n Automations Cloud ⚙️',
+                theme: 'outils-ia',
+                picto: '🔗',
+                desc: 'Workflows d\'automatisation no-code et low-code pour synchroniser des API, services web et bases de données.',
+                hasPages: false
+            },
+            {
+                repo: 'n8n-render-lamachine',
+                name: 'n8n sur Render — Serveur Web',
+                theme: 'outils-ia',
+                picto: '☁️',
+                desc: 'Déploiement permanent d\'instances n8n avec Docker, base de données Postgres et stockage persistant sur Render.',
+                hasPages: false
+            },
+            {
+                repo: 'parfum',
+                name: 'Guide & Boussole des Parfums 🌸',
+                theme: 'outils-ia',
+                picto: '🧴',
+                desc: 'Quiz olfactif pour trouver votre fragrance idéale : familles d\'arômes, pyramide de notes et recommandations.',
+                hasPages: true
+            },
+            {
+                repo: 'maison',
+                name: 'Ma Maison — Carnet d\'Entretien 🏡',
+                theme: 'outils-ia',
+                picto: '🛠️',
+                desc: 'Planification des travaux du domicile, garanties, équipements ménagers et calendrier des maintenances régulières.',
+                hasPages: true
+            },
+            {
+                repo: 'TicketMiam',
+                name: 'TicketMiam 🍽️',
+                theme: 'outils-ia',
+                picto: '🥗',
+                desc: 'Gestion des tickets restaurant, suivi en direct des consommations et calcul du reste à charge.',
+                hasPages: true
+            },
+            {
+                repo: 'WNG2026',
+                name: 'WNG 2026 — Délégation Française 🏅',
+                theme: 'outils-ia',
+                picto: '🇫🇷',
+                desc: 'Portail officiel pour la délégation française aux World Nomad Games 2026 : programme sportif, athlètes et actualités.',
+                hasPages: true
+            },
+            {
+                repo: 'carte-membres',
+                name: 'Cartes Membres & Adhésions 🪪',
+                theme: 'outils-ia',
+                picto: '🎫',
+                desc: 'Générateur de cartes de membres associatives avec numéro d\'adhérent, code-barres et suivi des cotisations.',
+                hasPages: true
+            },
+            {
+                repo: 'sr',
+                name: 'Speed Reading — Lecture Rapide ⚡',
+                theme: 'outils-ia',
+                picto: '📖',
+                desc: 'Entraînement de lecture rapide RSVP pour augmenter sa vitesse de lecture tout en gardant une excellente compréhension.',
+                hasPages: true
+            },
+            {
+                repo: 'sapatunav',
+                name: 'SapatuNav 🧭',
+                theme: 'outils-ia',
+                picto: '🥾',
+                desc: 'Boussole d\'orientation et repères simplifiés pour promeneurs et randonneurs.',
+                hasPages: true
+            },
+            {
+                repo: 'MMS',
+                name: 'MMS Messaging Studio 📨',
+                theme: 'outils-ia',
+                picto: '💬',
+                desc: 'Édition et mise en forme de messages multimédias enrichis avec prévisualisation multi-écrans.',
+                hasPages: true
+            }
+        ];
+
+        // Enrichir chaque projet avec les URLs GitHub
+        const enrichedProjects = allProjects.map(p => {
             return {
-                id: repo.toLowerCase().replace(/[^a-z0-9]/g, ''),
-                picto: picto,
-                name: repo.replace(/-/g, ' '),
-                category: cat,
-                description: "Projet expérimental ou application web interactive.",
-                // Correction magique : les URLs respectent désormais la CASSE exacte de ton Github !
-                demoUrl: `https://ericsotoca.github.io/${repo}/`,
-                sourceUrl: `https://github.com/ericsotoca/${repo}`,
-                image: '', previewImage: ''
+                ...p,
+                demoUrl: `https://ericsotoca.github.io/${p.repo}/`,
+                sourceUrl: `https://github.com/ericsotoca/${p.repo}`
             };
         });
 
-        // Descriptions, noms et images personnalisés pour tous les projets
-        const customData = {
-            // === FINANCE / PEA ===
-            'hypnozen':             { name: 'HypnoZen 🧘', desc: 'Application de relaxation par auto-hypnose. Ambiances sonores procédurales (Zen, Océan, Forêt) générées via Web Audio API. Fonctionne hors-ligne, zéro dépendance externe.' },
-            'pearetrait':           { name: 'PEA Retrait', desc: 'Simulateur professionnel de retraits sur Plan d\'Épargne en Actions. Calcule le capital restant, les plus-values imposables et optimise votre stratégie de retrait sur l\'horizon retraite.', image: 'images/logo_retraite.png' },
-            'peaetf':               { name: 'PEA ETF Analyzer', desc: 'Dashboard professionnel de gestion ETF pour PEA. Score de momentum 0-100, matrice de signaux MM200/RSI, sizing automatique des positions, graphiques en aire avec overlays SMA.' },
-            'calculateur':          { name: 'Calculatrice Pro', desc: 'Calculatrice avancée avec historique des opérations, fonctions scientifiques et interface optimisée pour une saisie rapide.', image: 'images/logo_calculatrice.png', preview: 'images/calculatrice_preview.png' },
-            'moncalculateur':       { name: 'Mon Calculateur', desc: 'Calculateur financier personnalisé pour estimer rendements, mensualités et objectifs d\'épargne selon vos paramètres.', image: 'images/logo_retraite.png' },
-            'calculateurcarbone':   { name: 'Calculateur Carbone', desc: 'Estimez votre empreinte carbone personnelle. Analyse vos transports, alimentation, logement et consommation, et propose des pistes de réduction concrètes.' },
-            'ca':                   { name: 'Suivi CA', desc: 'Tableau de bord simple pour suivre son chiffre d\'affaires mensuel et annuel, avec visualisation graphique de l\'évolution.' },
-            'retraite':             { name: 'Simulateur Retraite', desc: 'Projetez votre retraite : revenus attendus, âge optimal de départ, écart avec vos besoins. Compare les scénarios départ anticipé vs. taux plein.', image: 'images/logo_retraite.png' },
-
-            // === SANTÉ & BIEN-ÊTRE ===
-            'acouphenes':           { name: 'Acouphènes', desc: 'Votre compagnon pour mieux vivre avec les acouphènes. Sons masquants, exercices de relaxation auditive, journal de suivi et conseils pratiques au quotidien.', image: 'images/logo_acouphenes.png', preview: 'images/acouphenes_preview.png' },
-            'harmonie':             { name: 'Harmonie', desc: 'Application de pleine conscience et d\'harmonie corps-esprit. Exercices de cohérence cardiaque, méditations guidées et bilan de bien-être quotidien.', image: 'images/logo_harmonie.png', preview: 'images/harmonie_preview.png' },
-            'sophrologie':          { name: 'Sophrologie', desc: 'Séances de sophrologie guidées : relaxation dynamique, visualisation positive, ancrage. Idéal pour gérer le stress avant un examen ou une prise de parole.' },
-            'reflexologie':         { name: 'Réflexologie', desc: 'Cartographie interactive des zones réflexes des pieds. Identifiez les points de stimulation correspondant à chaque organe et apprenez les techniques de massage.' },
-            'tartre':               { name: 'Santé Dentaire', desc: 'Guide interactif de santé bucco-dentaire : prévention du tartre, techniques de brossage optimales et suivi de vos rendez-vous dentaires.' },
-            'ballonimaginaire':     { name: 'Ballon Imaginaire', desc: 'Outil de visualisation guidée par l\'image du ballon imaginaire — une technique d\'hypnose légère pour relâcher les tensions et retrouver la sérénité.' },
-            'oreille':              { name: 'Santé de l\'Oreille', desc: 'Guide complet pour la santé auditive : prévention des pertes auditives, exercices d\'entraînement auditif et conseils pour protéger votre capital sonore.' },
-            'audrey':               { name: 'Audrey Huault', desc: 'Site professionnel de la thérapeute Audrey Huault (Gap) : Hypnose, EMDR/MNO et Médecine Traditionnelle Chinoise. Présentation des soins et prise de contact.' },
-            'audreyhuault':         { name: 'Audrey Huault Pro', desc: 'Version évoluée du site thérapeute : Hypnose, EMDR/MNO et Médecine Traditionnelle Chinoise. Design premium, formulaire de contact et page de présentation détaillée.' },
-            'ecoute':               { name: 'Écoute Active', desc: 'Entraînez-vous à l\'écoute active et bienveillante. Exercices pratiques, grilles d\'auto-évaluation et conseils pour améliorer votre qualité de présence aux autres.' },
-            'vie':                  { name: 'Ma Vie', desc: 'Tableau de bord holiste de votre vie : santé, relations, finances, épanouissement. Suivez vos indicateurs de bien-être sur la durée et visualisez votre progression.' },
-
-            // === DÉVELOPPEMENT PERSONNEL ===
-            'larouedelavie':        { name: 'La Roue de la Vie', desc: 'Outil graphique interactif pour évaluer et rééquilibrer les 8 domaines clés de votre vie : Santé, Famille, Finance, Carrière, Épanouissement… Résultats instantanés en radar.', image: 'images/larouedelavie.png', preview: 'images/larouedelavie_preview.png' },
-            'enneagramme':          { name: 'Ennéagramme', desc: 'Découvrez votre type de personnalité parmi les 9 profils de l\'Ennéagramme. Quiz interactif, descriptions détaillées des types et des chemins de croissance personnelle.', image: 'images/logo_enneagramme.png', preview: 'images/enneagramme_preview.png' },
-            'croyances':            { name: 'Croyances Limitantes', desc: 'Identifiez et transformez vos croyances limitantes. Protocole guidé en 5 étapes : identification, questionnement, reformulation, ancrage de la nouvelle croyance.' },
-            'emotions':             { name: 'Roue des Émotions', desc: 'Explorez la roue des émotions de Plutchik en version interactive. Identifiez vos émotions primaires et secondaires, et développez votre intelligence émotionnelle.' },
-            'numerologie':          { name: 'Numérologie', desc: 'Calculez vos chiffres numérologiques (chemin de vie, expression, intime) à partir de votre prénom et date de naissance, avec interprétation détaillée.' },
-            'consentement':         { name: 'Consentement Éclairé', desc: 'Outil pédagogique sur le consentement dans les relations. Quiz de situations, cadre légal simplifié et guide pour des conversations ouvertes et respectueuses.' },
-            'coupleconnect':        { name: 'CoupleConnect', desc: 'Renforcer la communication dans le couple. Questions de connexion, jeux de dialogue bienveillant et exercices pour raviver la complicité quotidienne.' },
-            'amicoach':             { name: 'AmiCoach', desc: 'Votre coach amical IA ! Posez vos questions, exprimez vos doutes — obtenez des réponses bienveillantes et des exercices adaptés à votre situation du moment.' },
-            'kiff':                 { name: 'Mon Kiff', desc: 'Cultivez ce qui vous fait vibrer ! Listez, explorez et amplifiez vos sources de plaisir authentique pour vivre une vie plus alignée avec vos véritables désirs.' },
-            'brise':                { name: 'Brise-Glace', desc: 'Des questions puissantes pour briser la glace et créer de vraies connexions. Idéal pour les soirées, team buildings, thérapies de groupe ou premiers rendez-vous.', image: '' },
-            'decouverte':           { name: 'Découverte de Soi', desc: 'Parcours guidé de découverte de soi : forces, valeurs, talents cachés. Exercices introspectifs et bilan de personnalité pour mieux vous connaître.', image: 'images/logo_decouverte.png' },
-            'futur':                { name: 'Lettre du Futur', desc: 'Écrivez une lettre à votre futur vous — ou lisez une lettre inspirante de votre moi idéal. Outil puissant de projection pour clarifier ses ambitions.', image: 'images/logo_futur.png' },
-            'reves':                { name: 'Journal de Rêves', desc: 'Consignez, analysez et interprétez vos rêves. Symboles récurrents, émotions, thèmes — construisez votre propre dictionnaire onirique personnel.' },
-            'memoire':              { name: 'Mémoire+', desc: 'Entraînez et boostez votre mémoire avec des exercices progressifs : mémorisation de chiffres, listes, visages. Méthodes mnémotechniques expliquées étape par étape.' },
-            'calculprofond':        { name: 'Calcul Profond', desc: 'Simulateur de pensée profonde et de prises de décision complexes. Pondérez vos options, cartographiez les conséquences et clarifiez vos choix difficiles.' },
-            'interieur':            { name: 'Voyage Intérieur', desc: 'Méditez et explorez votre paysage intérieur. Visualisations guidées, journaling structuré et carte de vos états d\'âme pour un développement personnel en profondeur.', image: 'images/logo_interieur.png' },
-            'poly':                 { name: 'Polyglotte', desc: 'Application d\'apprentissage de vocabulaire multilingue par flashcards. Méthode de répétition espacée Leitner pour une mémorisation durable.', image: 'images/logo_poly.png', preview: 'images/poly_preview.png' },
-
-            // === JEUX ===
-            'awale':                { name: '🎯 Awalé — Dans la Tête d\'un Champion', desc: 'La version ultime du jeu de stratégie africain Awalé ! Intelligence artificielle avancée, tutoriels, niveaux de difficulté. Plus de 50 000 parties jouées. PWA installable.', image: 'images/danslatetedunchampion.png', preview: 'images/danslatetedunchampion_preview.png' },
-            'awalecapture':         { name: 'Awalé Capture', desc: 'Variante tactique du jeu Awalé axée sur la capture maximale. Complément parfait au jeu principal — voir aussi le repo awale pour la version complète.' },
-            'awaleflash':           { name: 'Awalé Flash', desc: 'Entraînez votre réflexe tactique avec Awalé Flash : des positions à résoudre contre la montre. Idéal pour progresser rapidement — voir aussi le repo awale.' },
-            'quizzawale':           { name: 'Quiz Awalé', desc: 'Testez vos connaissances sur le jeu Awalé : règles, stratégies, histoire africaine du jeu. Des centaines de questions pour tous niveaux — voir aussi le repo awale.' },
-            'thegame':              { name: 'The Game', desc: 'Jeu de logique et de stratégie aux règles simples mais à la profondeur insoupçonnée. Pouvez-vous toujours jouer en respectant les contraintes ?' },
-            'doigts':               { name: 'Jeu des Doigts', desc: 'Le célèbre jeu de compte sur les doigts en version numérique. Affûtez vos réflexes mathématiques et battez votre meilleur score !' },
-            'pmu':                  { name: 'PMU Simulator', desc: 'Simulateur de paris hippiques pour s\'entraîner aux stratégies de mise sans risquer un centime. Analysez les cotes et testez vos systèmes.' },
-            'tiragecartesracle':    { name: 'Tirage Oracle', desc: 'Effectuez un tirage de cartes oracle interactif. Cartes illustrées, messages intuitifs et interprétations pour chaque position du tirage.' },
-            'ericochet':            { name: 'ERICochet', desc: 'Jeu de ricochet cérébral : gérez les rebonds et atteignez la cible. Physique réaliste et niveaux progressifs pour un jeu addictif.', image: 'images/logo_ERICochet.png', preview: 'images/ERICochet_preview.png' },
-
-            // === OBJECTIFS & PRODUCTIVITÉ (regroupés) ===
-            'objectifs':            { name: 'Gestionnaire Objectifs', desc: 'Définissez, planifiez et suivez vos objectifs de vie avec méthode SMART. Tableaux de bord visuels, jalons et rappels — voir aussi MesObjectifs et OBJECTIF2026.' },
-            'mesobjectifs':         { name: 'Mes Objectifs', desc: 'Votre espace personnel de suivi d\'objectifs : vision board, indicateurs de progression et célébration des petites victoires. Voir aussi Objectifs et OBJECTIF2026.', image: 'images/logo_MesObjectifs.png', preview: 'images/MesObjectifs_preview.png' },
-            'objectif2026':         { name: 'OBJECTIF 2026', desc: 'Challenge annuel 2026 : définissez vos 3 objectifs majeurs de l\'année, planifiez par trimestre et suivez votre progression mois par mois. Voir aussi MesObjectifs.' },
-            'timing':               { name: 'Timing', desc: 'Gestionnaire de timing pour événements et présentations. Configurez vos créneaux, suivez le temps en direct et restez dans les délais impartis.' },
-            'sablier':              { name: 'Sablier', desc: 'Sablier numérique et minuteur polyvalent. Compte à rebours, chronomètre, timer Pomodoro pour les sessions de travail concentré.' },
-            'ouestmavoiture':       { name: 'Où est ma voiture ?', desc: 'Ne cherchez plus votre voiture ! Enregistrez sa position d\'un tap, retrouvez-la sur carte avec itinéraire pédestre, même sans connexion.', image: 'images/logo_ouestmavoiture.png', preview: 'images/ouestmavoiture_preview.png' },
-            'favoris':              { name: 'Mes Favoris', desc: 'Gestionnaire de favoris web personnel et visuel. Organisez vos liens par catégories avec aperçu miniature, recherche et export. Alternative à Pocket.' },
-            'rituels':              { name: 'Mes Rituels', desc: 'Construisez et ancrez vos rituels quotidiens : morning routine, soir, semaine. Visualisez vos habitudes sous forme de chaîne de succès (Don\'t break the chain).', image: 'images/logo_mesrituels.png', preview: 'images/mesrituels_preview.png' },
-            'hibernation':          { name: 'Hibernation', desc: 'Minuteur d\'hibernation pour votre PC. Planifiez l\'extinction automatique de votre ordinateur à une heure précise ou après un délai, sans logiciel à installer.', image: 'images/logo_hibernation.png', preview: 'images/hibernation_preview.png' },
-
-            // === UTILITAIRES & OUTILS ===
-            'annuaireia':           { name: 'Annuaire IA', desc: 'Répertoire curaté des meilleurs outils d\'intelligence artificielle, classés par usage : rédaction, image, code, audio, vidéo, productivité. Mis à jour régulièrement.', image: 'images/logo_annuaireia.png', preview: 'images/annuaireia_preview.png' },
-            'qrcodes':              { name: 'Générateur QR', desc: 'Créez des QR codes personnalisés en quelques secondes : URL, texte, email, WiFi, carte de visite. Export PNG en haute résolution, personnalisation couleurs et logo.', image: 'images/logo_qrcodes.png', preview: 'images/qrcodes_preview.png' },
-            'pdftoimages':          { name: 'PDF → Images', desc: 'Convertissez vos fichiers PDF en images JPG ou PNG haute qualité, page par page. Traitement 100% local dans votre navigateur, sans envoi sur serveur.' },
-            'pdftomp3':             { name: 'PDF → MP3', desc: 'Transformez vos documents PDF en podcasts audio. Sélectionnez la voix, la vitesse et le format, et écoutez vos lectures en déplacement.' },
-            'convertisseur':        { name: 'Convertisseur', desc: 'Convertisseur universel : unités de mesure, devises, températures, poids, distances. Interface rapide et précision maximale pour tous vos besoins de conversion.' },
-            'githubrepodownloader': { name: 'GitHub Downloader', desc: 'Téléchargez facilement le contenu d\'un repo GitHub public sans avoir Git installé. Collez l\'URL, récupérez un ZIP propre du code source.' },
-            'parfum':               { name: 'Guide Parfums', desc: 'Guide interactif pour trouver votre parfum idéal. Quiz olfactif, pyramide de notes, famille de fragrances et recommandations personnalisées.' },
-            'grok':                 { name: 'Interface Grok', desc: 'Interface simplifiée et personnalisée pour interagir avec Grok AI (xAI). Prompts prédéfinis, historique de conversation et export des échanges.' },
-            'maison':               { name: 'Ma Maison', desc: 'Application de gestion du foyer : planification des travaux, suivi des garanties, inventaire des équipements et calendrier d\'entretien préventif.' },
-            'interieur':            { name: 'Design Intérieur', desc: 'Explorez des palettes de couleurs et des styles de décoration intérieure. Visualisez des ambiances (Scandinave, Bohème, Industriel) pour renouveler votre espace.', image: 'images/logo_interieur.png' },
-            'mms':                  { name: 'MMS', desc: 'Outil de messagerie et de partage multimedia simplifié. Composez et visualisez des messages enrichis (texte + images) depuis votre navigateur.' },
-            'sr':                   { name: 'Speed Reading', desc: 'Entraîneur de lecture rapide : RSVP (Rapid Serial Visual Presentation), expansion de champ de vision et exercices de compréhension pour doubler votre vitesse de lecture.' },
-            'verre':                { name: 'Verre d\'Eau', desc: 'Tracker d\'hydratation quotidienne. Enregistrez vos verres bus, visualisez votre progression vers l\'objectif et recevez des rappels pour rester bien hydraté.' },
-
-            // === AUDIO & MÉDIAS ===
-            'siestefm':             { name: 'SiesteFM 📻', desc: 'La radio de la sieste parfaite. Musiques douces, sons naturels et ambiances relaxantes sélectionnés pour accompagner votre sieste et améliorer sa qualité.', image: 'images/logo_siestefm.png', preview: 'images/siestefm_preview.png' },
-            'webradio':             { name: 'Sotoca WebRadio', desc: 'Webradio personnalisée avec lecteur intégré, programmation de playlists et interface stylée. Streamez vos stations favorites et créez vos propres listes d\'écoute.', image: 'images/logo_sotocawebradio.png', preview: 'images/sotocawebradio_preview.png' },
-            'histoires':            { name: 'Histoires', desc: 'Bibliothèque d\'histoires interactives et de contes audio. Histoires pour enfants, récits de voyage et fictions sonores à écouter ou à lire.' },
-            'roman':                { name: 'Roman Interactif', desc: 'Écrivez ou lisez un roman dont vous êtes le héros. Choix narratifs, branches d\'histoire et illustrations générées pour une lecture immersive.', image: 'images/logo_roman.png', preview: 'images/roman_preview.png' },
-
-            // === PROJETS CLIENTS & ÉVÉNEMENTIELS ===
-            'wng2026':              { name: 'WNG 2026', desc: 'Application événementielle pour la Délégation Française. Programme, accréditations, infos pratiques et communications officielles pour les participants.' },
-            'ticketmiam':           { name: 'TicketMiam 🍽️', desc: 'Application de gestion des tickets repas et des commandes de restauration collective. Suivi en temps réel, statistiques de consommation et exports.' },
-            'bts':                  { name: 'BTS SIO', desc: 'Supports de cours et exercices pratiques pour les étudiants en BTS SIO. Révisions structurées, QCM corrigés et projets guidés pour l\'examen.' },
-            'tacroisi r':           { name: 'TaCroisiR', desc: 'Application de planification de croisière : itinéraires, escales, activités et budget. Organisez et partagez votre aventure maritime facilement.' },
-            'raynair2024':          { name: 'Raynair 2024', desc: 'Outil de planification de voyage low-cost façon Ryanair. Comparateur de dates flexibles, alertes prix et optimisation des combinaisons vol + hébergement.' },
-            'coursgithub':          { name: 'Cours GitHub', desc: 'Formation Git & GitHub simplifiée pour débutants. Commandes essentielles, workflows, gestion des branches — du premier commit au déploiement.' },
-            'wild codes choolformationianov2023': { name: 'Formation IA — Wild Code School', desc: 'Supports de la formation Intelligence Artificielle dispensée à la Wild Code School (novembre 2023). Exercices pratiques, ressources et projets étudiants.' },
-
-            // === DIvers ===
-            'cartemembers':         { name: 'Cartes Membres', desc: 'Système de gestion des cartes de membres pour associations ou clubs. Création, attribution, suivi des adhésions et des renouvellements.' },
-            'playstore':            { name: 'Play Store', desc: 'Publications et ressources liées aux applications publiées sur le Google Play Store. Listings, captures d\'écran et descriptions des apps Android.' },
-            'n8n':                  { name: 'n8n Automation', desc: 'Workflows d\'automatisation no-code basés sur n8n. Intégrations entre services web, gestion de déclencheurs et automatisation de tâches répétitives.' },
-            'n8nrenderlamachine':   { name: 'n8n — La Machine', desc: 'Instance n8n hébergée sur Render.com pour des automatisations cloud permanentes. Workflows de veille, alertes et synchronisations entre applications.' },
-            'sapatunav':            { name: 'SapatuNav', desc: 'Application de navigation et d\'orientation simplifiée. Boussole, points de repère et suivi de trajet pour randonneurs et promeneurs débutants.' },
-            'wng20 26':             { name: 'WNG 2026', desc: 'Portail officiel de la délégation française pour les World Nomad Games 2026. Programme sportif, équipes, résultats et informations pratiques.' }
-        };
-
-        apps.forEach(app => {
-            const match = customData[app.id];
-            if (match) {
-                if (match.name)    app.name = match.name;
-                if (match.desc)    app.description = match.desc;
-                if (match.image)   app.image = match.image;
-                if (match.preview) app.previewImage = match.preview;
-            }
-        });
-
-        document.getElementById('repoCountDisplay').textContent = `Applications répertoriées : ${apps.length}`;
-
-        // UI Logic
-        const grid = document.getElementById('appsGrid');
+        // DOM Elements
+        const navContainer = document.getElementById('navCategories');
+        const sectionsContainer = document.getElementById('themeSectionsContainer');
+        const totalBadge = document.getElementById('totalAppsBadge');
         const searchInput = document.getElementById('searchInput');
-        const categoriesInputs = document.querySelectorAll('.category');
-        const modal = document.getElementById('appModal');
+        const emptyResults = document.getElementById('emptyResults');
+        const searchedTermText = document.getElementById('searchedTermText');
         
+        // Modal elements
+        const modal = document.getElementById('appModal');
+        const closeModalBtn = document.getElementById('closeModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalCategory = document.getElementById('modalCategory');
+        const modalDescription = document.getElementById('modalDescription');
+        const modalImageContainer = document.getElementById('modalImagePreviewContainer');
+        const modalImagePreview = document.getElementById('modalImagePreview');
+        const codeBtn = document.getElementById('codeBtn');
+        const startAppBtn = document.getElementById('startAppBtn');
+
+        let currentActiveTheme = 'all';
+
+        // Mise à jour de l'année et du compteur global
         document.getElementById('copyright-year').textContent = new Date().getFullYear();
+        totalBadge.innerHTML = `⚡ <strong>${enrichedProjects.length}</strong> applications répertoriées`;
 
-        function renderApps(list) {
-            grid.innerHTML = '';
-            if (list.length === 0) {
-                grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: var(--text-muted); opacity: 0.7;">Aucune application ne correspond à cette recherche.</p>';
-                return;
-            }
-            list.forEach(app => {
-                const card = document.createElement('div');
-                card.className = 'app-card';
-                
-                // Gérer les images manquantes sublimement (placeholder avec UI Avatars)
-                const imgTag = (app.image && app.image.trim() !== '') 
-                    ? `<img src="${app.image}" alt="${app.name}" loading="lazy">`
-                    : `<div class="avatar-placeholder">${app.picto || '✨'}</div>`;
+        // 1. Initialiser la barre de filtres thématiques
+        function renderNav() {
+            navContainer.innerHTML = '';
 
-                // Déterminer un label visuel
-                const categoryLabels = {
-                    'finance': 'Finance / PEA',
-                    'sante-bien-etre': 'Santé & Bien-être',
-                    'developpement': 'Dev Personnel',
-                    'jeux': 'Jeux',
-                    'utilitaires': 'Utilitaires',
-                    'organisation-productivite': 'Productivité',
-                    'musique': 'Audio/Musique'
-                };
-                const catLabel = categoryLabels[app.category] || 'Autre';
+            // Bouton "Tout voir"
+            const allBtn = document.createElement('div');
+            allBtn.className = 'nav-item active';
+            allBtn.dataset.theme = 'all';
+            allBtn.innerHTML = `🌟 Tout afficher <span class="count-badge">${enrichedProjects.length}</span>`;
+            allBtn.addEventListener('click', () => selectTheme('all'));
+            navContainer.appendChild(allBtn);
 
-                card.innerHTML = `
-                    <div class="app-icon">${imgTag}</div>
-                    <div class="app-info">
-                        <div class="app-category-badge">${catLabel}</div>
-                        <div class="app-name">${app.name}</div>
-                        <div class="app-description">${app.description}</div>
-                    </div>
-                `;
-                card.addEventListener('click', () => openModal(app, catLabel));
-                grid.appendChild(card);
+            themes.forEach(th => {
+                const count = enrichedProjects.filter(p => p.theme === th.id).length;
+                const btn = document.createElement('div');
+                btn.className = `nav-item ${th.isSpecial ? 'thai-nav' : ''}`;
+                btn.dataset.theme = th.id;
+                btn.innerHTML = `${th.icon} ${th.name} <span class="count-badge">${count}</span>`;
+                btn.addEventListener('click', () => selectTheme(th.id));
+                navContainer.appendChild(btn);
             });
         }
 
-        function openModal(app, catLabel) {
-            document.getElementById('modalTitle').textContent = (app.picto ? app.picto + ' ' : '') + app.name;
-            document.getElementById('modalCategory').textContent = catLabel;
-            document.getElementById('modalDescription').textContent = app.description;
-            document.getElementById('startAppBtn').href = app.demoUrl;
-            document.getElementById('codeBtn').href = app.sourceUrl;
+        // 2. Rendu des sections ordonnées par thématique
+        function renderSections(filterTerm = '') {
+            sectionsContainer.innerHTML = '';
+            const term = filterTerm.trim().toLowerCase();
+            let totalVisible = 0;
 
-            const previewContainer = document.getElementById('modalImagePreviewContainer');
-            const previewImg = document.getElementById('modalImagePreview');
+            themes.forEach(th => {
+                // Filtrer selon la catégorie sélectionnée (si active) et la recherche
+                if (currentActiveTheme !== 'all' && currentActiveTheme !== th.id) {
+                    return;
+                }
 
-            if (app.previewImage && app.previewImage.trim() !== '') {
-                previewImg.src = app.previewImage;
-                previewContainer.style.display = 'flex';
-            } else if (app.image && app.image.trim() !== '') {
-                previewImg.src = app.image;
-                previewContainer.style.display = 'flex';
+                let themeProjects = enrichedProjects.filter(p => p.theme === th.id);
+
+                if (term) {
+                    themeProjects = themeProjects.filter(p => {
+                        return p.name.toLowerCase().includes(term) ||
+                               p.desc.toLowerCase().includes(term) ||
+                               p.repo.toLowerCase().includes(term);
+                    });
+                }
+
+                if (themeProjects.length === 0) {
+                    return;
+                }
+
+                totalVisible += themeProjects.length;
+
+                // Créer le conteneur de section
+                const section = document.createElement('section');
+                section.className = `theme-section ${th.id}-section`;
+                section.id = `section-${th.id}`;
+
+                // Bannière spéciale pour la Thaïlande
+                let specialBanner = '';
+                if (th.id === 'thailande' && !term) {
+                    specialBanner = `
+                        <div class="thailande-highlight-banner">
+                            <div class="flag-badge">🇹🇭</div>
+                            <div>
+                                <h3>Section Spéciale — Destination Thaïlande & Voyage</h3>
+                                <p>Un écosystème sur-mesure d'applications dédiées à nos séjours : gestion du visa DTV, calcul mental de change THB/EUR, valises PWA 100% hors-ligne, planification d'itinéraires et ponts culturels franco-thaïlandais.</p>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                section.innerHTML = `
+                    <div class="theme-header">
+                        <div class="theme-title-area">
+                            <div class="theme-icon-box">${th.icon}</div>
+                            <div>
+                                <h2 class="theme-heading">
+                                    ${th.name}
+                                    <span class="theme-count">${themeProjects.length} application${themeProjects.length > 1 ? 's' : ''}</span>
+                                </h2>
+                                <p class="theme-desc">${th.description}</p>
+                            </div>
+                        </div>
+                    </div>
+                    ${specialBanner}
+                    <div class="apps-grid" id="grid-${th.id}"></div>
+                `;
+
+                sectionsContainer.appendChild(section);
+
+                // Injecter les cartes de la thématique
+                const grid = section.querySelector(`#grid-${th.id}`);
+                themeProjects.forEach(app => {
+                    const card = createCard(app, th);
+                    grid.appendChild(card);
+                });
+            });
+
+            // Affichage du message si aucun résultat
+            if (totalVisible === 0) {
+                emptyResults.style.display = 'block';
+                searchedTermText.textContent = filterTerm;
             } else {
-                previewContainer.style.display = 'none';
+                emptyResults.style.display = 'none';
+            }
+        }
+
+        // Créer une carte d'application
+        function createCard(app, theme) {
+            const card = document.createElement('div');
+            card.className = 'app-card';
+
+            const iconHtml = (app.image && app.image.trim() !== '')
+                ? `<img src="${app.image}" alt="${app.name}" loading="lazy">`
+                : `<div class="avatar-placeholder">${app.picto || '✨'}</div>`;
+
+            const isThai = app.theme === 'thailande';
+            const liveBadge = app.hasPages 
+                ? `<span class="app-tag live">⚡ En Ligne</span>`
+                : `<span class="app-tag">💻 Code</span>`;
+            const thaiTag = isThai ? `<span class="app-tag thai">🇹🇭 Thaïlande</span>` : '';
+
+            card.innerHTML = `
+                <div class="app-header-area">
+                    ${iconHtml}
+                </div>
+                <div class="app-info">
+                    <div class="app-tags">
+                        ${liveBadge}
+                        ${thaiTag}
+                        <span class="app-tag">${theme.name.split(' ')[0]}</span>
+                    </div>
+                    <h3 class="app-name">${app.name}</h3>
+                    <p class="app-description">${app.desc}</p>
+                    <div class="app-actions">
+                        <button class="app-btn app-btn-outline" data-action="details">Détails</button>
+                        <a href="${app.hasPages ? app.demoUrl : app.sourceUrl}" target="_blank" rel="noopener noreferrer" class="app-btn app-btn-launch" data-action="launch">
+                            ${app.hasPages ? 'Lancer 🚀' : 'Code 💻'}
+                        </a>
+                    </div>
+                </div>
+            `;
+
+            // Interactions
+            card.addEventListener('click', (e) => {
+                if (e.target.closest('[data-action="launch"]')) {
+                    // Clic direct sur lancer l'app
+                    return;
+                }
+                openModal(app, theme);
+            });
+
+            return card;
+        }
+
+        // Modal de détails
+        function openModal(app, theme) {
+            modalTitle.textContent = `${app.picto ? app.picto + ' ' : ''}${app.name}`;
+            modalCategory.textContent = `${theme.icon} ${theme.name}`;
+            modalCategory.style.color = theme.color;
+            modalDescription.textContent = app.desc;
+
+            startAppBtn.href = app.hasPages ? app.demoUrl : app.sourceUrl;
+            startAppBtn.textContent = app.hasPages ? "Lancer l'Application 🚀" : "Explorer le Dépôt GitHub 💻";
+            codeBtn.href = app.sourceUrl;
+
+            const previewImgSrc = app.preview || app.image;
+            if (previewImgSrc && previewImgSrc.trim() !== '') {
+                modalImagePreview.src = previewImgSrc;
+                modalImageContainer.style.display = 'flex';
+            } else {
+                modalImageContainer.style.display = 'none';
             }
 
             modal.classList.add('show');
@@ -520,37 +2060,48 @@
             document.body.classList.remove('modal-open');
         }
 
-        document.getElementById('closeModal').addEventListener('click', closeModal);
+        closeModalBtn.addEventListener('click', closeModal);
         modal.addEventListener('click', (e) => {
             if (e.target === modal) closeModal();
         });
-
-        // Filtering
-        let currentCategory = 'all';
-        function filterContent() {
-            const term = searchInput.value.toLowerCase();
-            const filtered = apps.filter(app => {
-                const matchCat = currentCategory === 'all' || app.category === currentCategory;
-                const matchName = app.name.toLowerCase().includes(term);
-                const matchDesc = app.description.toLowerCase().includes(term);
-                return matchCat && (matchName || matchDesc);
-            });
-            renderApps(filtered);
-        }
-
-        categoriesInputs.forEach(btn => {
-            btn.addEventListener('click', () => {
-                categoriesInputs.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                currentCategory = btn.dataset.category;
-                filterContent();
-            });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.classList.contains('show')) closeModal();
         });
 
-        searchInput.addEventListener('input', filterContent);
+        // Sélection d'une thématique
+        function selectTheme(themeId) {
+            currentActiveTheme = themeId;
+            document.querySelectorAll('.nav-item').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.theme === themeId);
+            });
 
-        // Init
-        renderApps(apps);
+            renderSections(searchInput.value);
+
+            // Si une thématique précise est choisie, faire défiler vers la section
+            if (themeId !== 'all') {
+                const targetSec = document.getElementById(`section-${themeId}`);
+                if (targetSec) {
+                    targetSec.scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+        }
+
+        // Recherche en direct
+        searchInput.addEventListener('input', (e) => {
+            renderSections(e.target.value);
+        });
+
+        // Raccourci clavier "/" pour chercher instantanément
+        document.addEventListener('keydown', (e) => {
+            if (e.key === '/' && document.activeElement !== searchInput) {
+                e.preventDefault();
+                searchInput.focus();
+            }
+        });
+
+        // Initialisation
+        renderNav();
+        renderSections();
     </script>
 </body>
 </html>
