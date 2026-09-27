@@ -1844,12 +1844,32 @@
             }
         ];
 
-        // Enrichir chaque projet avec les URLs GitHub
+        // Liste des 87 dépôts audités et certifiés actifs (200 OK) sur GitHub Pages
+        const liveVerifiedRepos = new Set([
+            "ThaiWander", "Remix_ThaiWander", "LEXTHAILANDIA", "EbookTH", "Alliance_1", "Sawasdee-Amour",
+            "Sawasdee-Love", "Sabaidee-Love", "TH_GB_FR", "Rose", "PEA-ETF", "PEA_Academie", "PEA-Retrait",
+            "retraite", "Calculatrice", "mon-calculateur", "Calculateur_Carbone", "HypnoZen", "Acouphenes",
+            "Harmonie", "Sophrologie", "reflexologie", "oreille", "tartre", "ballonimaginaire", "ecoute",
+            "verre", "vie", "larouedelavie", "Enneagramme", "LDC", "Compa", "CoupleConnect",
+            "astrologie-lieu-de-vie", "PositionMondiale", "croyances", "emotions", "numerologie", "AmiCoach",
+            "kiff", "MEMOIRE", "Brise", "decouverte", "futur", "REVES", "interieur", "Calcul_Profond",
+            "poly", "awale", "awale_capture", "quizz_awale", "ERICochet", "thegame", "pmu",
+            "tirage-cartes-oracle", "Spatial_Audio_Compass", "Audio3D", "Audio_3D", "Spacial",
+            "Spatial_Audio_EMDR", "SiesteFM", "webradio", "roman", "histoires", "AnnuaireIA", "grok",
+            "QRCodes", "rituels", "MesObjectifs", "OBJECTIF2026", "ouestmavoiture", "Sablier", "Hibernation",
+            "Favoris", "ADN", "BLAST-BioParser", "PDFtoIMAGES", "convertisseur", "github-repo-downloader",
+            "parfum", "maison", "TicketMiam", "WNG2026", "carte-membres", "sr", "sapatunav", "MMS"
+        ]);
+
+        // Enrichir chaque projet avec le statut de déploiement réel
         const enrichedProjects = allProjects.map(p => {
+            const isLive = liveVerifiedRepos.has(p.repo);
             return {
                 ...p,
-                demoUrl: `https://ericsotoca.github.io/${p.repo}/`,
-                sourceUrl: `https://github.com/ericsotoca/${p.repo}`
+                isLive: isLive,
+                demoUrl: isLive ? `https://ericsotoca.github.io/${p.repo}/` : `https://github.com/ericsotoca/${p.repo}`,
+                sourceUrl: `https://github.com/ericsotoca/${p.repo}`,
+                pagesSettingsUrl: `https://github.com/ericsotoca/${p.repo}/settings/pages`
             };
         });
 
@@ -1994,9 +2014,9 @@
                 : `<div class="avatar-placeholder">${app.picto || '✨'}</div>`;
 
             const isThai = app.theme === 'thailande';
-            const liveBadge = app.hasPages 
+            const liveBadge = app.isLive 
                 ? `<span class="app-tag live">⚡ En Ligne</span>`
-                : `<span class="app-tag">💻 Code</span>`;
+                : `<span class="app-tag" style="background: rgba(148, 163, 184, 0.12); color: #cbd5e1; border: 1px solid rgba(148, 163, 184, 0.25);">💻 Code GitHub</span>`;
             const thaiTag = isThai ? `<span class="app-tag thai">🇹🇭 Thaïlande</span>` : '';
 
             card.innerHTML = `
@@ -2013,8 +2033,8 @@
                     <p class="app-description">${app.desc}</p>
                     <div class="app-actions">
                         <button class="app-btn app-btn-outline" data-action="details">Détails</button>
-                        <a href="${app.hasPages ? app.demoUrl : app.sourceUrl}" target="_blank" rel="noopener noreferrer" class="app-btn app-btn-launch" data-action="launch">
-                            ${app.hasPages ? 'Lancer 🚀' : 'Code 💻'}
+                        <a href="${app.demoUrl}" target="_blank" rel="noopener noreferrer" class="app-btn app-btn-launch" data-action="launch">
+                            ${app.isLive ? 'Lancer 🚀' : 'Code 💻'}
                         </a>
                     </div>
                 </div>
@@ -2023,7 +2043,7 @@
             // Interactions
             card.addEventListener('click', (e) => {
                 if (e.target.closest('[data-action="launch"]')) {
-                    // Clic direct sur lancer l'app
+                    // Clic direct sur le bouton d'action
                     return;
                 }
                 openModal(app, theme);
@@ -2037,11 +2057,30 @@
             modalTitle.textContent = `${app.picto ? app.picto + ' ' : ''}${app.name}`;
             modalCategory.textContent = `${theme.icon} ${theme.name}`;
             modalCategory.style.color = theme.color;
-            modalDescription.textContent = app.desc;
+            
+            // Description et note d'activation si hors-ligne
+            let descHtml = `<p>${app.desc}</p>`;
+            if (!app.isLive) {
+                descHtml += `
+                    <div style="margin-top: 1.2rem; background: rgba(56, 189, 248, 0.08); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 12px; padding: 1rem; font-size: 0.88rem; color: #bae6fd; line-height: 1.5;">
+                        <strong style="color: #38bdf8;">💡 En attente de déploiement en ligne :</strong><br>
+                        Le code source de ce projet est hébergé sur GitHub. Pour rendre l'application accessible en ligne à tout moment sans erreur 404, vous pouvez activer GitHub Pages dans les réglages du dépôt (<strong>Settings &gt; Pages &gt; Branch main</strong>).
+                    </div>
+                `;
+            }
+            modalDescription.innerHTML = descHtml;
 
-            startAppBtn.href = app.hasPages ? app.demoUrl : app.sourceUrl;
-            startAppBtn.textContent = app.hasPages ? "Lancer l'Application 🚀" : "Explorer le Dépôt GitHub 💻";
-            codeBtn.href = app.sourceUrl;
+            if (app.isLive) {
+                startAppBtn.href = app.demoUrl;
+                startAppBtn.textContent = "🚀 Lancer l'Application";
+                codeBtn.href = app.sourceUrl;
+                codeBtn.textContent = "💻 Code Source GitHub";
+            } else {
+                startAppBtn.href = app.sourceUrl;
+                startAppBtn.textContent = "💻 Explorer le Code sur GitHub";
+                codeBtn.href = app.pagesSettingsUrl;
+                codeBtn.textContent = "⚙️ Activer sur GitHub Pages";
+            }
 
             const previewImgSrc = app.preview || app.image;
             if (previewImgSrc && previewImgSrc.trim() !== '') {
@@ -2050,7 +2089,6 @@
             } else {
                 modalImageContainer.style.display = 'none';
             }
-
             modal.classList.add('show');
             document.body.classList.add('modal-open');
         }
