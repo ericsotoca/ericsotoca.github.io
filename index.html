@@ -1861,15 +1861,12 @@
             "parfum", "maison", "TicketMiam", "WNG2026", "carte-membres", "sr", "sapatunav", "MMS"
         ]);
 
-        // Enrichir chaque projet avec le statut de déploiement réel
+        // Enrichir chaque projet avec les URLs de déploiement et de code
         const enrichedProjects = allProjects.map(p => {
-            const isLive = liveVerifiedRepos.has(p.repo);
             return {
                 ...p,
-                isLive: isLive,
-                demoUrl: isLive ? `https://ericsotoca.github.io/${p.repo}/` : `https://github.com/ericsotoca/${p.repo}`,
-                sourceUrl: `https://github.com/ericsotoca/${p.repo}`,
-                pagesSettingsUrl: `https://github.com/ericsotoca/${p.repo}/settings/pages`
+                demoUrl: `https://ericsotoca.github.io/${p.repo}/`,
+                sourceUrl: `https://github.com/ericsotoca/${p.repo}`
             };
         });
 
@@ -2014,9 +2011,6 @@
                 : `<div class="avatar-placeholder">${app.picto || '✨'}</div>`;
 
             const isThai = app.theme === 'thailande';
-            const liveBadge = app.isLive 
-                ? `<span class="app-tag live">⚡ En Ligne</span>`
-                : `<span class="app-tag" style="background: rgba(148, 163, 184, 0.12); color: #cbd5e1; border: 1px solid rgba(148, 163, 184, 0.25);">💻 Code GitHub</span>`;
             const thaiTag = isThai ? `<span class="app-tag thai">🇹🇭 Thaïlande</span>` : '';
 
             card.innerHTML = `
@@ -2025,7 +2019,7 @@
                 </div>
                 <div class="app-info">
                     <div class="app-tags">
-                        ${liveBadge}
+                        <span class="app-tag live">⚡ En Ligne</span>
                         ${thaiTag}
                         <span class="app-tag">${theme.name.split(' ')[0]}</span>
                     </div>
@@ -2034,7 +2028,7 @@
                     <div class="app-actions">
                         <button class="app-btn app-btn-outline" data-action="details">Détails</button>
                         <a href="${app.demoUrl}" target="_blank" rel="noopener noreferrer" class="app-btn app-btn-launch" data-action="launch">
-                            ${app.isLive ? 'Lancer 🚀' : 'Code 💻'}
+                            Lancer 🚀
                         </a>
                     </div>
                 </div>
@@ -2043,7 +2037,7 @@
             // Interactions
             card.addEventListener('click', (e) => {
                 if (e.target.closest('[data-action="launch"]')) {
-                    // Clic direct sur le bouton d'action
+                    // Clic direct sur le bouton Lancer
                     return;
                 }
                 openModal(app, theme);
@@ -2057,30 +2051,12 @@
             modalTitle.textContent = `${app.picto ? app.picto + ' ' : ''}${app.name}`;
             modalCategory.textContent = `${theme.icon} ${theme.name}`;
             modalCategory.style.color = theme.color;
-            
-            // Description et note d'activation si hors-ligne
-            let descHtml = `<p>${app.desc}</p>`;
-            if (!app.isLive) {
-                descHtml += `
-                    <div style="margin-top: 1.2rem; background: rgba(56, 189, 248, 0.08); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 12px; padding: 1rem; font-size: 0.88rem; color: #bae6fd; line-height: 1.5;">
-                        <strong style="color: #38bdf8;">💡 En attente de déploiement en ligne :</strong><br>
-                        Le code source de ce projet est hébergé sur GitHub. Pour rendre l'application accessible en ligne à tout moment sans erreur 404, vous pouvez activer GitHub Pages dans les réglages du dépôt (<strong>Settings &gt; Pages &gt; Branch main</strong>).
-                    </div>
-                `;
-            }
-            modalDescription.innerHTML = descHtml;
+            modalDescription.textContent = app.desc;
 
-            if (app.isLive) {
-                startAppBtn.href = app.demoUrl;
-                startAppBtn.textContent = "🚀 Lancer l'Application";
-                codeBtn.href = app.sourceUrl;
-                codeBtn.textContent = "💻 Code Source GitHub";
-            } else {
-                startAppBtn.href = app.sourceUrl;
-                startAppBtn.textContent = "💻 Explorer le Code sur GitHub";
-                codeBtn.href = app.pagesSettingsUrl;
-                codeBtn.textContent = "⚙️ Activer sur GitHub Pages";
-            }
+            startAppBtn.href = app.demoUrl;
+            startAppBtn.textContent = "🚀 Lancer l'Application";
+            codeBtn.href = app.sourceUrl;
+            codeBtn.textContent = "💻 Code Source GitHub";
 
             const previewImgSrc = app.preview || app.image;
             if (previewImgSrc && previewImgSrc.trim() !== '') {
