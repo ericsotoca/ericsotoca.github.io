@@ -1,0 +1,44 @@
+name: Test voix française Neuro-Golf
+
+on:
+  push:
+    branches:
+      - test-kokoro-neurogolf-voice
+
+permissions:
+  contents: read
+
+jobs:
+  generate-audio:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Démarrer Kokoro TTS
+        run: |
+          docker run -d --name kokoro -p 7860:7860 hangrylabs/kokorotts:latest
+          for i in $(seq 1 60); do
+            if curl -fsS http://localhost:7860/tts/status >/dev/null; then
+              echo "Kokoro est prêt"
+              exit 0
+            fi
+            sleep 5
+          done
+          docker logs kokoro
+          exit 1
+
+      - name: Générer la voix française
+        run: |
+          curl --fail --show-error --silent \
+            -X POST "http://localhost:7860/tts/generate" \
+            -H "Content-Type: application/json" \
+            -d '{"text":"Et si votre cerveau détenait la clé de votre swing ? Découvrez Neuro-Golf, le Code du Swing : une autre façon de comprendre et d’améliorer votre jeu.","voice":"ff_siwis","output_format":"mp3"}' \
+            -o neuro-golf-voix-siwis.mp3
+          test -s neuro-golf-voix-siwis.mp3
+          file neuro-golf-voix-siwis.mp3
+
+      - name: Publier le fichier audio de test
+        uses: actions/upload-artifact@v4
+        with:
+          name: neuro-golf-voix-siwis
+          path: neuro-golf-voix-siwis.mp3
+          retention-days: 7
