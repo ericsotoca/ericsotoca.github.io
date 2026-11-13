@@ -1,0 +1,150 @@
+name: PROCESS B — Affiche vidéo Neuro-Tennis Tome 1
+on:
+  push:
+    branches:
+      - test-process-b-neuro-tennis-tome1
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build-promo-video:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - name: Installer les outils
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg python3-pip fonts-dejavu-core
+          python3 -m pip install --break-system-packages Pillow requests
+      - name: Télécharger et vérifier la couverture officielle Amazon
+        run: |
+          curl -L --retry 3 --retry-delay 3 --fail --show-error \
+            "https://images-na.ssl-images-amazon.com/images/P/B0GM6DB361.01._SCLZZZZZZZ_.jpg" \
+            -o neuro-tennis-tome1-cover.jpg
+          test -s neuro-tennis-tome1-cover.jpg
+          python3 - <<'PY'
+          from PIL import Image
+          im=Image.open("neuro-tennis-tome1-cover.jpg")
+          im.verify()
+          im=Image.open("neuro-tennis-tome1-cover.jpg")
+          print("Couverture officielle récupérée :", im.format, im.size)
+          if im.width < 300 or im.height < 400:
+              raise SystemExit("Image trop petite pour être une couverture exploitable")
+          PY
+      - name: Créer l’affiche PROCESS B avec la couverture officielle intégrée
+        run: |
+          python3 - <<'PY'
+          from PIL import Image, ImageDraw, ImageFont, ImageFilter
+          import math
+          W,H=1080,1920
+          im=Image.new("RGB",(W,H))
+          px=im.load()
+          for y in range(H):
+              t=y/H
+              for x in range(W):
+                  glow=max(0,1-math.sqrt(((x-260)/780)**2+((y-760)/1050)**2))
+                  px[x,y]=(int(3+8*glow),int(12+48*glow),int(36+105*glow))
+          d=ImageDraw.Draw(im,"RGBA")
+          # Stadium lights and court atmosphere
+          for x in (55,1020):
+              for k in range(8):
+                  d.ellipse((x-5-k*2,220-k*2,x+5+k*2,230+k*2),fill=(75,170,255,max(4,28-k*3)))
+          for y in (1330,1380,1450):
+              d.line((0,y,W,y-100),fill=(255,255,255,35),width=3)
+          d.polygon([(0,1450),(1080,1320),(1080,1780),(0,1780)],fill=(135,75,35,100))
+          # Court lines
+          d.line((0,1510,1080,1380),fill=(255,255,255,95),width=5)
+          d.line((0,1690,1080,1560),fill=(255,255,255,70),width=4)
+          # Fonts
+          reg="/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
+          bold="/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
+          def F(p,s): return ImageFont.truetype(p,s)
+          # Headline
+          d.text((55,55),"LE MATCH SE JOUE AUSSI",font=F(bold,61),fill="white",stroke_width=1,stroke_fill=(0,0,0,100))
+          d.text((55,125),"DANS LE CERVEAU",font=F(bold,76),fill=(255,211,35))
+          d.rounded_rectangle((58,225,650,237),radius=6,fill=(255,210,30,255))
+          d.text((60,265),"Les neurosciences au service de votre tennis",font=F(reg,31),fill=(230,241,255))
+          # Neural glow motif
+          for r in range(155,15,-14):
+              d.ellipse((190-r,620-r,190+r,620+r),outline=(25,170,255,max(5,100-r//2)),width=3)
+          # Court net / horizon
+          d.line((35,1190,1040,1190),fill=(210,235,255,80),width=3)
+          # Official cover: fitted as the main book face
+          cover=Image.open("neuro-tennis-tome1-cover.jpg").convert("RGB")
+          ch=900
+          cw=int(cover.width*ch/cover.height)
+          cover=cover.resize((cw,ch),Image.Resampling.LANCZOS)
+          # shadow
+          shadow=Image.new("RGBA",(cw+70,ch+70),(0,0,0,0))
+          sd=ImageDraw.Draw(shadow)
+          sd.rounded_rectangle((20,20,cw+45,ch+45),radius=12,fill=(0,0,0,190))
+          shadow=shadow.filter(ImageFilter.GaussianBlur(22))
+          im.paste(shadow,(105,445),shadow)
+          # subtle book edge and cover face
+          d=ImageDraw.Draw(im,"RGBA")
+          d.polygon([(105+cw,465),(105+cw+38,485),(105+cw+38,1350),(105+cw,1345)],fill=(215,220,230,255))
+          im.paste(cover,(105,445))
+          d=ImageDraw.Draw(im,"RGBA")
+          d.rectangle((105,445,105+cw-1,445+ch-1),outline=(255,255,255,170),width=3)
+          # Benefits panel
+          bx=610
+          benefits=[
+            ("01","ANTICIPER","plus tôt"),
+            ("02","MAÎTRISER","la pression"),
+            ("03","GARDER","son attention"),
+            ("04","DÉCIDER","avec lucidité")
+          ]
+          for i,(num,a,b) in enumerate(benefits):
+              y=475+i*215
+              d.rounded_rectangle((bx,y,bx+410,y+165),radius=24,fill=(5,22,52,205),outline=(70,180,255,170),width=3)
+              d.ellipse((bx+22,y+38,bx+105,y+121),outline=(255,210,35,255),width=5)
+              d.text((bx+39,y+55),num,font=F(bold,27),fill=(255,215,50))
+              d.text((bx+125,y+36),a,font=F(bold,31),fill="white")
+              d.text((bx+125,y+83),b,font=F(reg,29),fill=(255,216,65))
+          # Footer CTA
+          d.rounded_rectangle((55,1570,1025,1745),radius=42,fill=(255,211,28,255))
+          cta="RETROUVEZ CE LIVRE SUR AMAZON"
+          f=F(bold,42)
+          bb=d.textbbox((0,0),cta,font=f)
+          d.text(((W-(bb[2]-bb[0]))//2,1628),cta,font=f,fill=(5,23,55))
+          d.text((W//2-125,1690),"NEURO-TENNIS • TOME 1",font=F(bold,23),fill=(5,23,55))
+          d.text((55,1810),"ERIC SOTOCA  •  NEUROSCIENCES & PERFORMANCE",font=F(reg,21),fill=(218,231,250,220))
+          im.save("neuro-tennis-tome1-affiche.png",quality=95)
+          print("Affiche créée avec la couverture Amazon officielle intégrée.")
+          PY
+      - name: Démarrer Kokoro TTS
+        run: |
+          docker run -d --name kokoro -p 7860:7860 hangrylabs/kokorotts:latest
+          for i in $(seq 1 90); do
+            if curl -fsS http://localhost:7860/tts/status >/dev/null; then exit 0; fi
+            sleep 5
+          done
+          docker logs kokoro
+          exit 1
+      - name: Générer la narration française
+        run: |
+          curl --fail --show-error --silent -X POST "http://localhost:7860/tts/generate" \
+            -H "Content-Type: application/json" \
+            -d '{"text":"Au tennis, maîtriser ses émotions fait la différence. Découvrez Neuro-Tennis, L’Amygdale au Filet. Retrouvez ce livre sur Amazon.","voice":"ff_siwis","output_format":"mp3"}' \
+            -o neuro-tennis-tome1.mp3
+          test -s neuro-tennis-tome1.mp3
+      - name: Assembler la vidéo verticale de 10 secondes
+        run: |
+          ffmpeg -y -loop 1 -framerate 25 -i neuro-tennis-tome1-affiche.png -i neuro-tennis-tome1.mp3 \
+            -filter_complex "[0:v]scale=1080:1920,zoompan=z='min(1.035,1+0.035*on/250)':d=250:s=1080x1920:fps=25,format=yuv420p[v]" \
+            -map "[v]" -map 1:a:0 -t 10 -r 25 -c:v libx264 -preset medium -crf 18 \
+            -c:a aac -b:a 128k -af "apad=pad_dur=10" -shortest -movflags +faststart \
+            neuro-tennis-tome1-process-b-10s.mp4
+          ffprobe -v error -show_entries format=duration -show_entries stream=codec_name,width,height -of json neuro-tennis-tome1-process-b-10s.mp4
+          ffmpeg -v error -i neuro-tennis-tome1-process-b-10s.mp4 -f null -
+      - name: Publier vidéo, affiche, audio et couverture vérifiée
+        uses: actions/upload-artifact@v4
+        with:
+          name: process-b-neuro-tennis-tome1
+          path: |
+            neuro-tennis-tome1-process-b-10s.mp4
+            neuro-tennis-tome1-affiche.png
+            neuro-tennis-tome1.mp3
+            neuro-tennis-tome1-cover.jpg
+          retention-days: 7
