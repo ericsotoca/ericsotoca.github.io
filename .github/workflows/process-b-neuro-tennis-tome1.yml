@@ -1,4 +1,4 @@
-name: PROCESS B — Affiche vidéo Neuro-Tennis Tome 1
+name: PROCESS B — Affiche statique Neuro-Tennis Tome 1
 on:
   push:
     branches:
@@ -15,8 +15,8 @@ jobs:
       - name: Installer les outils
         run: |
           sudo apt-get update
-          sudo apt-get install -y ffmpeg python3-pip fonts-dejavu-core
-          python3 -m pip install --break-system-packages Pillow requests
+          sudo apt-get install -y python3-pip fonts-dejavu-core
+          python3 -m pip install --break-system-packages Pillow
       - name: Télécharger et vérifier la couverture officielle Amazon
         run: |
           curl -L --retry 3 --retry-delay 3 --fail --show-error \
@@ -113,38 +113,11 @@ jobs:
           im.save("neuro-tennis-tome1-affiche.png",quality=95)
           print("Affiche créée avec la couverture Amazon officielle intégrée.")
           PY
-      - name: Démarrer Kokoro TTS
-        run: |
-          docker run -d --name kokoro -p 7860:7860 hangrylabs/kokorotts:latest
-          for i in $(seq 1 90); do
-            if curl -fsS http://localhost:7860/tts/status >/dev/null; then exit 0; fi
-            sleep 5
-          done
-          docker logs kokoro
-          exit 1
-      - name: Générer la narration française
-        run: |
-          curl --fail --show-error --silent -X POST "http://localhost:7860/tts/generate" \
-            -H "Content-Type: application/json" \
-            -d '{"text":"Au tennis, maîtriser ses émotions fait la différence. Découvrez Neuro-Tennis, L’Amygdale au Filet. Retrouvez ce livre sur Amazon.","voice":"ff_siwis","output_format":"mp3"}' \
-            -o neuro-tennis-tome1.mp3
-          test -s neuro-tennis-tome1.mp3
-      - name: Assembler la vidéo verticale de 10 secondes
-        run: |
-          ffmpeg -y -loop 1 -framerate 25 -i neuro-tennis-tome1-affiche.png -i neuro-tennis-tome1.mp3 \
-            -filter_complex "[0:v]scale=1080:1920,zoompan=z='min(1.035,1+0.035*on/250)':d=250:s=1080x1920:fps=25,format=yuv420p[v]" \
-            -map "[v]" -map 1:a:0 -t 10 -r 25 -c:v libx264 -preset medium -crf 18 \
-            -c:a aac -b:a 128k -af "apad=pad_dur=10" -shortest -movflags +faststart \
-            neuro-tennis-tome1-process-b-10s.mp4
-          ffprobe -v error -show_entries format=duration -show_entries stream=codec_name,width,height -of json neuro-tennis-tome1-process-b-10s.mp4
-          ffmpeg -v error -i neuro-tennis-tome1-process-b-10s.mp4 -f null -
-      - name: Publier vidéo, affiche, audio et couverture vérifiée
+      - name: Publier uniquement l’affiche statique et la couverture source
         uses: actions/upload-artifact@v4
         with:
-          name: process-b-neuro-tennis-tome1
+          name: process-b-neuro-tennis-tome1-affiche-statique
           path: |
-            neuro-tennis-tome1-process-b-10s.mp4
             neuro-tennis-tome1-affiche.png
-            neuro-tennis-tome1.mp3
             neuro-tennis-tome1-cover.jpg
           retention-days: 7
