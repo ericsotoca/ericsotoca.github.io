@@ -1,0 +1,87 @@
+name: Test vidéo Neuro-Tennis tome 1
+on:
+  push:
+    branches:
+      - test-neuro-tennis-tome1-video
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build-video:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Démarrer Kokoro TTS
+        run: |
+          docker run -d --name kokoro -p 7860:7860 hangrylabs/kokorotts:latest
+          for i in $(seq 1 90); do
+            if curl -fsS http://localhost:7860/tts/status >/dev/null; then exit 0; fi
+            sleep 5
+          done
+          docker logs kokoro
+          exit 1
+      - name: Installer FFmpeg et Pillow
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg python3-pip
+          python3 -m pip install --break-system-packages Pillow
+          ffmpeg -version
+          ffprobe -version
+      - name: Télécharger et contrôler la couverture Amazon
+        run: |
+          curl -L --fail --show-error "https://images-na.ssl-images-amazon.com/images/P/B0GM6DB361.01._SCLZZZZZZZ_.jpg" -o neuro-tennis-tome1.jpg
+          test -s neuro-tennis-tome1.jpg
+          file neuro-tennis-tome1.jpg
+          ffmpeg -v error -i neuro-tennis-tome1.jpg -frames:v 1 -f null -
+      - name: Générer la voix française Kokoro
+        run: |
+          curl --fail --show-error --silent -X POST "http://localhost:7860/tts/generate" -H "Content-Type: application/json" -d '{"text":"Au tennis, maîtriser ses émotions fait la différence. Découvrez Neuro-Tennis, L’Amygdale au Filet. Retrouvez ce livre sur Amazon.","voice":"ff_siwis","output_format":"mp3"}' -o neuro-tennis-tome1.mp3
+          test -s neuro-tennis-tome1.mp3
+          ffmpeg -y -i neuro-tennis-tome1.mp3 -af "apad=pad_dur=10" -t 10 neuro-tennis-audio-10s.mp3
+      - name: Créer l’animation de la couverture
+        run: |
+          mkdir -p frames
+          python3 - <<'PY'
+          from PIL import Image, ImageOps
+          import math
+
+          source = Image.open("neuro-tennis-tome1.jpg").convert("RGB")
+          W, H, TOTAL = 1080, 1920, 250
+          scale = min(W / source.width, H / source.height)
+          full_w, full_h = round(source.width * scale), round(source.height * scale)
+          zoom_frames, spin_frames = 50, 125
+          for i in range(TOTAL):
+              if i < zoom_frames:
+                  p = i / (zoom_frames - 1)
+                  p = p * p * (3 - 2 * p)
+                  zoom, angle = 0.5 + 0.5 * p, 0.0
+              elif i < zoom_frames + spin_frames:
+                  u = (i - zoom_frames) / (spin_frames - 1)
+                  eased = u * u * (3 - 2 * u)
+                  angle, zoom = 2 * math.pi * 3 * eased, 1.0
+              else:
+                  angle, zoom = 0.0, 1.0
+              frame = Image.new("RGB", (W, H), "black")
+              current_w = max(1, round(full_w * zoom * abs(math.cos(angle))))
+              current_h = round(full_h * zoom)
+              cover = source.resize((max(1, round(full_w * zoom)), current_h), Image.Resampling.LANCZOS)
+              if math.cos(angle) < 0:
+                  cover = ImageOps.mirror(cover)
+              cover = cover.resize((current_w, current_h), Image.Resampling.LANCZOS)
+              frame.paste(cover, ((W - current_w) // 2, (H - current_h) // 2))
+              frame.save(f"frames/frame-{i:04d}.png", optimize=False)
+          PY
+      - name: Assembler la vidéo verticale animée
+        run: |
+          ffmpeg -y -framerate 25 -i frames/frame-%04d.png -i neuro-tennis-audio-10s.mp3 -map 0:v:0 -map 1:a:0 -t 10 -r 25 -c:v libx264 -preset medium -crf 18 -pix_fmt yuv420p -c:a aac -b:a 128k -movflags +faststart neuro-tennis-tome1-10s.mp4
+          ffprobe -v error -show_entries format=duration -show_entries stream=codec_name,width,height -of json neuro-tennis-tome1-10s.mp4
+          ffmpeg -v error -i neuro-tennis-tome1-10s.mp4 -f null -
+      - name: Publier les fichiers de test
+        uses: actions/upload-artifact@v4
+        with:
+          name: neuro-tennis-tome1-video-animation-test
+          path: |
+            neuro-tennis-tome1.jpg
+            neuro-tennis-tome1.mp3
+            neuro-tennis-tome1-10s.mp4
+          retention-days: 7
