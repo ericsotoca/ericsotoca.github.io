@@ -1,0 +1,44 @@
+name: Test vidéo Neuro-Rugby tome 1
+on:
+  push:
+    branches:
+      - test-neuro-rugby-tome1-video
+permissions:
+  contents: read
+jobs:
+  build-video:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Démarrer Kokoro TTS
+        run: |
+          docker run -d --name kokoro -p 7860:7860 hangrylabs/kokorotts:latest
+          for i in $(seq 1 90); do
+            if curl -fsS http://localhost:7860/tts/status >/dev/null; then exit 0; fi
+            sleep 5
+          done
+          docker logs kokoro
+          exit 1
+      - name: Télécharger la couverture Amazon
+        run: |
+          curl -L --fail --show-error "https://images-na.ssl-images-amazon.com/images/P/B0H4MB4YQL.01._SCLZZZZZZZ_.jpg" -o neuro-rugby-tome1.jpg
+          test -s neuro-rugby-tome1.jpg
+          file neuro-rugby-tome1.jpg
+      - name: Générer la voix française Kokoro
+        run: |
+          curl --fail --show-error --silent -X POST "http://localhost:7860/tts/generate" -H "Content-Type: application/json" -d '{"text":"Au rugby, le cerveau lit le jeu avant l’action. Découvrez Neuro-Rugby, Les Fondations du Cerveau Rugbystique, et les neurosciences de la performance.","voice":"ff_siwis","output_format":"mp3"}' -o neuro-rugby-tome1.mp3
+          test -s neuro-rugby-tome1.mp3
+          ffmpeg -y -i neuro-rugby-tome1.mp3 -af "apad=pad_dur=10" -t 10 neuro-rugby-audio-10s.mp3
+      - name: Assembler le MP4 vertical sans zoom
+        run: |
+          ffmpeg -y -loop 1 -framerate 25 -i neuro-rugby-tome1.jpg -i neuro-rugby-audio-10s.mp3 -map 0:v:0 -map 1:a:0 -vf "scale=1080:1920:force_original_aspect_ratio=decrease:flags=lanczos,pad=1080:1920:(ow-iw)/2:(oh-ih)/2:black,format=yuv420p" -t 10 -r 25 -c:v libx264 -preset medium -crf 18 -c:a aac -b:a 128k -movflags +faststart neuro-rugby-tome1-10s.mp4
+          ffprobe -v error -show_entries format=duration -show_entries stream=codec_name,width,height -of json neuro-rugby-tome1-10s.mp4
+          ffmpeg -v error -i neuro-rugby-tome1-10s.mp4 -f null -
+      - name: Publier les fichiers de test
+        uses: actions/upload-artifact@v4
+        with:
+          name: neuro-rugby-tome1-video-test
+          path: |
+            neuro-rugby-tome1.mp3
+            neuro-rugby-tome1-10s.mp4
+          retention-days: 7
