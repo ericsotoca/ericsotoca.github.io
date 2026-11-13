@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - test-neuro-rugby-tome1-video
+  workflow_dispatch:
 permissions:
   contents: read
 jobs:
