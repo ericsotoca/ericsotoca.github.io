@@ -19,6 +19,12 @@ jobs:
           done
           docker logs kokoro
           exit 1
+      - name: Installer FFmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+          ffmpeg -version
+          ffprobe -version
       - name: Télécharger la couverture Amazon
         run: |
           curl -L --fail --show-error "https://images-na.ssl-images-amazon.com/images/P/B0H4MB4YQL.01._SCLZZZZZZZ_.jpg" -o neuro-rugby-tome1.jpg
