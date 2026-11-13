@@ -1,0 +1,151 @@
+name: PROCESS B — Vidéo Neuro-Équitation Tome 1
+on:
+  push:
+    branches:
+      - process-b-neuro-equitation-tome1
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build-video:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - name: Installer les outils graphiques et FFmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg fonts-dejavu-core python3-pip
+          python3 -m pip install --break-system-packages Pillow
+      - name: Télécharger et vérifier la couverture officielle Amazon
+        run: |
+          curl -L --retry 3 --retry-delay 3 --fail --show-error "https://images-na.ssl-images-amazon.com/images/P/B0H3T4JD6X.01._SCLZZZZZZZ_.jpg" -o neuro-equitation-tome1-cover.jpg
+          test -s neuro-equitation-tome1-cover.jpg
+          python3 - <<'PY'
+          from PIL import Image
+          im=Image.open("neuro-equitation-tome1-cover.jpg")
+          im.verify()
+          im=Image.open("neuro-equitation-tome1-cover.jpg")
+          print("Couverture téléchargée :", im.format, im.size)
+          if im.width < 300 or im.height < 400:
+              raise SystemExit("Couverture trop petite ou non exploitable")
+          PY
+      - name: Composer l'affiche PROCESS B V3 adaptée à l'équitation
+        run: |
+          python3 - <<'PY'
+          from PIL import Image, ImageDraw, ImageFont, ImageFilter
+          import math
+          W,H=1080,1920
+          im=Image.new("RGB",(W,H),(12,20,34))
+          p=im.load()
+          for y in range(H):
+              for x in range(W):
+                  g=max(0,1-math.sqrt(((x-650)/900)**2+((y-700)/1250)**2))
+                  p[x,y]=(int(12+8*g),int(20+36*g),int(34+48*g))
+          reg="/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
+          bold="/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
+          def F(path,size): return ImageFont.truetype(path,size)
+          d=ImageDraw.Draw(im,"RGBA")
+          # Réseau neuronal abstrait en arrière-plan
+          nodes=[(720,180),(850,230),(970,160),(780,340),(930,410),(680,470),(880,520)]
+          edges=[(0,1),(1,2),(0,3),(3,4),(3,5),(5,6),(4,6),(2,4)]
+          for a,b in edges: d.line((*nodes[a],*nodes[b]),fill=(111,190,205,105),width=3)
+          for x,y in nodes:
+              d.ellipse((x-7,y-7,x+7,y+7),fill=(235,193,112,230))
+              d.ellipse((x-18,y-18,x+18,y+18),outline=(111,190,205,100),width=2)
+          d.rounded_rectangle((55,48,495,100),radius=24,fill=(31,69,68,255),outline=(170,197,155,255),width=2)
+          d.text((80,61),"NEUROSCIENCES  •  ÉQUITATION",font=F(bold,21),fill=(224,237,218))
+          d.text((54,137),"LA CONNEXION",font=F(bold,70),fill=(250,247,237))
+          d.text((54,218),"CAVALIER-CHEVAL",font=F(bold,66),fill=(231,190,113))
+          d.rounded_rectangle((56,307,600,317),radius=5,fill=(231,190,113))
+          d.text((58,345),"Comprendre le cerveau au cœur de la relation équestre",font=F(reg,25),fill=(218,226,220))
+          d.rounded_rectangle((42,420,1038,1120),radius=34,fill=(20,39,48,245),outline=(121,166,151,220),width=2)
+          d.rounded_rectangle((75,448,360,500),radius=24,fill=(231,190,113,255))
+          d.text((98,462),"LE LIVRE  •  TOME 1",font=F(bold,21),fill=(27,39,40))
+          cover=Image.open("neuro-equitation-tome1-cover.jpg").convert("RGB")
+          ch=419
+          cw=round(cover.width*ch/cover.height)
+          cover=cover.resize((cw,ch),Image.Resampling.LANCZOS)
+          cx,cy=82,550
+          sh=Image.new("RGBA",(cw+70,ch+70),(0,0,0,0))
+          sd=ImageDraw.Draw(sh)
+          sd.rounded_rectangle((18,18,cw+48,ch+48),radius=8,fill=(0,0,0,185))
+          sh=sh.filter(ImageFilter.GaussianBlur(18))
+          im.paste(sh,(cx-18,cy-12),sh)
+          im.paste(cover,(cx,cy))
+          d=ImageDraw.Draw(im,"RGBA")
+          d.rectangle((cx,cy,cx+cw-1,cy+ch-1),outline=(250,247,237,235),width=3)
+          d.text((82,990),"ERIC SOTOCA",font=F(bold,22),fill=(250,247,237))
+          # bénéfices inspirés de la description disponible dans la fiche livre
+          benefits=[("01","OBSERVER","les signaux"),("02","PERCEVOIR","l'autre"),("03","S'AJUSTER","mutuellement"),("04","COMPRENDRE","la connexion")]
+          bx=430
+          for i,(n,h,s) in enumerate(benefits):
+              y=535+i*140
+              d.rounded_rectangle((bx,y,990,y+112),radius=22,fill=(34,65,68,245),outline=(128,174,153,220),width=2)
+              d.ellipse((bx+18,y+23,bx+82,y+87),outline=(231,190,113,255),width=4)
+              d.text((bx+31,y+41),n,font=F(bold,19),fill=(245,210,151))
+              d.text((bx+103,y+20),h,font=F(bold,26),fill=(250,247,237))
+              d.text((bx+103,y+59),s,font=F(reg,23),fill=(231,190,113))
+          d.text((55,1160),"L'INTELLIGENCE DU LIEN",font=F(bold,34),fill=(250,247,237))
+          d.text((55,1208),"Une relation fondée sur l'écoute et l'ajustement.",font=F(reg,23),fill=(194,213,205))
+          d.rounded_rectangle((55,1260,1025,1510),radius=28,fill=(20,45,52,245),outline=(121,166,151,220),width=2)
+          # silhouette équestre stylisée originale (cheval + cavalier)
+          # corps du cheval
+          d.ellipse((145,1350,475,1445),fill=(180,143,104,255),outline=(238,208,165,255),width=3)
+          d.ellipse((420,1310,510,1390),fill=(180,143,104,255),outline=(238,208,165,255),width=3)
+          d.polygon([(460,1325),(495,1268),(510,1335)],fill=(180,143,104,255))
+          d.polygon([(475,1320),(535,1300),(510,1350)],fill=(180,143,104,255))
+          for x in [205,270,405,450]:
+              d.line((x,1410,x-10,1490),fill=(180,143,104,255),width=17)
+          d.arc((130,1320,300,1480),start=180,end=280,fill=(238,208,165,255),width=6)
+          # cavalier stylisé
+          d.ellipse((310,1285,355,1330),fill=(231,190,113,255))
+          d.line((333,1330,350,1380),fill=(231,190,113,255),width=15)
+          d.line((345,1350,400,1380),fill=(231,190,113,255),width=10)
+          d.line((350,1380,315,1420),fill=(231,190,113,255),width=10)
+          # ondes de perception et connexions entre cavalier et cheval
+          for r in [36,58,80]:
+              d.arc((420-r,1280-r,420+r,1280+r),210,330,fill=(231,190,113,180),width=3)
+          # encart notions
+          for i,(a,b) in enumerate([("OBSERVATION","être attentif"),("PERCEPTION","mieux ressentir"),("AJUSTEMENT","répondre ensemble")]):
+              y=1288+i*67
+              d.ellipse((660,y+7,678,y+25),fill=(231,190,113,255))
+              d.text((695,y),a,font=F(bold,18),fill=(250,247,237))
+              d.text((695,y+25),b,font=F(reg,16),fill=(194,213,205))
+          d.rounded_rectangle((55,1555,1025,1745),radius=36,fill=(231,190,113,255))
+          d.text((102,1590),"CULTIVEZ LA CONNEXION",font=F(bold,42),fill=(27,39,40))
+          d.text((102,1650),"RETROUVEZ CE LIVRE SUR AMAZON",font=F(bold,31),fill=(27,39,40))
+          d.text((55,1805),"ERIC SOTOCA  •  NEUROSCIENCES & PERFORMANCE",font=F(reg,20),fill=(218,226,220))
+          d.text((55,1842),"NEURO-ÉQUITATION  /  LE CERVEAU MIROIR ÉQUESTRE  /  TOME 1",font=F(reg,17),fill=(166,190,181))
+          im.save("neuro-equitation-tome1-affiche.png")
+          print("Affiche 1080x1920 créée avec la couverture officielle et des motifs équestres/neuronaux.")
+          PY
+      - name: Démarrer Kokoro TTS
+        run: |
+          docker run -d --name kokoro -p 7860:7860 hangrylabs/kokorotts:latest
+          for i in $(seq 1 90); do
+            if curl -fsS http://localhost:7860/tts/status >/dev/null; then exit 0; fi
+            sleep 5
+          done
+          docker logs kokoro
+          exit 1
+      - name: Générer la voix française
+        run: |
+          curl --fail --show-error --silent -X POST "http://localhost:7860/tts/generate" -H "Content-Type: application/json" -d '{"text":"La relation entre cavalier et cheval repose sur l’observation, la perception et l’ajustement mutuel. Découvrez Neuro-Équitation, Le Cerveau Miroir Équestre.","voice":"ff_siwis","output_format":"mp3"}' -o neuro-equitation-tome1.mp3
+          test -s neuro-equitation-tome1.mp3
+          ffmpeg -y -i neuro-equitation-tome1.mp3 -af "apad=pad_dur=10" -t 10 neuro-equitation-audio-10s.mp3
+      - name: Assembler le MP4 fixe sans rotation ni zoom
+        run: |
+          ffmpeg -y -loop 1 -framerate 25 -i neuro-equitation-tome1-affiche.png -i neuro-equitation-audio-10s.mp3 -map 0:v:0 -map 1:a:0 -vf "scale=1080:1920:flags=lanczos,format=yuv420p" -t 10 -r 25 -c:v libx264 -preset medium -crf 18 -c:a aac -b:a 128k -movflags +faststart neuro-equitation-tome1-10s.mp4
+          ffprobe -v error -show_entries format=duration -show_entries stream=codec_name,width,height -of json neuro-equitation-tome1-10s.mp4
+          ffmpeg -v error -i neuro-equitation-tome1-10s.mp4 -f null -
+      - name: Publier les fichiers de test
+        uses: actions/upload-artifact@v4
+        with:
+          name: process-b-neuro-equitation-tome1-video
+          path: |
+            neuro-equitation-tome1-cover.jpg
+            neuro-equitation-tome1-affiche.png
+            neuro-equitation-tome1.mp3
+            neuro-equitation-tome1-10s.mp4
+          retention-days: 7
